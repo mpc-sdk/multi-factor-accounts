@@ -1,15 +1,11 @@
 import Heading from '@/components/Heading';
 import Paragraph from '@/components/Paragraph';
 import Link from '@/components/Link';
-
-
-/*
-  <SnapConnect redirect="/keys" />
-*/
+import SnapConnect from '@/components/SnapConnect';
 
 export default function Home() {
   return (
-    <div>
+    <>
       <Heading>Connect</Heading>
       <Paragraph>
         Read more&nbsp;
@@ -22,6 +18,7 @@ export default function Home() {
         </Link>
         &nbsp;on github.
       </Paragraph>
-    </div>
+      <SnapConnect redirect="/keys" />
+    </>
   )
 }
