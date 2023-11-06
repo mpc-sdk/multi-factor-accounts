@@ -1,11 +1,11 @@
-import React from 'react';
+import React from "react";
 
 export default function FooterLinks({
   title,
   links,
 }: {
-  title: string
-  links: { name: string; href: string }[]
+  title: string;
+  links: { name: string; href: string }[];
 }) {
   return (
     <div>
@@ -18,5 +18,5 @@ export default function FooterLinks({
         ))}
       </ul>
     </div>
-  )
+  );
 }

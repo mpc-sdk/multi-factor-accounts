@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import detectEthereumProvider from "@metamask/detect-provider";
 
-import Layout from '@/pages/Layout';
-import NotFound from '@/pages/NotFound';
-import About from '@/pages/About';
-import Home from '@/pages/Home';
+import Layout from "@/pages/Layout";
+import NotFound from "@/pages/NotFound";
+import About from "@/pages/About";
+import Home from "@/pages/Home";
 
 import WorkerProvider, { webWorker } from "./worker";
 
@@ -121,5 +121,4 @@ export default function App() {
   );
 }
 
-        //<Footer />
-
+//<Footer />

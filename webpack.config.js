@@ -3,8 +3,8 @@ const path = require("path");
 const webpack = require("webpack");
 const dotenv = require("dotenv");
 
-const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env'
-dotenv.config({ path: envFile })
+const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : ".env";
+dotenv.config({ path: envFile });
 
 const isProduction = process.env.NODE_ENV === "production";
 const url = isProduction
@@ -40,16 +40,12 @@ module.exports = {
   mode: process.env.NODE_ENV || "development",
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [
-        "index.html",
-        "dist/styles.css",
-        "favicon.png"
-      ]
+      patterns: ["index.html", "dist/styles.css", "favicon.png"],
     }),
     new webpack.DefinePlugin({
-      'process.env.WS_URL': JSON.stringify(""),
-      'process.env.INFURA_API_KEY': JSON.stringify(process.env.INFURA_API_KEY),
-      'process.env.SNAP_ID': JSON.stringify(process.env.SNAP_ID),
+      "process.env.WS_URL": JSON.stringify(""),
+      "process.env.INFURA_API_KEY": JSON.stringify(process.env.INFURA_API_KEY),
+      "process.env.SNAP_ID": JSON.stringify(process.env.SNAP_ID),
     }),
   ],
   devServer: {

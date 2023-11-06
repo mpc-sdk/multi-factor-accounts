@@ -60,9 +60,12 @@ html {
 
 body {
   @apply bg-background text-foreground;
-  font-feature-settings: "rlig" 1, "calt" 1;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
 }
 
-body, main {
+body,
+main {
   min-height: 100%;
 }

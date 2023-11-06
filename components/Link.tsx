@@ -1,9 +1,18 @@
-import React from 'react';
+import React from "react";
 
-export default function Link( {href, children}: {href: string, children: React.ReactNode} ) {
-  return <a
-    href={href}
-    className="font-medium text-primary underline underline-offset-4">
-    {children}
-  </a>;
+export default function Link({
+  href,
+  children,
+}: {
+  href: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      className="font-medium text-primary underline underline-offset-4"
+    >
+      {children}
+    </a>
+  );
 }

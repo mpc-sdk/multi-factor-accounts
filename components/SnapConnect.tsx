@@ -2,10 +2,10 @@ import React from "react";
 //import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 
-import Link from '@/components/Link';
-import Paragraph from '@/components/Paragraph';
+import Link from "@/components/Link";
+import Paragraph from "@/components/Paragraph";
 
 import snapId from "@/lib/snap-id";
 //import { setSnackbar } from "./store/snackbars";
@@ -55,11 +55,10 @@ export default function SnapConnect(props: SnapConnectProps) {
       <div>
         <Paragraph>
           To begin you should have installed{" "}
-          <Link href="https://metamask.io/flask/">MetaMask Flask</Link> (&gt;=10.25) and then you can connect.
+          <Link href="https://metamask.io/flask/">MetaMask Flask</Link>{" "}
+          (&gt;=10.25) and then you can connect.
         </Paragraph>
-        <Button onClick={onConnect}>
-          Connect to MetaMask
-        </Button>
+        <Button onClick={onConnect}>Connect to MetaMask</Button>
       </div>
     </>
   );

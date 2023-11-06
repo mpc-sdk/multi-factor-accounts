@@ -1,8 +1,4 @@
-import init, {
-  keygen,
-  sign,
-  generateKeypair,
-} from "@mpc-sdk/mpc-bindings";
+import init, { keygen, sign, generateKeypair } from "@mpc-sdk/mpc-bindings";
 import * as Comlink from "comlink";
 
 console.log("Worker is initializing...");

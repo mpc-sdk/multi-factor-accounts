@@ -1,7 +1,7 @@
-import React from 'react';
-import FooterLinks from '@/components/FooterLinks'
-import Logo from '@/components/Logo'
-import Link from '@/components/Link';
+import React from "react";
+import FooterLinks from "@/components/FooterLinks";
+import Logo from "@/components/Logo";
+import Link from "@/components/Link";
 
 export default function Footer() {
   return (
@@ -10,18 +10,17 @@ export default function Footer() {
         <div className="grid grid-cols-2 gap-y-8  md:grid-cols-3 md:gap-x-8 md:gap-y-8 xl:ml-auto xl:w-2/3 xl:pl-2">
           <FooterLinks
             title="Info"
-            links={[
-              { name: 'About', href: '/#about' },
-            ]}
+            links={[{ name: "About", href: "/#about" }]}
           />
         </div>
         <div className="flex flex-col items-center space-y-4 pt-12 text-center md:flex-row md:justify-between md:space-y-0">
           <Logo />
           <p className="text-primary-30">
-            © 2023 <Link href="https://metamask.io">MetaMask</Link>. All rights reserved.
+            © 2023 <Link href="https://metamask.io">MetaMask</Link>. All rights
+            reserved.
           </p>
         </div>
       </div>
     </footer>
-  )
+  );
 }
