@@ -25,7 +25,7 @@
   },
   "devDependencies": {
     "@metamask/approval-controller": "^4.0.0",
-    "@metamask/snaps-cli": "^2.0.2",
+    "@metamask/snaps-cli": "^3.0.1",
     "@metamask/utils": "^8.2.0",
     "@types/node": "20.8.10",
     "@types/react": "^18.0.26",
