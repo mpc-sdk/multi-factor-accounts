@@ -1544,11 +1544,6 @@
     "@metamask/utils" "^8.1.0"
     webpack-sources "^3.2.3"
 
-"@metamask/types@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@metamask/types/-/types-1.1.0.tgz#9bd14b33427932833c50c9187298804a18c2e025"
-  integrity sha512-EEV/GjlYkOSfSPnYXfOosxa3TqYtIW3fhg6jdw+cok/OhMgNn4wCfbENFqjytrHMU2f7ZKtBAvtiP5V8H44sSw==
-
 "@metamask/utils@^6.0.1":
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/@metamask/utils/-/utils-6.2.0.tgz#7e63ad2db33117df6fef89449db3a86dcd6b42b5"
@@ -1561,7 +1556,7 @@
     semver "^7.3.8"
     superstruct "^1.0.3"
 
-"@metamask/utils@^8.1.0":
+"@metamask/utils@^8.1.0", "@metamask/utils@^8.2.0":
   version "8.2.0"
   resolved "https://registry.yarnpkg.com/@metamask/utils/-/utils-8.2.0.tgz#51d608faf1ba7ba021084682160f275bb127d137"
   integrity sha512-Zjx6y0PPrf9B4pdZ8JHl0grwJf/qNJ1dzYQh10/QSlj7Ct9Qy+r9PzdgGUHgA4oHohe1Phwy8MFnzB6TWZE11A==
