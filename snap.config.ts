@@ -4,7 +4,7 @@ const config: SnapConfig = {
   bundler: "webpack", // default: 'browserify'
   input: "snap.js",
   output: {
-    path: "dist",
+    path: "bundle",
   },
   server: {
     port: 9000,
