@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { HashRouter } from "react-router-dom";
 
 import store from "./store";
-//import App from "./app";
+import App from "./app";
 
 type RpcRequest = {
   method: string;
@@ -24,19 +24,11 @@ declare global {
   }
 }
 
-/*
-  <Provider store={store}>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </Provider>
-*/
-
 const root = ReactDOMClient.createRoot(document.querySelector("main"));
 root.render(
   <Provider store={store}>
     <HashRouter>
-      <p>Rendering</p>
+      <App />
     </HashRouter>
   </Provider>
 );
