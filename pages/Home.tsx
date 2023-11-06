@@ -1,10 +1,27 @@
+import Heading from '@/components/Heading';
+import Paragraph from '@/components/Paragraph';
+import Link from '@/components/Link';
+
+
+/*
+  <SnapConnect redirect="/keys" />
+*/
+
 export default function Home() {
   return (
     <div>
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-        Threshold Signatures
-      </h1>
-      <a href="#about">About</a>
+      <Heading>Connect</Heading>
+      <Paragraph>
+        Read more&nbsp;
+        <Link href="#/about">
+        about threshold signatures
+        </Link>
+        &nbsp;or get the&nbsp;
+        <Link href="https://github.com/mpc-sdk/tss-snap">
+        source code
+        </Link>
+        &nbsp;on github.
+      </Paragraph>
     </div>
   )
 }
