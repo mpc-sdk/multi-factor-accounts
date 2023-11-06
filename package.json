@@ -14,7 +14,7 @@
     "bundle/snap.manifest.json"
   ],
   "scripts": {
-    "start:webpack": "webpack-dev-server --no-client-overlay",
+    "start:webpack": "yarn tailwind && webpack-dev-server --no-client-overlay",
     "build:webpack": "yarn build:snap && yarn tailwind && yarn build:assets && webpack --config webpack.config.js --node-env production",
     "clean": "rm -rf dist bundle .parcel-cache && mkdir dist",
     "build:snap": "yarn clean && mm-snap build -s snap.js -d . && yarn build:assets",
@@ -23,8 +23,8 @@
     "types": "tsc --noEmit --project tsconfig.json",
     "fmt": "prettier --write . --no-color",
     "lint": "eslint src",
-    "start": "yarn build:snap && parcel src/index.html --port 7070",
-    "tailwind": "tailwindcss -i ./src/global.css -o ./dist/styles.css"
+    "start": "yarn build:snap && parcel app/index.html --port 7070",
+    "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"
   },
   "devDependencies": {
     "@metamask/approval-controller": "^4.0.0",
@@ -56,12 +56,17 @@
     "@ethersproject/hash": "^5.7.0",
     "@metamask/detect-provider": "^2.0.0",
     "@reduxjs/toolkit": "^1.9.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
     "comlink": "^4.3.1",
     "date-fns": "^2.29.3",
     "ethers": "6.8.1",
+    "lucide-react": "^0.292.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
-    "react-router-dom": "^6.5.0"
+    "react-router-dom": "^6.5.0",
+    "tailwind-merge": "^2.0.0",
+    "tailwindcss-animate": "^1.0.7"
   }
 }

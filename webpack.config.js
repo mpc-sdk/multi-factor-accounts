@@ -11,7 +11,7 @@ const url = isProduction
   ? "${document.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}"
   : "ws://${location.hostname}:7007";
 module.exports = {
-  entry: "./src/index.tsx",
+  entry: "./app/index.tsx",
   module: {
     rules: [
       {
@@ -42,6 +42,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         "index.html",
+        "dist/styles.css",
         "favicon.png"
       ]
     }),

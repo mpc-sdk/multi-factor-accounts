@@ -106,5 +106,7 @@ export default function App() {
     </ThemeProvider>
   */
 
-  return (<p>Rendering</p>);
+  return (<div className="bg-zinc-950 dark:bg-white">
+    <p>Rendering</p>
+  </div>);
 }
