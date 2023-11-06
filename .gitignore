@@ -3,6 +3,9 @@ target
 dist
 pkg
 node_modules
+bundle.js
+.env
+.env.production
 .parcel-cache
 *.bak
 *.log

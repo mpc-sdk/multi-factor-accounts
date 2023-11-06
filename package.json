@@ -8,16 +8,17 @@
   },
   "license": "MIT",
   "files": [
-    "bundle.js",
-    "images/",
-    "snap.manifest.json"
+    "dist/bundle.js",
+    "dist/bundle.js.map",
+    "dist/images/",
+    "dist/snap.manifest.json"
   ],
   "scripts": {
     "start:webpack": "webpack-dev-server --no-client-overlay",
     "build:webpack": "yarn build:snap && yarn build:assets && webpack --config webpack.config.js --node-env production",
     "clean": "rm -rf dist .parcel-cache && mkdir dist",
     "build:snap": "yarn clean && mm-snap build -s snap.js -d . && yarn build:assets",
-    "build:assets": "cp -r images dist/ && cp -r snap.manifest.json dist && cp -r bundle.js dist",
+    "build:assets": "cp -r images dist/ && cp -r snap.manifest.json dist",
     "build": "yarn build:snap && parcel build src/index.html --no-optimize --no-scope-hoist",
     "types": "tsc --noEmit --project tsconfig.json",
     "fmt": "prettier --write . --no-color",
