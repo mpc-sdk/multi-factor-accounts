@@ -23,12 +23,12 @@
     "fmt": "prettier --write . --no-color",
     "lint": "eslint app pages components lib",
     "start": "yarn build:snap && yarn snap:parcel && parcel app/index.html --port 7070",
-    "snap:parcel": "cp bundle/snap.manifest.json dist && mkdir -p dist/bundle && cp bundle/bundle.js dist/bundle",
+    "snap:parcel": "cp -r bundle dist/ && mv dist/bundle/snap.manifest.json dist/bundle/images dist",
     "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"
   },
   "devDependencies": {
     "@metamask/approval-controller": "^4.0.0",
-    "@metamask/snaps-cli": "3.0.1",
+    "@metamask/snaps-cli": "^2.0.2",
     "@metamask/utils": "^8.2.0",
     "@types/node": "20.8.10",
     "@types/react": "^18.0.26",

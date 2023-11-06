@@ -45,9 +45,6 @@ module.exports = {
       patterns: [
         "index.html",
         "dist/styles.css",
-        "snap.manifest.json",
-        { from: "bundle/bundle.js", to: "bundle/bundle.js" },
-        { from: "images/icon.svg", to: "images/icon.svg" },
         "favicon.png",
       ],
     }),
