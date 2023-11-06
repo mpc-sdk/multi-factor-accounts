@@ -4,6 +4,9 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Routes, Route } from "react-router-dom";
 import detectEthereumProvider from "@metamask/detect-provider";
 
+import About from '@/pages/About';
+import Home from '@/pages/Home';
+
 import WorkerProvider, { webWorker } from "./worker";
 
 type WorkerMessage = {
@@ -11,8 +14,6 @@ type WorkerMessage = {
 };
 
 /*
-  <Route path="/" element={<Home />} />
-  <Route path="/about" element={<About />} />
   <Route path="/keys/create" element={<Create />} />
   <Route path="/keys/import" element={<Import />} />
   <Route path="/keys/join/:groupId/:sessionId" element={<Join />} />
@@ -33,6 +34,8 @@ type WorkerMessage = {
 function Content() {
   return (
     <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/about" element={<About />} />
     </Routes>
   );
 }
@@ -106,7 +109,7 @@ export default function App() {
     </ThemeProvider>
   */
 
-  return (<div className="bg-zinc-950 dark:bg-white">
-    <p>Rendering</p>
-  </div>);
+  return (
+    <Content />
+  );
 }
