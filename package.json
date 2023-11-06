@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "start:webpack": "webpack-dev-server --no-client-overlay",
-    "build:webpack": "yarn build:snap && yarn build:assets && webpack --config webpack.config.js --node-env production",
+    "build:webpack": "yarn build:snap && yarn tailwind && yarn build:assets && webpack --config webpack.config.js --node-env production",
     "clean": "rm -rf dist bundle .parcel-cache && mkdir dist",
     "build:snap": "yarn clean && mm-snap build -s snap.js -d . && yarn build:assets",
     "build:assets": "cp -r images bundle/ && cp -r snap.manifest.json bundle",
@@ -24,7 +24,7 @@
     "fmt": "prettier --write . --no-color",
     "lint": "eslint src",
     "start": "yarn build:snap && parcel src/index.html --port 7070",
-    "tailwind": "tailwindcss -i ./src/global.css -o ./dist/output.css --watch"
+    "tailwind": "tailwindcss -i ./src/global.css -o ./dist/styles.css"
   },
   "devDependencies": {
     "@metamask/approval-controller": "^4.0.0",
@@ -41,6 +41,7 @@
     "eslint-plugin-react": "^7.31.11",
     "ganache": "^7.7.1",
     "parcel": "2.10.2",
+    "postcss": "^8.4.31",
     "prettier": "3.0.3",
     "string-replace-loader": "^3.1.0",
     "tailwindcss": "^3.3.5",
