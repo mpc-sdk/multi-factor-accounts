@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "description": "Snap using threshold signatures to sign messages and transactions.",
+  "proposedName": "Threshold Signatures",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mpc-sdk/tss-snap"
+  },
+  "source": {
+    "shasum": "cXhvie+xy84HqQFW+1dae44e0EV/kr8PUzt+6u+09eE=",
+    "location": {
+      "npm": {
+        "filePath": "bundle.js",
+        "iconPath": "images/icon.svg",
+        "packageName": "@mpc-sdk/tss-snap",
+        "registry": "https://registry.npmjs.org/"
+      }
+    }
+  },
+  "initialPermissions": {
+    "snap_manageState": {},
+    "endowment:rpc": {
+      "dapps": true,
+      "snaps": false
+    }
+  },
+  "manifestVersion": "0.1"
+}
