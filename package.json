@@ -13,17 +13,14 @@
     "snap.manifest.json"
   ],
   "scripts": {
-    "start:webpack": "yarn tailwind && webpack-dev-server --no-client-overlay",
-    "build:webpack": "yarn build:snap && yarn tailwind && yarn build:assets && webpack --config webpack.config.js --node-env production",
-    "clean": "rm -rf dist bundle .parcel-cache && mkdir dist",
-    "build:snap": "yarn clean && mm-snap build && yarn build:assets",
-    "build:assets": "cp -r images snap.manifest.json bundle/",
-    "build": "yarn build:snap && parcel build src/index.html --no-optimize --no-scope-hoist",
+    "build": "yarn build:snap && yarn tailwind && webpack --config webpack.config.js --node-env production",
+    "clean": "rm -rf dist bundle .parcel-cache",
+    "build:snap": "mm-snap build",
     "types": "tsc --noEmit --project tsconfig.json",
     "fmt": "prettier --write . --no-color",
     "lint": "eslint app pages components lib",
-    "start": "yarn build:snap && yarn snap:parcel && parcel app/index.html --port 7070",
-    "snap:parcel": "cp -r bundle dist/ && mv dist/bundle/snap.manifest.json dist/bundle/images dist",
+    "start": "yarn build:snap && yarn parcel:assets && parcel app/index.html --port 7070",
+    "parcel:assets": "mkdir dist && cp -r images snap.manifest.json bundle dist/",
     "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"
   },
   "devDependencies": {
