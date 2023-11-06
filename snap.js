@@ -5,17 +5,17 @@ export const onRpcRequest = ({ origin, request }) => {
     case "getState":
       return snap.request({
         method: "snap_manageState",
-        params: {operation: "get"},
+        params: { operation: "get" },
       });
     case "updateState":
       return snap.request({
         method: "snap_manageState",
-        params: {operation: "update", newState: request.params},
+        params: { operation: "update", newState: request.params },
       });
     case "clearState":
       return snap.request({
         method: "snap_manageState",
-        params: {operation: "clear"},
+        params: { operation: "clear" },
       });
     default:
       throw new Error("Method not found.");

@@ -1,10 +1,10 @@
-import type { SnapConfig } from '@metamask/snaps-cli';
+import type { SnapConfig } from "@metamask/snaps-cli";
 
 const config: SnapConfig = {
-  bundler: 'webpack', // default: 'browserify'
-  input: 'snap.js',
+  bundler: "webpack", // default: 'browserify'
+  input: "snap.js",
   output: {
-    path: 'dist',
+    path: "dist",
   },
   server: {
     port: 9000,
