@@ -1,3 +1,4 @@
+import React from 'react';
 import FooterLinks from '@/components/FooterLinks'
 import Logo from '@/components/Logo'
 import Link from '@/components/Link';

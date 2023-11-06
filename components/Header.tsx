@@ -1,7 +1,6 @@
+import React from 'react';
 import Link from '@/components/Link';
 import Logo  from '@/components/Logo';
-
-import {Link as RouterLink} from 'react-router-dom';
 
 export default function Header() {
   return (

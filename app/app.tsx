@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
-//import init from "@mpc-sdk/mpc-bindings";
+import React, { useEffect, useState } from "react";
 
 import { Routes, Route } from "react-router-dom";
 import detectEthereumProvider from "@metamask/detect-provider";
@@ -114,9 +113,11 @@ export default function App() {
   */
 
   return (
-    <Layout>
-      <Content />
-    </Layout>
+    <WorkerProvider>
+      <Layout>
+        <Content />
+      </Layout>
+    </WorkerProvider>
   );
 }
 

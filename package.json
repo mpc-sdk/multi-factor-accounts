@@ -21,7 +21,7 @@
     "build": "yarn build:snap && parcel build src/index.html --no-optimize --no-scope-hoist",
     "types": "tsc --noEmit --project tsconfig.json",
     "fmt": "prettier --write . --no-color",
-    "lint": "eslint src",
+    "lint": "eslint app pages components lib",
     "start": "yarn build:snap && yarn snap:parcel && parcel app/index.html --port 7070",
     "snap:parcel": "cp bundle/snap.manifest.json bundle/bundle.js dist",
     "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"

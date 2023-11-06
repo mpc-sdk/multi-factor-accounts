@@ -1,3 +1,4 @@
+import React from 'react';
 import Heading from '@/components/Heading'
 import Paragraph from '@/components/Paragraph'
 import Link from '@/components/Link'

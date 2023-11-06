@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+//import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button"
@@ -18,7 +18,7 @@ type SnapConnectProps = {
 
 export default function SnapConnect(props: SnapConnectProps) {
   const { redirect } = props;
-  const dispatch = useDispatch();
+  //const dispatch = useDispatch();
   const navigate = useNavigate();
 
   async function onConnect() {
@@ -36,6 +36,7 @@ export default function SnapConnect(props: SnapConnectProps) {
         redirect();
       }
     } catch (e) {
+      console.error(e);
       throw e;
       /*
       dispatch(
