@@ -8,8 +8,8 @@ dotenv.config({ path: envFile })
 
 const isProduction = process.env.NODE_ENV === "production";
 const url = isProduction
-  ? "${document.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}/mpc"
-  : "ws://${location.hostname}:3030/mpc";
+  ? "${document.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}"
+  : "ws://${location.hostname}:7007";
 module.exports = {
   entry: "./src/index.tsx",
   module: {
