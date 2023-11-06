@@ -6,6 +6,9 @@
     "module": "es2022",
     "target": "es2022",
     "lib": ["es2022", "webworker", "dom"],
+    "paths": {
+      "@/*": ["./*"]
+    },
     "jsx": "react",
     "allowJs": true,
     "skipLibCheck": true,
