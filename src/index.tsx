@@ -1,9 +1,9 @@
 import React from "react";
 import * as ReactDOMClient from "react-dom/client";
-//import { Provider } from "react-redux";
-//import { HashRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { HashRouter } from "react-router-dom";
 
-//import store from "./store";
+import store from "./store";
 //import App from "./app";
 
 type RpcRequest = {
@@ -33,4 +33,10 @@ declare global {
 */
 
 const root = ReactDOMClient.createRoot(document.querySelector("main"));
-root.render(<p>Rendering</p>);
+root.render(
+  <Provider store={store}>
+    <HashRouter>
+      <p>Rendering</p>
+    </HashRouter>
+  </Provider>
+);
