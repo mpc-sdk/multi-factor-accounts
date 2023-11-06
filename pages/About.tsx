@@ -1,3 +1,5 @@
+import { Link } from '@/components/Link';
+
 export default function About() {
   return (
     <div>
@@ -9,9 +11,7 @@ export default function About() {
       </p>
 
       <p className="leading-7 [&:not(:first-child)]:mt-6">
-        The private key is shared between the participants using a technique called <a href="https://en.wikipedia.org/wiki/Secure_multi-party_computation"
-    className="font-medium text-primary underline underline-offset-4"
-    >multi-party computation</a> (MPC) which ensures that the entire private key is never exposed to any participant; the process for generating key shares is called <a href="https://en.wikipedia.org/wiki/Distributed_key_generation">distributed key generation</a> (DKG).
+        The private key is shared between the participants using a technique called <Link href="https://en.wikipedia.org/wiki/Secure_multi-party_computation">multi-party computation</Link> (MPC) which ensures that the entire private key is never exposed to any participant; the process for generating key shares is called <Link href="https://en.wikipedia.org/wiki/Distributed_key_generation">distributed key generation</Link> (DKG).
       </p>
 
       <p className="leading-7 [&:not(:first-child)]:mt-6">
@@ -19,7 +19,7 @@ export default function About() {
       </p>
 
       <p className="leading-7 [&:not(:first-child)]:mt-6">
-        Unlike other techniques such as <a href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamirs Secret Sharing</a> (SSS) the entire private key is never revealed to any single participant and is therefore more secure as it does not have the <em>trusted dealer</em> problem.
+        Unlike other techniques such as <Link href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">Shamirs Secret Sharing</Link> (SSS) the entire private key is never revealed to any single participant and is therefore more secure as it does not have the <em>trusted dealer</em> problem.
       </p>
 
       <h2 className="mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
@@ -53,11 +53,11 @@ export default function About() {
       </h3>
 
       <p className="leading-7 [&:not(:first-child)]:mt-6">
-        We use the <a href="https://eprint.iacr.org/2020/540.pdf">GG20 protocol (pdf)</a> exposed by the <a href="https://github.com/ZenGo-X/multi-party-ecdsa">multi-party-ecdsa</a> library compiled to Webassembly.
+        We use the <Link href="https://eprint.iacr.org/2020/540.pdf">GG20 protocol (pdf)</Link> exposed by the <Link href="https://github.com/ZenGo-X/multi-party-ecdsa">multi-party-ecdsa</Link> library compiled to Webassembly.
       </p>
 
       <p className="leading-7 [&:not(:first-child)]:mt-6">
-        Communication between participants uses a websocket transport using an <a href="https://docs.rs/mpc-websocket/latest/mpc_websocket/">open-source library</a> we created. The websocket server code is licensed as MIT or Apache-2.0. This <a href="https://github.com/LavaMoat/tss-snap/tree/main/snap/dapp">snap</a>, <a href="https://github.com/LavaMoat/tss-snap/tree/main/packages/client">javascript client</a> and <a href="https://github.com/LavaMoat/tss-snap/tree/main/packages/wasm">webassembly bindings</a> are licensed as GPLv3.
+        Communication between participants uses a websocket transport using an <Link href="https://docs.rs/mpc-websocket/latest/mpc_websocket/">open-source library</Link> we created. The websocket server code is licensed as MIT or Apache-2.0. This <Link href="https://github.com/LavaMoat/tss-snap/tree/main/snap/dapp">snap</Link>, <Link href="https://github.com/LavaMoat/tss-snap/tree/main/packages/client">javascript client</Link> and <Link href="https://github.com/LavaMoat/tss-snap/tree/main/packages/wasm">webassembly bindings</Link> are licensed as GPLv3.
       </p>
     </div>
   )

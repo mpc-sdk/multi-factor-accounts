@@ -4,6 +4,9 @@ import React, { useEffect, useState, useMemo } from "react";
 import { Routes, Route } from "react-router-dom";
 import detectEthereumProvider from "@metamask/detect-provider";
 
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+
 import About from '@/pages/About';
 import Home from '@/pages/Home';
 
@@ -110,6 +113,24 @@ export default function App() {
   */
 
   return (
-    <Content />
+    <RootLayout />
   );
+}
+
+        //<Footer />
+
+function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex min-h-screen flex-col bg-primary-5 text-base antialiased">
+      <Header />
+      <div className="container flex-grow">
+        <Content />
+      </div>
+      <Footer />
+    </div>
+  )
 }
