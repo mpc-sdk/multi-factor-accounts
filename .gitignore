@@ -10,3 +10,4 @@ bundle.js
 .parcel-cache
 *.bak
 *.log
+*.tgz

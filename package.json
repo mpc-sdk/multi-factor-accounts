@@ -13,7 +13,7 @@
     "snap.manifest.json"
   ],
   "scripts": {
-    "build": "yarn build:snap && yarn tailwind && webpack --config webpack.config.js --node-env production",
+    "build": "yarn clean && yarn build:snap && yarn tailwind && webpack --config webpack.config.js --node-env production",
     "clean": "rm -rf dist bundle .parcel-cache",
     "build:snap": "mm-snap build",
     "types": "tsc --noEmit --project tsconfig.json",
