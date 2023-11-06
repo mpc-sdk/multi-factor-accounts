@@ -7,10 +7,10 @@
     "url": "https://github.com/mpc-sdk/tss-snap"
   },
   "source": {
-    "shasum": "WtzjL9b7/lEbozaxS711iEEaLTZ/VigCbWLqVxG3Ghc=",
+    "shasum": "Ysj/VyuGcl/otInAekYoYSC0uwT+aRY4+OZKu52bbls=",
     "location": {
       "npm": {
-        "filePath": "bundle.js",
+        "filePath": "bundle/bundle.js",
         "iconPath": "images/icon.svg",
         "packageName": "@mpc-sdk/tss-snap",
         "registry": "https://registry.npmjs.org/"

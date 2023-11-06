@@ -23,7 +23,7 @@
     "fmt": "prettier --write . --no-color",
     "lint": "eslint app pages components lib",
     "start": "yarn build:snap && yarn snap:parcel && parcel app/index.html --port 7070",
-    "snap:parcel": "cp bundle/snap.manifest.json bundle/bundle.js dist",
+    "snap:parcel": "cp bundle/snap.manifest.json dist && mkdir -p dist/bundle && cp bundle/bundle.js dist/bundle",
     "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"
   },
   "devDependencies": {
@@ -46,6 +46,7 @@
     "string-replace-loader": "^3.1.0",
     "tailwindcss": "^3.3.5",
     "ts-loader": "^9.2.6",
+    "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "5.2.2",
     "webpack": "5.89.0",
     "webpack-cli": "^5.0.1",
