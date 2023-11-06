@@ -23,7 +23,7 @@ module.exports = {
         test: /websocket-provider\.tsx?$/,
         loader: "string-replace-loader",
         options: {
-          search: "ws://localhost:3030/mpc",
+          search: "ws://localhost:7007",
           replace: url,
         },
       },
