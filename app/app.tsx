@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { Routes, Route } from "react-router-dom";
 import detectEthereumProvider from "@metamask/detect-provider";
 
@@ -8,7 +7,8 @@ import NotFound from "@/pages/NotFound";
 import About from "@/pages/About";
 import Home from "@/pages/Home";
 
-import WorkerProvider, { webWorker } from "./worker";
+import WorkerProvider, { webWorker } from "./providers/worker";
+import ChainProvider from "./providers/chain";
 
 type WorkerMessage = {
   data: { ready: boolean };
@@ -77,7 +77,7 @@ export default function App() {
   if (!provider) {
     return (
       <p>
-        Failed to detect an ethereum provider, please install{" "}
+        Failed to detect an ethereum provider, please install&nbsp;
         <a href="https://metamask.io/flask/">MetaMask Flask</a>
       </p>
     );
@@ -114,11 +114,11 @@ export default function App() {
 
   return (
     <WorkerProvider>
-      <Layout>
-        <Content />
-      </Layout>
+      <ChainProvider>
+        <Layout>
+          <Content />
+        </Layout>
+      </ChainProvider>
     </WorkerProvider>
   );
 }
-
-//<Footer />
