@@ -16,7 +16,7 @@ This repository contains submodules so you should clone it recursively.
 To compile the webassembly bindings:
 
 ```
-cd sdk && cargo make bindings
+(cd sdk && cargo make bindings)
 ```
 
 ## Dev Build
