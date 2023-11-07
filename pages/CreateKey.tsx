@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
@@ -128,8 +129,10 @@ export default function CreateKey() {
               Check the settings for the new key and confirm
             </AlertDescription>
           </Alert>
-
           <p>Create a new key {audienceLabel} split into {parties} shares and require {threshold} participants to sign.</p>
+          <div className="flex justify-end">
+            <Button>Create key</Button>
+          </div>
         </div>
       </CreateKeyContent>
     );

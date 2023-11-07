@@ -90,7 +90,9 @@ export default function KeyShareAudienceForm({
               </FormItem>
             )}
           />
-          <Button type="submit">Next</Button>
+          <div className="flex justify-end">
+            <Button type="submit">Next</Button>
+          </div>
         </form>
       </Form>
     </div>
