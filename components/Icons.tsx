@@ -1,7 +1,4 @@
-import {
-  Loader2,
-  KeySquare,
-} from 'lucide-react';
+import { Loader2, KeySquare } from "lucide-react";
 
 const Icons = {
   spinner: Loader2,

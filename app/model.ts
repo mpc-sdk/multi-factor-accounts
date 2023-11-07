@@ -47,7 +47,7 @@ export type SignProof = {
 export type SignTxReceipt = {
   signature: SignResult;
   address: string;
-  amount: string,
+  amount: string;
   // WARN: Storing the transaction is not possible at the moment
   // WARN: due to a typescript error with #private in the type
   // WARN: definition

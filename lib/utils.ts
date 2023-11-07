@@ -1,6 +1,6 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { toBeHex } from 'ethers';
+import { toBeHex } from "ethers";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));

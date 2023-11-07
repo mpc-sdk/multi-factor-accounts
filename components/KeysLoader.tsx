@@ -23,9 +23,7 @@ export default function KeysLoader() {
   }, []);
 
   if (loading) {
-    return (
-      <Loader text="Loading key shares..." />
-    );
+    return <Loader text="Loading key shares..." />;
   }
   return null;
 }

@@ -16,9 +16,9 @@ const ChainProvider = (props: ChainProviderProps) => {
     ethereum.on("chainChanged", handleChainChanged);
 
     const loadChainInfo = async () => {
-      const chainId = await ethereum.request({method: "eth_chainId"});
+      const chainId = await ethereum.request({ method: "eth_chainId" });
       setChain(chainId as string);
-    }
+    };
 
     loadChainInfo();
   }, []);

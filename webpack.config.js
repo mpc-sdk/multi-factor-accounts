@@ -1,5 +1,5 @@
 const CopyWebpackPlugin = require("copy-webpack-plugin");
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const TsconfigPathsPlugin = require("tsconfig-paths-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
 const dotenv = require("dotenv");
@@ -32,7 +32,11 @@ module.exports = {
   },
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
-    plugins: [new TsconfigPathsPlugin({/* options: see below */})],
+    plugins: [
+      new TsconfigPathsPlugin({
+        /* options: see below */
+      }),
+    ],
   },
   output: {
     path: path.resolve(__dirname, "dist"),
@@ -42,11 +46,7 @@ module.exports = {
   mode: process.env.NODE_ENV || "development",
   plugins: [
     new CopyWebpackPlugin({
-      patterns: [
-        "index.html",
-        "dist/styles.css",
-        "favicon.png",
-      ],
+      patterns: ["index.html", "dist/styles.css", "favicon.png"],
     }),
     new webpack.DefinePlugin({
       "process.env.WS_URL": JSON.stringify(""),

@@ -12,7 +12,9 @@ export default function Link({
   return (
     <a
       href={href}
-      className={className ?? "font-medium text-primary underline underline-offset-4"}
+      className={
+        className ?? "font-medium text-primary underline underline-offset-4"
+      }
     >
       {children}
     </a>

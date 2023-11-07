@@ -1,14 +1,13 @@
 import React from "react";
-//import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
+import { Button } from "@/components/ui/button";
 import Link from "@/components/Link";
 import Paragraph from "@/components/Paragraph";
 
 import snapId from "@/lib/snap-id";
-//import { setSnackbar } from "./store/snackbars";
 
 type RedirectHandler = () => void;
 
@@ -18,7 +17,7 @@ type SnapConnectProps = {
 
 export default function SnapConnect(props: SnapConnectProps) {
   const { redirect } = props;
-  //const dispatch = useDispatch();
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   async function onConnect() {
@@ -37,16 +36,11 @@ export default function SnapConnect(props: SnapConnectProps) {
       }
     } catch (e) {
       console.error(e);
-      throw e;
-      /*
-      dispatch(
-        setSnackbar({
-          message: `Could not connect: ${e.message || ""}`,
-          severity: "error",
-        })
-      );
-
-      */
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: e.message || e.toString(),
+      });
     }
   }
 

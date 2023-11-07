@@ -47,7 +47,7 @@ const loadKeyData = async () => {
 
 export const findKeyShare = async (
   keyAddress: string,
-  partyNumber: number
+  partyNumber: number,
 ): Promise<NamedKeyShare | undefined> => {
   const { keyShares } = await loadStateData();
   return keyShares.find((namedKeyShare) => {
@@ -70,7 +70,7 @@ export const saveKey = createAsyncThunk(
     appState.keyShares.push(keyShare);
     await saveStateData(appState);
     return await loadKeyData();
-  }
+  },
 );
 
 // Request used to delete a key share using it's
@@ -91,7 +91,7 @@ export const deleteKey = createAsyncThunk(
     const newState = { ...appState, keyShares: newKeys };
     await saveStateData(newState);
     return await loadKeyData();
-  }
+  },
 );
 
 export type KeyState = {
