@@ -5,7 +5,7 @@ import Logo from "@/components/Logo";
 export default function Header() {
   return (
     <header className="fixed z-20 w-full border-b bg-background py-4">
-      <div className="container mx-auto flex justify-between px-8">
+      <div className="flex justify-between px-4 md:px-6 xl:px-8">
         <Link href="#/" className="">
           <span className="flex items-center">
             <Logo />
