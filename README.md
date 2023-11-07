@@ -43,3 +43,17 @@ The snap code is compiled into the `bundle` folder, this task is automatically r
 ```
 yarn build:snap
 ```
+
+## Tasks
+
+Some more useful tasks:
+
+```
+yarn types    # type check
+yarn lint     # lint
+yarn fmt      # format
+```
+
+## License
+
+MIT

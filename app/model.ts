@@ -1,9 +1,35 @@
-import {
-  KeyShare,
-  SignResult,
-} from "@mpc-sdk/mpc-bindings";
-
 import { Transaction, TransactionReceiptParams } from "ethers";
+
+// Private key share.
+export type KeyShare = {
+  localKey: LocalKey;
+  publicKey: number[];
+  address: string;
+};
+
+// Opaque type for the private key share.
+export type LocalKey = {
+  // Index of the key share.
+  i: number;
+  // Threshold for key share signing.
+  t: number;
+  // Total number of parties.
+  n: number;
+};
+
+// Result of signing a message.
+export type SignResult = {
+  r: SignPrimitive;
+  s: SignPrimitive;
+  recid: number;
+};
+
+export type SignPrimitive = {
+  // For ECDSA should be `secp256k1`.
+  curve: string;
+  // Array of bytes for the value, length will be 32.
+  scalar: number[];
+};
 
 // Key share with a human-friendly label.
 export type NamedKeyShare = {
