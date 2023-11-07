@@ -1,7 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
+import keysReducer from "./keys";
 
 const store = configureStore({
-  reducer: {},
+  reducer: {
+    keys: keysReducer,
+  },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {

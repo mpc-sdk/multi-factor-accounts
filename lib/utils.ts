@@ -6,6 +6,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export type Dictionary<T> = {
+  [key: string]: T;
+};
+
 const chains: Dictionary<string> = {
   "0x01": "Mainnet",
   "0x03": "Ropsten",
