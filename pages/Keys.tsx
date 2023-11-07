@@ -16,9 +16,7 @@ function KeysContent({ children }: { children?: React.ReactNode }) {
   return (
     <>
       <Heading>Keys</Heading>
-      <div>
-        <ChainBadge className="mt-2" />
-      </div>
+      <ChainBadge className="mt-2" />
       {children}
     </>
   );
