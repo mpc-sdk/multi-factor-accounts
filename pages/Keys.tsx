@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Link } from 'react-router-dom';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -10,8 +11,6 @@ import {
 
 import Icons from "@/components/Icons";
 import Heading from "@/components/Heading";
-//import Paragraph from "@/components/Paragraph";
-//import Link from "@/components/Link";
 import ChainBadge from "@/components/ChainBadge";
 import KeysLoader from "@/components/KeysLoader";
 
@@ -27,6 +26,23 @@ function KeysContent({children}: {children: React.ReactNode}) {
   </>;
 }
 
+function NoKeys() {
+  return <KeysContent>
+    <div className="flex flex-col justify-center items-center mt-12">
+      <Alert>
+        <Icons.key className="h-4 w-4" />
+        <AlertTitle>No keys yet!</AlertTitle>
+        <AlertDescription>
+          To get started create a new key.
+        </AlertDescription>
+      </Alert>
+      <Link to="/keys/create">
+        <Button className="mt-8">Create a new key</Button>
+      </Link>
+    </div>
+  </KeysContent>;
+}
+
 export default function Keys() {
   const { keyShares, loaded } = useSelector(keysSelector);
 
@@ -34,23 +50,8 @@ export default function Keys() {
     return <KeysLoader />
   }
 
-
-        //<Terminal className="h-4 w-4" />
-
   if (keyShares.length == 0) {
-    return <KeysContent>
-      <div className="flex flex-col justify-center items-center mt-12">
-
-        <Alert>
-          <Icons.key className="h-4 w-4" />
-          <AlertTitle>No keys yet!</AlertTitle>
-          <AlertDescription>
-            To get started create a new key.
-          </AlertDescription>
-        </Alert>
-        <Button className="mt-8" onClick={() => {}}>Create a new key</Button>
-      </div>
-    </KeysContent>;
+    return <NoKeys />
   }
 
   return (
