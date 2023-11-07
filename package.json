@@ -53,6 +53,7 @@
     "@ethersproject/address": "^5.7.0",
     "@ethersproject/hash": "^5.7.0",
     "@metamask/detect-provider": "^2.0.0",
+    "@mpc-sdk/mpc-bindings": "./sdk/bindings/pkg",
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@radix-ui/react-slot": "^1.0.2",
     "@reduxjs/toolkit": "^1.9.1",

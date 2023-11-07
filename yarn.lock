@@ -1584,6 +1584,9 @@
     "@lezer/lr" "^1.0.0"
     json5 "^2.2.1"
 
+"@mpc-sdk/mpc-bindings@./sdk/bindings/pkg":
+  version "0.5.0"
+
 "@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.2":
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/@msgpackr-extract/msgpackr-extract-darwin-arm64/-/msgpackr-extract-darwin-arm64-3.0.2.tgz#44d752c1a2dc113f15f781b7cc4f53a307e3fa38"
