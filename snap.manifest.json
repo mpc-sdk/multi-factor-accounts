@@ -19,10 +19,7 @@
   },
   "initialPermissions": {
     "endowment:keyring": {
-      "allowedOrigins": [
-        "https://tss.ac",
-        "http://localhost:7070"
-      ]
+      "allowedOrigins": ["https://tss.ac", "http://localhost:7070"]
     },
     "endowment:rpc": {
       "dapps": true,

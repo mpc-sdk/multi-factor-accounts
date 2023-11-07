@@ -56,8 +56,7 @@ export default function KeyShareAudienceForm({
         </AlertDescription>
       </Alert>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 mt-6">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-6">
           <FormField
             control={form.control}
             name="type"
