@@ -67,12 +67,10 @@ export default function CreateKey() {
 
   const startKeyCreate = async () => {
     console.log("Starting key creation...");
-
     await guard(async () => {
-      const serverPublicKey = await fetchServerPublicKey(serverUrl);
-      console.log(serverPublicKey);
+      const serverOptions = await fetchServerPublicKey(serverUrl);
+      console.log(serverOptions);
     }, toast);
-
   };
 
   const BackButton = () => (

@@ -1,5 +1,11 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
 
+// Options for connecting to server.
+export type ServerOptions = {
+  serverUrl: string;
+  serverPublicKey: string;
+}
+
 // Private key share.
 export type KeyShare = {
   localKey: LocalKey;

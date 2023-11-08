@@ -1,3 +1,7 @@
+import { ServerOptions } from '@/app/model';
+
+// Cache of server options.
+let serverOptions: ServerOptions = null;
 
 // Convert from a ws: (or wss:) protocol to http: or https:.
 export function convertUrlProtocol(server: string): string {
@@ -11,8 +15,12 @@ export function convertUrlProtocol(server: string): string {
 }
 
 // Get the public key of the backend server.
-export async function fetchServerPublicKey(server: string): Promise<string> {
-  let url = convertUrlProtocol(server);
+export async function fetchServerPublicKey(serverUrl: string): Promise<ServerOptions> {
+  if (serverOptions != null && serverOptions.serverUrl === serverUrl) {
+    return serverOptions;
+  }
+
+  let url = convertUrlProtocol(serverUrl);
   url = `${url}/public-key`;
   const response = await fetch(url);
 
@@ -20,5 +28,10 @@ export async function fetchServerPublicKey(server: string): Promise<string> {
     throw new Error(
       `unexpected status code fetching public key: ${response.status}`);
   }
-  return await response.text();
+  const serverPublicKey = await response.text();
+  serverOptions = {
+    serverUrl: serverUrl,
+    serverPublicKey,
+  };
+  return serverOptions;
 }
