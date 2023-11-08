@@ -21,7 +21,7 @@ module.exports = {
         exclude: /node_modules/,
       },
       {
-        test: /websocket-provider\.tsx?$/,
+        test: /server-url\.ts?$/,
         loader: "string-replace-loader",
         options: {
           search: "ws://localhost:7007",

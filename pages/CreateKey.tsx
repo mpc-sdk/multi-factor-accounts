@@ -12,6 +12,9 @@ import KeyShareAudienceForm, {
 import KeyShareNameForm from "@/forms/KeyShareName";
 import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
+import serverUrl from '@/lib/server-url';
+import { fetchServerPublicKey } from '@/lib/client';
+
 type CreateKeyState = {
   audience: KeyShareAudience;
   name?: string;
@@ -57,6 +60,12 @@ export default function CreateKey() {
     const newState = { ...createKeyState, threshold };
     setCreateKeyState(newState);
     setStep(step + 1);
+  };
+
+  const startKeyCreate = async () => {
+    console.log("Starting key creation...");
+    const serverPublicKey = await fetchServerPublicKey(serverUrl);
+    console.log(serverPublicKey);
   };
 
   const BackButton = () => (
@@ -138,7 +147,7 @@ export default function CreateKey() {
             require {threshold} participants to sign.
           </p>
           <div className="flex justify-end">
-            <Button>Create key</Button>
+            <Button onClick={startKeyCreate}>Create key</Button>
           </div>
         </div>
       </CreateKeyContent>
