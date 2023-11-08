@@ -11,7 +11,7 @@ export function convertUrlProtocol(server: string): string {
 }
 
 // Get the public key of the backend server.
-export async function fetchServerPublicKey(server: string): string {
+export async function fetchServerPublicKey(server: string): Promise<string> {
   let url = convertUrlProtocol(server);
   url = `${url}/public-key`;
   const response = await fetch(url);

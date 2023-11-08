@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "@/components/Link";
 import Paragraph from "@/components/Paragraph";
 
+import guard from '@/lib/guard';
 import snapId from "@/lib/snap-id";
 
 type RedirectHandler = () => void;
@@ -22,8 +23,7 @@ export default function SnapConnect(props: SnapConnectProps) {
 
   async function onConnect() {
     console.log("Connect to snap", snapId);
-
-    try {
+    await guard(async () => {
       await ethereum.request({
         method: "wallet_requestSnaps",
         params: { [snapId]: {} },
@@ -34,14 +34,7 @@ export default function SnapConnect(props: SnapConnectProps) {
       } else {
         redirect();
       }
-    } catch (e) {
-      console.error(e);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: e.message || e.toString(),
-      });
-    }
+    }, toast);
   }
 
   return (

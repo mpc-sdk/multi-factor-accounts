@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
@@ -12,6 +13,7 @@ import KeyShareAudienceForm, {
 import KeyShareNameForm from "@/forms/KeyShareName";
 import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
+import guard from '@/lib/guard';
 import serverUrl from '@/lib/server-url';
 import { fetchServerPublicKey } from '@/lib/client';
 
@@ -36,6 +38,7 @@ function CreateKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function CreateKey() {
+  const { toast } = useToast();
   const [step, setStep] = useState(0);
   const [createKeyState, setCreateKeyState] = useState<CreateKeyState>(null);
 
@@ -64,8 +67,12 @@ export default function CreateKey() {
 
   const startKeyCreate = async () => {
     console.log("Starting key creation...");
-    const serverPublicKey = await fetchServerPublicKey(serverUrl);
-    console.log(serverPublicKey);
+
+    await guard(async () => {
+      const serverPublicKey = await fetchServerPublicKey(serverUrl);
+      console.log(serverPublicKey);
+    }, toast);
+
   };
 
   const BackButton = () => (
