@@ -37,8 +37,7 @@ export async function digest(message: string): Promise<string> {
 }
 
 export function fromHexString(hex: string): Uint8Array {
-  return new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+  return new Uint8Array(hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
 }
 
 export function toHexString(bytes: Uint8Array): string {
@@ -46,7 +45,7 @@ export function toHexString(bytes: Uint8Array): string {
   // NOTE: sometimes the function never returns, so we need the Array.from()
   return Array.from(bytes).reduce(
     (str: string, byte: number) => str + byte.toString(16).padStart(2, "0"),
-    ""
+    "",
   );
 }
 

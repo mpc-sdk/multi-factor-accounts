@@ -5,6 +5,7 @@ pkg
 node_modules
 bundle
 bundle.js
+.yarn
 .env
 .env.production
 .parcel-cache

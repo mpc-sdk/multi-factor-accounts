@@ -1,13 +1,10 @@
 import React from "react";
 
-import Icons from "@/components/Icons";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Slider } from "@/components/ui/slider";
 
 import {
@@ -97,7 +94,10 @@ export default function KeyShareNumberForm({
             )}
           />
           <div
-            className={`flex ${back == null ? 'justify-end' : 'justify-between'}`}>
+            className={`flex ${
+              back == null ? "justify-end" : "justify-between"
+            }`}
+          >
             {back}
             <Button type="submit">Next</Button>
           </div>

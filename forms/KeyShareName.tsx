@@ -8,7 +8,6 @@ import * as z from "zod";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import {
   Form,
@@ -50,7 +49,7 @@ export default function KeyShareNameForm({
         <Icons.key className="h-4 w-4" />
         <AlertTitle>Give the key a name</AlertTitle>
         <AlertDescription>
-          The key name helps you easily recognize the key and it's purpose.
+          The key name helps you easily recognize the key and it&apos;s purpose.
         </AlertDescription>
       </Alert>
       <Form {...form}>
@@ -68,7 +67,11 @@ export default function KeyShareNameForm({
               </FormItem>
             )}
           />
-          <div className={`flex ${back == null ? 'justify-end' : 'justify-between'}`}>
+          <div
+            className={`flex ${
+              back == null ? "justify-end" : "justify-between"
+            }`}
+          >
             {back}
             <Button type="submit">Next</Button>
           </div>

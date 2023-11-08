@@ -18,7 +18,8 @@
     "build:snap": "mm-snap build",
     "types": "tsc --noEmit --project tsconfig.json",
     "fmt": "prettier --write . --no-color",
-    "lint": "eslint app pages components lib",
+    "lint": "eslint app components forms lib pages",
+    "check": "yarn types && yarn lint && yarn fmt",
     "start": "yarn clean && yarn build:snap && yarn dev:assets && parcel app/index.html --port 7070",
     "dev:assets": "mkdir -p dist && cp -r images snap.manifest.json bundle dist/",
     "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"
@@ -78,5 +79,6 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^9.0.1",
     "zod": "^3.22.4"
-  }
+  },
+  "packageManager": "yarn@4.0.1"
 }

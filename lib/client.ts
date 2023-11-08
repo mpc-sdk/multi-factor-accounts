@@ -1,4 +1,4 @@
-import { ServerOptions, MeetingOptions } from '@/app/model';
+import { ServerOptions, MeetingOptions } from "@/app/model";
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;
@@ -6,15 +6,19 @@ let keypair: string = null;
 
 export type WebassemblyWorker = {
   generateKeypair: () => Promise<string>;
-  createMeeting: (options: MeetingOptions, identifiers: string[], initiator: string) => Promise<string>;
+  createMeeting: (
+    options: MeetingOptions,
+    identifiers: string[],
+    initiator: string,
+  ) => Promise<string>;
 };
 
 // Convert from a ws: (or wss:) protocol to http: or https:.
 export function convertUrlProtocol(server: string): string {
   const url = new URL(server);
-  if (url.protocol === 'ws:') {
+  if (url.protocol === "ws:") {
     url.protocol = "http:";
-  } else if (url.protocol === 'wss:') {
+  } else if (url.protocol === "wss:") {
     url.protocol = "https:";
   }
   return url.toString().replace(/\/+$/, "");
@@ -22,7 +26,8 @@ export function convertUrlProtocol(server: string): string {
 
 // Get the public key of the backend server and cache the result.
 export async function fetchServerPublicKey(
-  serverUrl: string): Promise<ServerOptions> {
+  serverUrl: string,
+): Promise<ServerOptions> {
   if (serverOptions != null && serverOptions.serverUrl === serverUrl) {
     return serverOptions;
   }
@@ -33,7 +38,8 @@ export async function fetchServerPublicKey(
 
   if (response.status !== 200) {
     throw new Error(
-      `unexpected status code fetching public key: ${response.status}`);
+      `unexpected status code fetching public key: ${response.status}`,
+    );
   }
   const serverPublicKey = await response.text();
   serverOptions = {
@@ -45,7 +51,8 @@ export async function fetchServerPublicKey(
 
 // Generate a keypair or return a cached session keypair.
 export async function generateKeypair(
-  worker: WebassemblyWorker): Promise<string> {
+  worker: WebassemblyWorker,
+): Promise<string> {
   if (keypair !== null) {
     return keypair;
   }

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "@/components/Link";
 import Paragraph from "@/components/Paragraph";
 
-import guard from '@/lib/guard';
+import guard from "@/lib/guard";
 import snapId from "@/lib/snap-id";
 
 type RedirectHandler = () => void;

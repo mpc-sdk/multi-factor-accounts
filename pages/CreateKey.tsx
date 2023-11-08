@@ -11,7 +11,7 @@ import KeyShareAudienceForm from "@/forms/KeyShareAudience";
 import KeyShareNameForm from "@/forms/KeyShareName";
 import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
-import { CreateKeyState, KeyShareAudience } from '@/app/model';
+import { CreateKeyState, KeyShareAudience } from "@/app/model";
 
 function CreateKeyHeading() {
   return <Heading>Create Key</Heading>;
@@ -54,7 +54,9 @@ export default function CreateKey() {
   };
 
   const BackButton = () => (
-    <Button variant="outline" onClick={() => setStep(step - 1)}>Back</Button>
+    <Button variant="outline" onClick={() => setStep(step - 1)}>
+      Back
+    </Button>
   );
 
   if (step == 0) {
@@ -139,20 +141,25 @@ export default function CreateKey() {
       </CreateKeyContent>
     );
   } else if (step == 5) {
-    return <CreateKeyContent>
-      <div className="flex flex-col space-y-6 mt-12">
-        <Alert>
-          <Icons.key className="h-4 w-4" />
-          <AlertTitle>Invitations</AlertTitle>
-          <AlertDescription>
-            Share links to invite participants to join this key, each link may only be used once. Send the links using your favorite messaging or email app, when everyone joins we can continue.
-          </AlertDescription>
-        </Alert>
-        <MeetingPoint
-          audience={createKeyState.audience}
-          parties={createKeyState.parties} />
-      </div>
-    </CreateKeyContent>;
+    return (
+      <CreateKeyContent>
+        <div className="flex flex-col space-y-6 mt-12">
+          <Alert>
+            <Icons.key className="h-4 w-4" />
+            <AlertTitle>Invitations</AlertTitle>
+            <AlertDescription>
+              Share links to invite participants to join this key, each link may
+              only be used once. Send the links using your favorite messaging or
+              email app, when everyone joins we can continue.
+            </AlertDescription>
+          </Alert>
+          <MeetingPoint
+            audience={createKeyState.audience}
+            parties={createKeyState.parties}
+          />
+        </div>
+      </CreateKeyContent>
+    );
   }
 
   return null;
