@@ -67,7 +67,7 @@ export default function KeyShareAudienceForm({
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="self" />
+                        <RadioGroupItem value={KeyShareAudience.self} />
                       </FormControl>
                       <FormLabel className="font-normal">Just for me</FormLabel>
                     </FormItem>

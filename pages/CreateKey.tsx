@@ -140,7 +140,18 @@ export default function CreateKey() {
     );
   } else if (step == 5) {
     return <CreateKeyContent>
-      <MeetingPoint parties={createKeyState.parties} />
+      <div className="flex flex-col space-y-6 mt-12">
+        <Alert>
+          <Icons.key className="h-4 w-4" />
+          <AlertTitle>Invitations</AlertTitle>
+          <AlertDescription>
+            Share links to invite participants to join this key, each link may only be used once. Send the links using your favorite messaging or email app, when everyone joins we can continue.
+          </AlertDescription>
+        </Alert>
+        <MeetingPoint
+          audience={createKeyState.audience}
+          parties={createKeyState.parties} />
+      </div>
     </CreateKeyContent>;
   }
 

@@ -14,6 +14,11 @@ export type CreateKeyState = {
   threshold?: number;
 };
 
+// Information about a meeting point.
+export type MeetingInfo = {
+  meetingId: string;
+  identifiers: string[];
+};
 
 // Options for connecting to server.
 export type ServerOptions = {
