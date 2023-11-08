@@ -5,7 +5,7 @@ let serverOptions: ServerOptions = null;
 
 // Convert from a ws: (or wss:) protocol to http: or https:.
 export function convertUrlProtocol(server: string): string {
-  let url = new URL(server);
+  const url = new URL(server);
   if (url.protocol === 'ws:') {
     url.protocol = "http:";
   } else if (url.protocol === 'wss:') {
