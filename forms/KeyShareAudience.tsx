@@ -1,6 +1,7 @@
 import React from "react";
 
 import Icons from "@/components/Icons";
+import { KeyShareAudience } from '@/app/model';
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,11 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-export enum KeyShareAudience {
-  self = "self",
-  shared = "shared",
-}
 
 export default function KeyShareAudienceForm({
   onNext,

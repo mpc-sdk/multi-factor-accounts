@@ -1,28 +1,17 @@
 import React, { useState } from "react";
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
+import MeetingPoint from "@/components/MeetingPoint";
 
-import KeyShareAudienceForm, {
-  KeyShareAudience,
-} from "@/forms/KeyShareAudience";
-
+import KeyShareAudienceForm from "@/forms/KeyShareAudience";
 import KeyShareNameForm from "@/forms/KeyShareName";
 import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
-import guard from '@/lib/guard';
-import serverUrl from '@/lib/server-url';
-import { fetchServerPublicKey } from '@/lib/client';
-
-type CreateKeyState = {
-  audience: KeyShareAudience;
-  name?: string;
-  parties?: number;
-  threshold?: number;
-};
+import { CreateKeyState, KeyShareAudience } from '@/app/model';
 
 function CreateKeyHeading() {
   return <Heading>Create Key</Heading>;
@@ -38,7 +27,6 @@ function CreateKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function CreateKey() {
-  const { toast } = useToast();
   const [step, setStep] = useState(0);
   const [createKeyState, setCreateKeyState] = useState<CreateKeyState>(null);
 
@@ -65,19 +53,9 @@ export default function CreateKey() {
     setStep(step + 1);
   };
 
-  const startKeyCreate = async () => {
-    console.log("Starting key creation...");
-    await guard(async () => {
-      const serverOptions = await fetchServerPublicKey(serverUrl);
-      console.log(serverOptions);
-    }, toast);
-  };
-
   const BackButton = () => (
     <Button variant="outline" onClick={() => setStep(step - 1)}>Back</Button>
   );
-
-  console.log("step", step);
 
   if (step == 0) {
     return (
@@ -152,11 +130,15 @@ export default function CreateKey() {
             require {threshold} participants to sign.
           </p>
           <div className="flex justify-end">
-            <Button onClick={startKeyCreate}>Create key</Button>
+            <Button onClick={() => setStep(step + 1)}>Create key</Button>
           </div>
         </div>
       </CreateKeyContent>
     );
+  } else if (step == 5) {
+    return <CreateKeyContent>
+      <MeetingPoint parties={createKeyState.parties} />
+    </CreateKeyContent>;
   }
 
   return null;

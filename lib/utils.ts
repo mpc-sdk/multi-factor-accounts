@@ -23,3 +23,25 @@ const chains: Dictionary<string> = {
 export function getChainName(value: string | number): string {
   return chains[toBeHex(BigInt(value))];
 }
+
+/// Create a hex-encoded SHA-256 digest of a string.
+export async function digest(message: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(message);
+  const buffer = await crypto.subtle.digest("SHA-256", data);
+  return toHexString(new Uint8Array(buffer));
+}
+
+export function fromHexString(hex: string): Uint8Array {
+  return new Uint8Array(
+    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+}
+
+export function toHexString(bytes: Uint8Array): string {
+  // NOTE: calling reduce directly on Uint8Array appears to be buggy
+  // NOTE: sometimes the function never returns, so we need the Array.from()
+  return Array.from(bytes).reduce(
+    (str: string, byte: number) => str + byte.toString(16).padStart(2, "0"),
+    ""
+  );
+}

@@ -1,10 +1,31 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
 
+// Intended audience for a key share.
+export enum KeyShareAudience {
+  self = "self",
+  shared = "shared",
+}
+
+// State for the create key flow.
+export type CreateKeyState = {
+  audience: KeyShareAudience;
+  name?: string;
+  parties?: number;
+  threshold?: number;
+};
+
+
 // Options for connecting to server.
 export type ServerOptions = {
   serverUrl: string;
   serverPublicKey: string;
-}
+};
+
+// Options for creating a meeting point.
+export type MeetingOptions = {
+  server: ServerOptions;
+  keypair: string;
+};
 
 // Private key share.
 export type KeyShare = {
