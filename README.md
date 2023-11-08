@@ -11,9 +11,17 @@ This repository contains submodules so you should clone it recursively.
 * `wasm-pack` (`cargo install wasm-pack`)
 * `cargo-make` (`cargo install cargo-make`)
 
-## Webassembly
+### Server Keypair
 
-To compile the webassembly bindings:
+Generate a keypair for the backend server:
+
+```
+(cd sdk && cargo make gen-server-key)
+```
+
+### Webassembly
+
+Compile the webassembly bindings:
 
 ```
 (cd sdk && cargo make bindings)
@@ -21,11 +29,10 @@ To compile the webassembly bindings:
 
 ## Relay Server
 
-A backend relay server is required for meeting points and relaying messages, to start a server using the default config:
+A backend relay server is required for meeting points and relaying messages, to start a server using the default config (you must have already generated a keypair for the server):
 
 ```
 cd sdk
-cargo make gen-server-key         # generate a keypair for the server
 cargo run -- server config.toml   # start a server using the default config
 ```
 
