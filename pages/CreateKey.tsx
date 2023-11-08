@@ -59,6 +59,10 @@ export default function CreateKey() {
     setStep(step + 1);
   };
 
+  const BackButton = () => (
+    <Button variant="outline" onClick={() => setStep(step - 1)}>Back</Button>
+  );
+
   console.log("step", step);
 
   if (step == 0) {
@@ -70,7 +74,7 @@ export default function CreateKey() {
   } else if (step == 1) {
     return (
       <CreateKeyContent>
-        <KeyShareNameForm onNext={onKeyName} />
+        <KeyShareNameForm onNext={onKeyName} back={<BackButton />} />
       </CreateKeyContent>
     );
   } else if (step == 2) {

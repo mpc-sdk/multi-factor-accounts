@@ -26,6 +26,7 @@ export default function KeyShareNumberForm({
   min,
   max,
   defaultValue,
+  back,
   onNext,
 }: {
   message: React.ReactNode;
@@ -33,6 +34,7 @@ export default function KeyShareNumberForm({
   min?: number;
   max?: number;
   defaultValue?: number;
+  back?: React.ReactNode;
   onNext: (num: number) => void;
 }) {
   const minValue = min ?? 2;
@@ -94,7 +96,8 @@ export default function KeyShareNumberForm({
               </FormItem>
             )}
           />
-          <div className="flex justify-end">
+          <div className={`flex ${back == null ? 'justify-end' : 'justify-between'}`}>
+            {back}
             <Button type="submit">Next</Button>
           </div>
         </form>
