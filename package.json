@@ -19,7 +19,7 @@
     "types": "tsc --noEmit --project tsconfig.json",
     "fmt": "prettier --write . --no-color",
     "lint": "eslint app pages components lib",
-    "start": "yarn build:snap && yarn dev:assets && parcel app/index.html --port 7070",
+    "start": "yarn clean && yarn build:snap && yarn dev:assets && parcel app/index.html --port 7070",
     "dev:assets": "mkdir -p dist && cp -r images snap.manifest.json bundle dist/",
     "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"
   },
