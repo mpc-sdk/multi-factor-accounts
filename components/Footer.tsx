@@ -15,7 +15,7 @@ export default function Footer() {
         </div>
         <div className="flex flex-col items-center space-y-4 pt-12 text-center md:flex-row md:justify-between md:space-y-0">
           <Logo />
-          <p className="text-primary-30">
+          <p className="text-sm">
             © 2023 <Link href="https://metamask.io">MetaMask</Link>. All rights
             reserved.
           </p>

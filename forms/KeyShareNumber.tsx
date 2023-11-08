@@ -39,7 +39,7 @@ export default function KeyShareNumberForm({
 }) {
   const minValue = min ?? 2;
   const maxValue = max ?? 16;
-  const defaultAmount = defaultValue ?? 3;
+  const defaultAmount = defaultValue ?? 2;
 
   const FormSchema = z.object({
     amount: z.coerce
@@ -96,7 +96,8 @@ export default function KeyShareNumberForm({
               </FormItem>
             )}
           />
-          <div className={`flex ${back == null ? 'justify-end' : 'justify-between'}`}>
+          <div
+            className={`flex ${back == null ? 'justify-end' : 'justify-between'}`}>
             {back}
             <Button type="submit">Next</Button>
           </div>

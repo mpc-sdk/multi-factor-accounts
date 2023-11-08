@@ -73,6 +73,7 @@ export default function CreateKey() {
     return (
       <CreateKeyContent>
         <KeyShareNumberForm
+          back={<BackButton />}
           onNext={onKeyParties}
           label="Participants"
           message={
@@ -91,6 +92,7 @@ export default function CreateKey() {
     return (
       <CreateKeyContent>
         <KeyShareNumberForm
+          back={<BackButton />}
           onNext={onKeyThreshold}
           label="Threshold"
           defaultValue={createKeyState.parties}
@@ -129,7 +131,8 @@ export default function CreateKey() {
             Create a new key {audienceLabel} split into {parties} shares and
             require {threshold} participants to sign.
           </p>
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <BackButton />
             <Button onClick={() => setStep(step + 1)}>Create key</Button>
           </div>
         </div>
