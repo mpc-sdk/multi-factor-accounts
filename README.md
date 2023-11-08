@@ -29,11 +29,11 @@ Compile the webassembly bindings:
 
 ## Relay Server
 
-A backend relay server is required for meeting points and relaying messages, to start a server using the default config (you must have already generated a keypair for the server):
+A backend relay server must be running for meeting points and relaying messages, to start a server using the default config (you must have already generated a keypair for the server):
 
 ```
 cd sdk
-cargo run -- server config.toml   # start a server using the default config
+cargo run -- server config.toml
 ```
 
 Note that CORS configuration is in the `sdk/config.toml` file so if you change the port for the development server you would need to update the CORS configuration.
