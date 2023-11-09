@@ -8,7 +8,7 @@ import Icons from "@/components/Icons";
 import Link from "@/components/Link";
 
 import { WorkerContext } from "@/app/providers/worker";
-import { KeyShareAudience, MeetingInfo, SessionState, OwnerType, JoinMeeting } from "@/app/model";
+import { CreateKeyState, KeyShareAudience, MeetingInfo, SessionState, OwnerType, JoinMeeting } from "@/app/model";
 
 import guard from "@/lib/guard";
 import serverUrl from "@/lib/server-url";
@@ -74,23 +74,18 @@ function Invitations({
 
 // Create a meeting point.
 export default function MeetingPoint({
-  parties,
-  audience,
   session,
 }: {
-  parties: number;
-  audience: KeyShareAudience;
   session: SessionState;
 }) {
   const { toast } = useToast();
   const [meetingInfo, setMeetingInfo] = useState<MeetingInfo>(null);
+  const [publicKeys, setPublicKeys] = useState<string[]>(null);
   const worker = useContext(WorkerContext);
   const create = session.ownerType == OwnerType.initiator;
 
   useEffect(() => {
     const joinMeetingPoint = async (meetingId: string, userId: string) => {
-      console.log("Join existing meeting", meetingId, userId);
-
       await guard(async () => {
         const publicKeys = await joinMeeting(
           worker,
@@ -98,12 +93,13 @@ export default function MeetingPoint({
           meetingId,
           userId,
         );
-
-        console.log("Got public keys", publicKeys);
+        setPublicKeys(publicKeys);
       }, toast);
     };
 
     const createMeetingPoint = async () => {
+      const { parties } = (session as CreateKeyState);
+
       const identifiers: string[] = [];
 
       /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -142,14 +138,19 @@ export default function MeetingPoint({
     }
   }, []);
 
-  if (meetingInfo == null) {
+  if (publicKeys !== null) {
+    return <p>Execute the session...</p>;
+    //return <SessionRunner />
+  }
+
+  if (meetingInfo === null) {
     const loaderText = create ? "Creating meeting..." : "Joining meeting...";
     return <Loader text={loaderText} />;
   }
 
   if (create) {
-    return <Invitations meetingInfo={meetingInfo} audience={audience} />;
+    return <Invitations meetingInfo={meetingInfo} audience={(session as CreateKeyState).audience} />;
   }
 
-  return <p>View for joinin the meeting point...</p>;
+  return null;
 }

@@ -155,8 +155,6 @@ export default function CreateKey() {
           </Alert>
           <MeetingPoint
             session={createKeyState as SessionState}
-            audience={createKeyState.audience}
-            parties={createKeyState.parties}
           />
         </div>
       </CreateKeyContent>

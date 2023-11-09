@@ -7,7 +7,7 @@ import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
 import MeetingPoint from "@/components/MeetingPoint";
 
-import { KeyShareAudience, SessionState, OwnerType, SessionType } from "@/app/model";
+import { SessionState, OwnerType, SessionType } from "@/app/model";
 
 import NotFound from "@/pages/NotFound";
 
@@ -45,11 +45,7 @@ export default function JoinKey() {
             key generation
           </AlertDescription>
         </Alert>
-        <MeetingPoint
-          session={session}
-          audience={KeyShareAudience.self}
-          parties={1}
-        />
+        <MeetingPoint session={session} />
       </div>
     </JoinKeyContent>
   );
