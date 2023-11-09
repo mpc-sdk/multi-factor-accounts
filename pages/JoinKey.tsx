@@ -1,10 +1,11 @@
 import React from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
+import KeyBadge from "@/components/KeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 
 import { SessionState, OwnerType, SessionType } from "@/app/model";
@@ -22,8 +23,12 @@ function JoinKeyContent({ children }: { children: React.ReactNode }) {
 
 export default function JoinKey() {
   const { meetingId, userId } = useParams();
+  const [searchParams, _] = useSearchParams();
+  const name = searchParams.get('name');
+  const parties = searchParams.get('parties');
+  const threshold = searchParams.get('threshold');
 
-  if (!meetingId || !userId) {
+  if (!meetingId || !userId || !name || !parties || !threshold) {
     return <NotFound />;
   }
 
@@ -36,6 +41,7 @@ export default function JoinKey() {
 
   return (
     <JoinKeyContent>
+      <KeyBadge name={name} threshold={threshold} parties={parties} />
       <div className="flex flex-col space-y-6 mt-12">
         <Alert>
           <Icons.key className="h-4 w-4" />

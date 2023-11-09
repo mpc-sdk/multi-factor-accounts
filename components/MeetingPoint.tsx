@@ -25,7 +25,6 @@ function Invitations({
   inviteParams?: Dictionary<string>
 }) {
   const { toast } = useToast();
-
   const copyLink = async (value: string) => {
     await copyToClipboard(value);
     toast({
@@ -168,3 +167,4 @@ export default function MeetingPoint({
 
   return null;
 }
+
