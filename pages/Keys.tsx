@@ -27,7 +27,8 @@ function NoKeys() {
       <div className="mt-12">
         <KeyAlert
           title="No keys yet!"
-          description="To get started create a new key." />
+          description="To get started create a new key."
+        />
         <div className="flex justify-end">
           <Link to="/keys/create">
             <Button className="mt-8">Create a new key</Button>

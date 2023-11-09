@@ -8,21 +8,34 @@ import Icons from "@/components/Icons";
 import Link from "@/components/Link";
 
 import { WorkerContext } from "@/app/providers/worker";
-import { CreateKeyState, KeyShareAudience, MeetingInfo, SessionState, OwnerType, JoinMeeting } from "@/app/model";
+import {
+  CreateKeyState,
+  KeyShareAudience,
+  MeetingInfo,
+  SessionState,
+  OwnerType,
+  JoinMeeting,
+} from "@/app/model";
 
 import guard from "@/lib/guard";
 import serverUrl from "@/lib/server-url";
 import { joinMeeting, createMeeting } from "@/lib/client";
-import { Dictionary, digest, abbreviateAddress, copyToClipboard, inviteUrl } from "@/lib/utils";
+import {
+  Dictionary,
+  digest,
+  abbreviateAddress,
+  copyToClipboard,
+  inviteUrl,
+} from "@/lib/utils";
 
 function Invitations({
   meetingInfo,
   audience,
   inviteParams,
 }: {
-  meetingInfo: MeetingInfo
-  audience: KeyShareAudience
-  inviteParams?: Dictionary<string>
+  meetingInfo: MeetingInfo;
+  audience: KeyShareAudience;
+  inviteParams?: Dictionary<string>;
 }) {
   const { toast } = useToast();
   const copyLink = async (value: string) => {
@@ -79,8 +92,8 @@ export default function MeetingPoint({
   session,
   onMeetingPointReady,
 }: {
-  session: SessionState
-  onMeetingPointReady: (publicKeys: string[], data: unknown) => void
+  session: SessionState;
+  onMeetingPointReady: (publicKeys: string[], data: unknown) => void;
 }) {
   const { toast } = useToast();
   const [meetingInfo, setMeetingInfo] = useState<MeetingInfo>(null);
@@ -102,7 +115,7 @@ export default function MeetingPoint({
     };
 
     const createMeetingPoint = async () => {
-      const { parties } = (session as CreateKeyState);
+      const { parties } = session as CreateKeyState;
 
       const identifiers: string[] = [];
 
@@ -117,9 +130,9 @@ export default function MeetingPoint({
       const initiatorUserId = identifiers[0];
 
       const inviteParams = {
-        "name": (session as CreateKeyState).name,
-        "parties": (session as CreateKeyState).parties,
-        "threshold": (session as CreateKeyState).threshold,
+        name: (session as CreateKeyState).name,
+        parties: (session as CreateKeyState).parties,
+        threshold: (session as CreateKeyState).threshold,
       };
 
       const meetingId = await guard(async () => {
@@ -147,7 +160,8 @@ export default function MeetingPoint({
     } else {
       joinMeetingPoint(
         (session as JoinMeeting).meetingId,
-        (session as JoinMeeting).userId);
+        (session as JoinMeeting).userId,
+      );
     }
   }, []);
 
@@ -157,17 +171,19 @@ export default function MeetingPoint({
   }
 
   if (create) {
-    return <div className="flex flex-col space-y-6">
-      <Loader text="Waiting for everybody to join..." />
-      <Invitations
-        meetingInfo={meetingInfo}
-        inviteParams={{
-          name: (session as CreateKeyState).name
-        }}
-        audience={(session as CreateKeyState).audience} />
-    </div>;
+    return (
+      <div className="flex flex-col space-y-6">
+        <Loader text="Waiting for everybody to join..." />
+        <Invitations
+          meetingInfo={meetingInfo}
+          inviteParams={{
+            name: (session as CreateKeyState).name,
+          }}
+          audience={(session as CreateKeyState).audience}
+        />
+      </div>
+    );
   }
 
   return null;
 }
-

@@ -8,12 +8,14 @@ export default function SessionRunner({
   executor,
   message,
 }: {
-  loaderText: string,
-  executor: () => Promise<void>,
-  message: React.ReactNode,
+  loaderText: string;
+  executor: () => Promise<void>;
+  message: React.ReactNode;
 }) {
-  return <div className="flex flex-col space-y-6 mt-12">
-    {message}
-    <Loader text={loaderText} />
-  </div>;
+  return (
+    <div className="flex flex-col space-y-6 mt-12">
+      {message}
+      <Loader text={loaderText} />
+    </div>
+  );
 }

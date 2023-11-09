@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams } from "react-router-dom";
 
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
@@ -7,7 +7,13 @@ import KeyBadge from "@/components/KeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
 
-import { PublicKeys, AssociatedData, SessionState, OwnerType, SessionType } from "@/app/model";
+import {
+  PublicKeys,
+  AssociatedData,
+  SessionState,
+  OwnerType,
+  SessionType,
+} from "@/app/model";
 
 import NotFound from "@/pages/NotFound";
 
@@ -25,7 +31,7 @@ export default function JoinKey() {
   const [keygenData, setKeygenData] = useState<AssociatedData>(null);
   const { meetingId, userId } = useParams();
   const [searchParams] = useSearchParams();
-  const name = searchParams.get('name');
+  const name = searchParams.get("name");
 
   if (!meetingId || !userId || !name) {
     return <NotFound />;
@@ -47,18 +53,20 @@ export default function JoinKey() {
     return (
       <JoinKeyContent>
         <KeyBadge
-          name={keygenData.get('name') as string}
-          threshold={keygenData.get('threshold') as number}
-          parties={keygenData.get('parties') as number} />
+          name={keygenData.get("name") as string}
+          threshold={keygenData.get("threshold") as number}
+          parties={keygenData.get("parties") as number}
+        />
         <SessionRunner
           loaderText="Creating key share..."
           message={
             <KeyAlert
               title="Generating key share"
               description="Crunching the numbers to compute your key share securely"
-              />
+            />
           }
-          executor={startKeygen} />
+          executor={startKeygen}
+        />
       </JoinKeyContent>
     );
   }
@@ -70,7 +78,7 @@ export default function JoinKey() {
         <KeyAlert
           title="Join key"
           description="Joining the key, when all participants are here we will proceed to key generation"
-          />
+        />
         <MeetingPoint
           session={session}
           onMeetingPointReady={(keys, data) => {

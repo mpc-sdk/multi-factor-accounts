@@ -12,7 +12,14 @@ import KeyShareAudienceForm from "@/forms/KeyShareAudience";
 import KeyShareNameForm from "@/forms/KeyShareName";
 import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
-import { PublicKeys, CreateKeyState, KeyShareAudience, OwnerType, SessionType, SessionState } from "@/app/model";
+import {
+  PublicKeys,
+  CreateKeyState,
+  KeyShareAudience,
+  OwnerType,
+  SessionType,
+  SessionState,
+} from "@/app/model";
 
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -25,11 +32,10 @@ function CreateKeyContent({ children }: { children: React.ReactNode }) {
 
 export default function CreateKey() {
   const [step, setStep] = useState(0);
-  const [createKeyState, setCreateKeyState] =
-    useState<CreateKeyState>({
-      ownerType: OwnerType.initiator,
-      sessionType: SessionType.keygen,
-    });
+  const [createKeyState, setCreateKeyState] = useState<CreateKeyState>({
+    ownerType: OwnerType.initiator,
+    sessionType: SessionType.keygen,
+  });
   const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
 
   const onKeyAudience = (audience: KeyShareAudience) => {
@@ -74,16 +80,18 @@ export default function CreateKey() {
         <KeyBadge
           name={createKeyState.name}
           threshold={createKeyState.threshold}
-          parties={createKeyState.parties} />
+          parties={createKeyState.parties}
+        />
         <SessionRunner
           loaderText="Creating key share..."
           message={
             <KeyAlert
               title="Generating key share"
               description="Crunching the numbers to compute your key share securely"
-              />
+            />
           }
-          executor={startKeygen} />
+          executor={startKeygen}
+        />
       </CreateKeyContent>
     );
   }
@@ -106,7 +114,8 @@ export default function CreateKey() {
         <KeyBadge
           name={createKeyState.name}
           threshold={createKeyState.threshold}
-          parties={createKeyState.parties} />
+          parties={createKeyState.parties}
+        />
         <KeyShareNumberForm
           back={<BackButton />}
           onNext={onKeyParties}
@@ -127,7 +136,8 @@ export default function CreateKey() {
         <KeyBadge
           name={createKeyState.name}
           threshold={createKeyState.threshold}
-          parties={createKeyState.parties} />
+          parties={createKeyState.parties}
+        />
         <KeyShareNumberForm
           back={<BackButton />}
           onNext={onKeyThreshold}
@@ -155,7 +165,8 @@ export default function CreateKey() {
         <KeyBadge
           name={createKeyState.name}
           threshold={createKeyState.threshold}
-          parties={createKeyState.parties} />
+          parties={createKeyState.parties}
+        />
         <div className="flex flex-col space-y-6 mt-12">
           <KeyAlert
             title="Confirm"
@@ -178,12 +189,13 @@ export default function CreateKey() {
         <KeyBadge
           name={createKeyState.name}
           threshold={createKeyState.threshold}
-          parties={createKeyState.parties} />
+          parties={createKeyState.parties}
+        />
         <div className="flex flex-col space-y-6 mt-12">
           <KeyAlert
             title="Invitations"
             description="Share links to invite participants to join this key, each link may only be used once. Send the links using your favorite messaging or email app, when everyone joins we can continue."
-            />
+          />
           <MeetingPoint
             session={createKeyState as SessionState}
             onMeetingPointReady={(keys) => setPublicKeys(keys)}

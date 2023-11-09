@@ -9,10 +9,10 @@ export function cn(...inputs: ClassValue[]) {
 
 // Generate an invitation URL.
 export function inviteUrl(
-    prefix: string,
-    meetingId: string,
-    userId: string,
-    params?: Dictionary<string>,
+  prefix: string,
+  meetingId: string,
+  userId: string,
+  params?: Dictionary<string>,
 ): string {
   let url = `${location.protocol}//${location.host}/#/${prefix}/${meetingId}/${userId}`;
   if (params) {
@@ -32,7 +32,7 @@ export async function copyToClipboard(text: string) {
 
 export type Dictionary<T> = {
   [key: string]: T;
-}
+};
 
 const chains: Dictionary<string> = {
   "0x01": "Mainnet",
@@ -59,8 +59,7 @@ export async function digest(message: string): Promise<string> {
 
 // Convert from a hex-encoded string.
 export function fromHexString(hex: string): Uint8Array {
-  return new Uint8Array(
-    hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
+  return new Uint8Array(hex.match(/.{1,2}/g).map((byte) => parseInt(byte, 16)));
 }
 
 // Convert to a hex-encoded string.

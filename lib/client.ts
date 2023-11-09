@@ -1,4 +1,12 @@
-import { Protocol, KeygenOptions, PublicKeys, ServerOptions, MeetingOptions, KeyShare, Parameters } from "@/app/model";
+import {
+  Protocol,
+  KeygenOptions,
+  PublicKeys,
+  ServerOptions,
+  MeetingOptions,
+  KeyShare,
+  Parameters,
+} from "@/app/model";
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;
