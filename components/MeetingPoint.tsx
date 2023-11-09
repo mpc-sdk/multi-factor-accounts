@@ -149,7 +149,12 @@ export default function MeetingPoint({
   }
 
   if (create) {
-    return <Invitations meetingInfo={meetingInfo} audience={(session as CreateKeyState).audience} />;
+    return <div className="flex flex-col space-y-6">
+      <Loader text="Waiting for everybody to join..." />
+      <Invitations
+        meetingInfo={meetingInfo}
+        audience={(session as CreateKeyState).audience} />
+    </div>;
   }
 
   return null;
