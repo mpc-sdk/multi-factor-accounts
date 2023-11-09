@@ -13,18 +13,16 @@ import { CreateKeyState, KeyShareAudience, MeetingInfo, SessionState, OwnerType,
 import guard from "@/lib/guard";
 import serverUrl from "@/lib/server-url";
 import { joinMeeting, createMeeting } from "@/lib/client";
-import { digest, abbreviateAddress, copyToClipboard } from "@/lib/utils";
-
-function inviteUrl(prefix: string, meetingId: string, userId: string) {
-  return `${location.protocol}//${location.host}/#/${prefix}/${meetingId}/${userId}`;
-}
+import { Dictionary, digest, abbreviateAddress, copyToClipboard, inviteUrl } from "@/lib/utils";
 
 function Invitations({
   meetingInfo,
   audience,
+  inviteParams,
 }: {
-  meetingInfo: MeetingInfo;
-  audience: KeyShareAudience;
+  meetingInfo: MeetingInfo
+  audience: KeyShareAudience
+  inviteParams?: Dictionary<string>
 }) {
   const { toast } = useToast();
 
@@ -40,7 +38,12 @@ function Invitations({
   return (
     <div className="rounded-md border">
       {participants.map((userId, index) => {
-        const url = inviteUrl("keys/join", meetingInfo.meetingId, userId);
+        const url = inviteUrl(
+          "keys/join",
+          meetingInfo.meetingId,
+          userId,
+          inviteParams,
+        );
         const isSelf = audience === KeyShareAudience.self;
         return (
           <div
@@ -140,7 +143,6 @@ export default function MeetingPoint({
 
   if (publicKeys !== null) {
     return <p>Execute the session...</p>;
-    //return <SessionRunner />
   }
 
   if (meetingInfo === null) {
@@ -149,10 +151,17 @@ export default function MeetingPoint({
   }
 
   if (create) {
+    const inviteParams: Dictionary<string> = {
+      "name": (session as CreateKeyState).name,
+      "parties": (session as CreateKeyState).parties.toString(),
+      "threshold": (session as CreateKeyState).threshold.toString(),
+    };
+
     return <div className="flex flex-col space-y-6">
       <Loader text="Waiting for everybody to join..." />
       <Invitations
         meetingInfo={meetingInfo}
+        inviteParams={inviteParams}
         audience={(session as CreateKeyState).audience} />
     </div>;
   }
