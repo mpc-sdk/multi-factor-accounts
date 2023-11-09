@@ -1,18 +1,50 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
 
+// Types of sessions.
+export enum SessionType {
+  // Key generation session.
+  keygen = "keygen",
+  // Signing session.
+  sign = "sign",
+}
+
 // Intended audience for a key share.
 export enum KeyShareAudience {
   self = "self",
   shared = "shared",
 }
 
-// State for the create key flow.
+// Type discriminant for session types.
+export enum OwnerType {
+  // Initiator of session.
+  initiator = "initiator",
+  // Participant in session.
+  participant = "participant",
+}
+
+// State for the create key flow (initiator).
 export type CreateKeyState = {
-  audience: KeyShareAudience;
+  ownerType: OwnerType;
+  sessionType: SessionType;
+  audience?: KeyShareAudience;
   name?: string;
   parties?: number;
   threshold?: number;
 };
+
+// Parameters for joining a meeting.
+export type JoinMeeting = {
+  meetingId: string;
+  userId: string;
+};
+
+// State for the create key flow (participant).
+export type JoinKeyState = JoinMeeting & {
+  ownerType: OwnerType;
+  sessionType: SessionType;
+};
+
+export type SessionState = CreateKeyState | JoinKeyState;
 
 // Information about a meeting point.
 export type MeetingInfo = {

@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from 'react-router-dom';
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -6,7 +7,9 @@ import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
 import MeetingPoint from "@/components/MeetingPoint";
 
-import { KeyShareAudience } from "@/app/model";
+import { KeyShareAudience, SessionState, OwnerType, SessionType } from "@/app/model";
+
+import NotFound from "@/pages/NotFound";
 
 function JoinKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -18,6 +21,19 @@ function JoinKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function JoinKey() {
+  const { meetingId, userId } = useParams();
+
+  if (!meetingId || !userId) {
+    return <NotFound />;
+  }
+
+  const session: SessionState = {
+    ownerType: OwnerType.participant,
+    sessionType: SessionType.keygen,
+    meetingId,
+    userId,
+  };
+
   return (
     <JoinKeyContent>
       <div className="flex flex-col space-y-6 mt-12">
@@ -30,7 +46,7 @@ export default function JoinKey() {
           </AlertDescription>
         </Alert>
         <MeetingPoint
-          create={false}
+          session={session}
           audience={KeyShareAudience.self}
           parties={1}
         />

@@ -5,12 +5,20 @@ let serverOptions: ServerOptions = null;
 let keypair: string = null;
 
 export type WebassemblyWorker = {
+  // Generate a noise protocol keypair using the default pattern.
   generateKeypair: () => Promise<string>;
+  // Create meeting gets a meeting identifier.
   createMeeting: (
     options: MeetingOptions,
     identifiers: string[],
     initiator: string,
   ) => Promise<string>;
+  // Join meeting gets the public keys of all participants.
+  joinMeeting: (
+    options: MeetingOptions,
+    meetingId: string,
+    userId: string,
+  ) => Promise<string[]>;
 };
 
 // Convert from a ws: (or wss:) protocol to http: or https:.
@@ -73,9 +81,21 @@ export async function createMeeting(
     server,
     keypair,
   };
-
-  console.log(identifiers);
-  console.log(initiator);
-
   return await worker.createMeeting(options, identifiers, initiator);
+}
+
+// Join a meeting point for public key exchange.
+export async function joinMeeting(
+  worker: WebassemblyWorker,
+  serverUrl: string,
+  meetingId: string,
+  userId: string,
+): Promise<string[]> {
+  const server = await fetchServerPublicKey(serverUrl);
+  const keypair = await generateKeypair(worker);
+  const options: MeetingOptions = {
+    server,
+    keypair,
+  };
+  return await worker.joinMeeting(options, meetingId, userId);
 }

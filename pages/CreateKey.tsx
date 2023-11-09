@@ -11,7 +11,7 @@ import KeyShareAudienceForm from "@/forms/KeyShareAudience";
 import KeyShareNameForm from "@/forms/KeyShareName";
 import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
-import { CreateKeyState, KeyShareAudience } from "@/app/model";
+import { CreateKeyState, KeyShareAudience, OwnerType, SessionType, SessionState } from "@/app/model";
 
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -24,10 +24,14 @@ function CreateKeyContent({ children }: { children: React.ReactNode }) {
 
 export default function CreateKey() {
   const [step, setStep] = useState(0);
-  const [createKeyState, setCreateKeyState] = useState<CreateKeyState>(null);
+  const [createKeyState, setCreateKeyState] =
+    useState<CreateKeyState>({
+      ownerType: OwnerType.initiator,
+      sessionType: SessionType.keygen,
+    });
 
   const onKeyAudience = (audience: KeyShareAudience) => {
-    setCreateKeyState({ audience });
+    setCreateKeyState({ ...createKeyState, audience });
     setStep(step + 1);
   };
 
@@ -150,7 +154,7 @@ export default function CreateKey() {
             </AlertDescription>
           </Alert>
           <MeetingPoint
-            create={true}
+            session={createKeyState as SessionState}
             audience={createKeyState.audience}
             parties={createKeyState.parties}
           />

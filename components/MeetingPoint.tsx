@@ -8,11 +8,11 @@ import Icons from "@/components/Icons";
 import Link from "@/components/Link";
 
 import { WorkerContext } from "@/app/providers/worker";
-import { KeyShareAudience, MeetingInfo } from "@/app/model";
+import { KeyShareAudience, MeetingInfo, SessionState, OwnerType, JoinMeeting } from "@/app/model";
 
 import guard from "@/lib/guard";
 import serverUrl from "@/lib/server-url";
-import { createMeeting } from "@/lib/client";
+import { joinMeeting, createMeeting } from "@/lib/client";
 import { digest, abbreviateAddress, copyToClipboard } from "@/lib/utils";
 
 function inviteUrl(prefix: string, meetingId: string, userId: string) {
@@ -76,17 +76,33 @@ function Invitations({
 export default function MeetingPoint({
   parties,
   audience,
-  create,
+  session,
 }: {
   parties: number;
   audience: KeyShareAudience;
-  create: boolean;
+  session: SessionState;
 }) {
   const { toast } = useToast();
   const [meetingInfo, setMeetingInfo] = useState<MeetingInfo>(null);
   const worker = useContext(WorkerContext);
+  const create = session.ownerType == OwnerType.initiator;
 
   useEffect(() => {
+    const joinMeetingPoint = async (meetingId: string, userId: string) => {
+      console.log("Join existing meeting", meetingId, userId);
+
+      await guard(async () => {
+        const publicKeys = await joinMeeting(
+          worker,
+          serverUrl,
+          meetingId,
+          userId,
+        );
+
+        console.log("Got public keys", publicKeys);
+      }, toast);
+    };
+
     const createMeetingPoint = async () => {
       const identifiers: string[] = [];
 
@@ -98,23 +114,31 @@ export default function MeetingPoint({
       }
 
       // By convention the initiator is the first identifier
-      const initiator = identifiers[0];
+      const initiatorUserId = identifiers[0];
 
-      await guard(async () => {
+      const meetingId = await guard(async () => {
         const meetingId = await createMeeting(
           worker,
           serverUrl,
           identifiers,
-          initiator,
+          initiatorUserId,
         );
         setMeetingInfo({ meetingId, identifiers });
+        return meetingId;
       }, toast);
+
+      // After creating the meeting point, we also
+      // need to join the meeting to be notified of
+      // all the public keys.
+      await joinMeetingPoint(meetingId, initiatorUserId);
     };
 
     if (create) {
       createMeetingPoint();
     } else {
-      console.log("Join existing meeting...");
+      joinMeetingPoint(
+        (session as JoinMeeting).meetingId,
+        (session as JoinMeeting).userId);
     }
   }, []);
 
