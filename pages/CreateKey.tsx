@@ -57,7 +57,9 @@ export default function CreateKey() {
   };
 
   const BackButton = () => (
-    <Button variant="outline" onClick={() => setStep(step - 1)}>
+    // NOTE: the type="button" is required so form submission on
+    // NOTE: enter key works as expected.
+    <Button type="button" variant="outline" onClick={() => setStep(step - 1)}>
       Back
     </Button>
   );

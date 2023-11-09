@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import Icons from "@/components/Icons";
 import Heading from "@/components/Heading";
+import KeyAlert from "@/components/KeyAlert";
 import ChainBadge from "@/components/ChainBadge";
 import KeysLoader from "@/components/KeysLoader";
 
@@ -26,14 +27,14 @@ function NoKeys() {
   return (
     <KeysContent>
       <div className="mt-12">
-        <Alert>
-          <Icons.key className="h-4 w-4" />
-          <AlertTitle>No keys yet!</AlertTitle>
-          <AlertDescription>To get started create a new key.</AlertDescription>
-        </Alert>
-        <Link to="/keys/create">
-          <Button className="mt-8">Create a new key</Button>
-        </Link>
+        <KeyAlert
+          title="No keys yet!"
+          description="To get started create a new key." />
+        <div className="flex justify-end">
+          <Link to="/keys/create">
+            <Button className="mt-8">Create a new key</Button>
+          </Link>
+        </div>
       </div>
     </KeysContent>
   );

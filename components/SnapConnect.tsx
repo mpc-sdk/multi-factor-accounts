@@ -45,7 +45,9 @@ export default function SnapConnect(props: SnapConnectProps) {
           <Link href="https://metamask.io/flask/">MetaMask Flask</Link>{" "}
           (&gt;=11.4.0) and then you can connect.
         </Paragraph>
-        <Button onClick={onConnect}>Connect to MetaMask</Button>
+        <div className="flex justify-end">
+          <Button onClick={onConnect}>Connect to MetaMask</Button>
+        </div>
       </div>
     </>
   );
