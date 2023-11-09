@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 
 import Heading from "@/components/Heading";
-import Icons from "@/components/Icons";
 import KeyAlert from "@/components/KeyAlert";
 import KeyBadge from "@/components/KeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
@@ -13,7 +12,7 @@ import KeyShareAudienceForm from "@/forms/KeyShareAudience";
 import KeyShareNameForm from "@/forms/KeyShareName";
 import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
-import { CreateKeyState, KeyShareAudience, OwnerType, SessionType, SessionState } from "@/app/model";
+import { PublicKeys, CreateKeyState, KeyShareAudience, OwnerType, SessionType, SessionState } from "@/app/model";
 
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -31,7 +30,7 @@ export default function CreateKey() {
       ownerType: OwnerType.initiator,
       sessionType: SessionType.keygen,
     });
-  const [publicKeys, setPublicKeys] = useState<string[]>(null);
+  const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
 
   const onKeyAudience = (audience: KeyShareAudience) => {
     setCreateKeyState({ ...createKeyState, audience });

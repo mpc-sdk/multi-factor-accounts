@@ -1,4 +1,4 @@
-import { ServerOptions, MeetingOptions } from "@/app/model";
+import { Protocol, KeygenOptions, PublicKeys, ServerOptions, MeetingOptions, KeyShare, Parameters } from "@/app/model";
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;
@@ -20,6 +20,7 @@ export type WebassemblyWorker = {
     meetingId: string,
     userId: string,
   ) => Promise<[string[], unknown]>;
+  keygen: (options: KeygenOptions, publicKeys: PublicKeys) => Promise<KeyShare>;
 };
 
 // Convert from a ws: (or wss:) protocol to http: or https:.
@@ -100,4 +101,23 @@ export async function joinMeeting(
     keypair,
   };
   return await worker.joinMeeting(options, meetingId, userId);
+}
+
+// Perform key generation.
+export async function keygen(
+  worker: WebassemblyWorker,
+  serverUrl: string,
+  protocol: Protocol,
+  parameters: Parameters,
+  participants: PublicKeys,
+): Promise<KeyShare> {
+  const server = await fetchServerPublicKey(serverUrl);
+  const keypair = await generateKeypair(worker);
+  const options: KeygenOptions = {
+    server,
+    keypair,
+    protocol,
+    parameters,
+  };
+  return await worker.keygen(options, participants);
 }

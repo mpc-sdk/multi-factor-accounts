@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import Heading from "@/components/Heading";
-import Icons from "@/components/Icons";
 import KeyAlert from "@/components/KeyAlert";
 import KeyBadge from "@/components/KeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
 
-import { KeygenAssociatedData, SessionState, OwnerType, SessionType } from "@/app/model";
+import { PublicKeys, AssociatedData, SessionState, OwnerType, SessionType } from "@/app/model";
 
 import NotFound from "@/pages/NotFound";
 
@@ -22,8 +21,8 @@ function JoinKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function JoinKey() {
-  const [publicKeys, setPublicKeys] = useState<string[]>(null);
-  const [keygenData, setKeygenData] = useState<KeygenAssociatedData>(null);
+  const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
+  const [keygenData, setKeygenData] = useState<AssociatedData>(null);
   const { meetingId, userId } = useParams();
   const [searchParams] = useSearchParams();
   const name = searchParams.get('name');
@@ -48,9 +47,9 @@ export default function JoinKey() {
     return (
       <JoinKeyContent>
         <KeyBadge
-          name={keygenData.get('name')}
-          threshold={keygenData.get('threshold')}
-          parties={keygenData.get('parties')} />
+          name={keygenData.get('name') as string}
+          threshold={keygenData.get('threshold') as number}
+          parties={keygenData.get('parties') as number} />
         <SessionRunner
           loaderText="Creating key share..."
           message={
@@ -76,7 +75,7 @@ export default function JoinKey() {
           session={session}
           onMeetingPointReady={(keys, data) => {
             setPublicKeys(keys);
-            setKeygenData(data as KeygenAssociatedData);
+            setKeygenData(data as AssociatedData);
           }}
         />
       </div>

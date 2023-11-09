@@ -1,5 +1,26 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
 
+// Participant public keys are hex-encoded strings.
+export type PublicKeys = string[];
+
+// Supported protocols.
+export enum Protocol {
+  gg20 = "gg20",
+}
+
+export type KeygenOptions = {
+  server: ServerOptions;
+  protocol: Protocol;
+  keypair: string;
+  parameters: Parameters;
+};
+
+// Key parameters.
+export type Parameters = {
+  parties: number;
+  threshold: number;
+};
+
 // Types of sessions.
 export enum SessionType {
   // Key generation session.
@@ -44,12 +65,8 @@ export type JoinKeyState = JoinMeeting & {
   sessionType: SessionType;
 };
 
-// Associated data for a keygen session passed via the meeting point.
-export type KeygenAssociatedData = {
-  name: string;
-  parties: number;
-  threshold: number;
-};
+// Associated data for a session passed via the meeting point.
+export type AssociatedData = Map<string, unknown>;
 
 export type SessionState = CreateKeyState | JoinKeyState;
 
