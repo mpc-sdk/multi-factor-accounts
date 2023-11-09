@@ -115,7 +115,6 @@ export async function joinMeeting(
 export async function keygen(
   worker: WebassemblyWorker,
   serverUrl: string,
-  protocol: Protocol,
   parameters: Parameters,
   participants: PublicKeys,
 ): Promise<KeyShare> {
@@ -124,7 +123,7 @@ export async function keygen(
   const options: KeygenOptions = {
     server,
     keypair,
-    protocol,
+    protocol: Protocol.gg20,
     parameters,
   };
   return await worker.keygen(options, participants);

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 
+import { useToast } from "@/components/ui/use-toast";
+
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
 import KeyBadge from "@/components/KeyBadge";
@@ -17,6 +19,9 @@ import {
 
 import NotFound from "@/pages/NotFound";
 
+import guard from '@/lib/guard';
+import { keygen, WebassemblyWorker } from '@/lib/client';
+
 function JoinKeyContent({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -27,6 +32,7 @@ function JoinKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function JoinKey() {
+  const { toast } = useToast();
   const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
   const [keygenData, setKeygenData] = useState<AssociatedData>(null);
   const { meetingId, userId } = useParams();
@@ -44,8 +50,20 @@ export default function JoinKey() {
     userId,
   };
 
-  const startKeygen = async () => {
+  const startKeygen = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start key generation (participant)..");
+    await guard(async () => {
+      const keyShare = await keygen(
+        worker,
+        serverUrl,
+        {
+          parties: keygenData.get("parties") as number,
+          threshold: keygenData.get("threshold") as number,
+        },
+        publicKeys,
+      );
+      console.log("key share", keyShare);
+    }, toast);
   };
 
   // Meeting is prepared so we can execute keygen
@@ -54,8 +72,8 @@ export default function JoinKey() {
       <JoinKeyContent>
         <KeyBadge
           name={keygenData.get("name") as string}
-          threshold={keygenData.get("threshold") as number}
           parties={keygenData.get("parties") as number}
+          threshold={keygenData.get("threshold") as number}
         />
         <SessionRunner
           loaderText="Creating key share..."

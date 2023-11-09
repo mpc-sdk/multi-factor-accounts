@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
@@ -21,6 +22,9 @@ import {
   SessionState,
 } from "@/app/model";
 
+import guard from '@/lib/guard';
+import { keygen, WebassemblyWorker } from '@/lib/client';
+
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -31,6 +35,7 @@ function CreateKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function CreateKey() {
+  const { toast } = useToast();
   const [step, setStep] = useState(0);
   const [createKeyState, setCreateKeyState] = useState<CreateKeyState>({
     ownerType: OwnerType.initiator,
@@ -69,8 +74,21 @@ export default function CreateKey() {
     </Button>
   );
 
-  const startKeygen = async () => {
+  const startKeygen = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start key generation (initiator)..");
+    await guard(async () => {
+      const keyShare = await keygen(
+        worker,
+        serverUrl,
+        {
+          parties: createKeyState.parties,
+          threshold: createKeyState.threshold,
+        },
+        publicKeys,
+      );
+      console.log("key share", keyShare);
+
+    }, toast);
   };
 
   // Meeting is prepared so we can execute keygen

@@ -109,7 +109,6 @@ export default function MeetingPoint({
           meetingId,
           userId,
         );
-        console.log("Got meeting associated data", data);
         onMeetingPointReady(publicKeys, data);
       }, toast);
     };
