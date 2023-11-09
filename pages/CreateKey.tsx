@@ -194,7 +194,7 @@ export default function CreateKey() {
           </Alert>
           <MeetingPoint
             session={createKeyState as SessionState}
-            onPublicKeys={(keys) => setPublicKeys(keys)}
+            onMeetingPointReady={(keys) => setPublicKeys(keys)}
           />
         </div>
       </CreateKeyContent>

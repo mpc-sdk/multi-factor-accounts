@@ -12,6 +12,9 @@
     "images/",
     "snap.manifest.json"
   ],
+  "workspaces": [
+    "sdk/bindings/pkg"
+  ],
   "scripts": {
     "clean": "rm -rf dist bundle .parcel-cache",
     "build": "yarn clean && yarn build:snap && yarn tailwind && webpack --config webpack.config.js --node-env production",
@@ -56,7 +59,7 @@
     "@ethersproject/hash": "^5.7.0",
     "@hookform/resolvers": "^3.3.2",
     "@metamask/detect-provider": "^2.0.0",
-    "@mpc-sdk/mpc-bindings": "./sdk/bindings/pkg",
+    "@mpc-sdk/mpc-bindings": "workspace:^",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@radix-ui/react-radio-group": "^1.1.3",

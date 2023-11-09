@@ -2142,12 +2142,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mpc-sdk/mpc-bindings@file:./sdk/bindings/pkg::locator=%40mpc-sdk%2Ftss-snap%40workspace%3A.":
-  version: 0.5.0
-  resolution: "@mpc-sdk/mpc-bindings@file:./sdk/bindings/pkg#./sdk/bindings/pkg::hash=e2680f&locator=%40mpc-sdk%2Ftss-snap%40workspace%3A."
-  checksum: d2058b1ace21a3780e54b14cd913cccd033315c80d08d0cf63347a2c57a521331d78bd59994c873a47a44cb20cf75367641a5e3c16e8a63502732f612a1ac8c6
-  languageName: node
-  linkType: hard
+"@mpc-sdk/mpc-bindings@workspace:^, @mpc-sdk/mpc-bindings@workspace:sdk/bindings/pkg":
+  version: 0.0.0-use.local
+  resolution: "@mpc-sdk/mpc-bindings@workspace:sdk/bindings/pkg"
+  languageName: unknown
+  linkType: soft
 
 "@mpc-sdk/tss-snap@workspace:.":
   version: 0.0.0-use.local
@@ -2160,7 +2159,7 @@ __metadata:
     "@metamask/detect-provider": "npm:^2.0.0"
     "@metamask/snaps-cli": "npm:^3.0.1"
     "@metamask/utils": "npm:^8.2.0"
-    "@mpc-sdk/mpc-bindings": ./sdk/bindings/pkg
+    "@mpc-sdk/mpc-bindings": "workspace:^"
     "@radix-ui/react-label": "npm:^2.0.2"
     "@radix-ui/react-navigation-menu": "npm:^1.1.4"
     "@radix-ui/react-radio-group": "npm:^1.1.3"

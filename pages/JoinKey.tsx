@@ -9,7 +9,7 @@ import KeyBadge from "@/components/KeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
 
-import { SessionState, OwnerType, SessionType } from "@/app/model";
+import { KeygenAssociatedData, SessionState, OwnerType, SessionType } from "@/app/model";
 
 import NotFound from "@/pages/NotFound";
 
@@ -24,17 +24,12 @@ function JoinKeyContent({ children }: { children: React.ReactNode }) {
 
 export default function JoinKey() {
   const [publicKeys, setPublicKeys] = useState<string[]>(null);
+  const [keygenData, setKeygenData] = useState<KeygenAssociatedData>(null);
   const { meetingId, userId } = useParams();
   const [searchParams] = useSearchParams();
   const name = searchParams.get('name');
-  const parties = searchParams.get('parties');
-  const threshold = searchParams.get('threshold');
 
-  // Check we have all the required parameters
-  const paramsValid = meetingId && userId && name && parties && threshold
-    && !isNaN(parseInt(parties)) && !isNaN(parseInt(threshold));
-
-  if (!paramsValid) {
+  if (!meetingId || !userId || !name) {
     return <NotFound />;
   }
 
@@ -53,7 +48,10 @@ export default function JoinKey() {
   if (publicKeys !== null) {
     return (
       <JoinKeyContent>
-        <KeyBadge name={name} threshold={threshold} parties={parties} />
+        <KeyBadge
+          name={keygenData.get('name')}
+          threshold={keygenData.get('threshold')}
+          parties={keygenData.get('parties')} />
         <SessionRunner
           loaderText="Generating key share..."
           executor={startKeygen} />
@@ -63,7 +61,7 @@ export default function JoinKey() {
 
   return (
     <JoinKeyContent>
-      <KeyBadge name={name} threshold={threshold} parties={parties} />
+      <KeyBadge name={name} />
       <div className="flex flex-col space-y-6 mt-12">
         <Alert>
           <Icons.key className="h-4 w-4" />
@@ -75,7 +73,10 @@ export default function JoinKey() {
         </Alert>
         <MeetingPoint
           session={session}
-          onPublicKeys={(keys) => setPublicKeys(keys)}
+          onMeetingPointReady={(keys, data) => {
+            setPublicKeys(keys);
+            setKeygenData(data as KeygenAssociatedData);
+          }}
         />
       </div>
     </JoinKeyContent>

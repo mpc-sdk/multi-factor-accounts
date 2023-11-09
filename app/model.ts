@@ -44,6 +44,13 @@ export type JoinKeyState = JoinMeeting & {
   sessionType: SessionType;
 };
 
+// Associated data for a keygen session passed via the meeting point.
+export type KeygenAssociatedData = {
+  name: string;
+  parties: number;
+  threshold: number;
+};
+
 export type SessionState = CreateKeyState | JoinKeyState;
 
 // Information about a meeting point.

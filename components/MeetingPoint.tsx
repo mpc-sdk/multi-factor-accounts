@@ -77,10 +77,10 @@ function Invitations({
 // Create a meeting point.
 export default function MeetingPoint({
   session,
-  onPublicKeys,
+  onMeetingPointReady,
 }: {
   session: SessionState
-  onPublicKeys: (publicKeys: string[]) => void
+  onMeetingPointReady: (publicKeys: string[], data: unknown) => void
 }) {
   const { toast } = useToast();
   const [meetingInfo, setMeetingInfo] = useState<MeetingInfo>(null);
@@ -90,13 +90,14 @@ export default function MeetingPoint({
   useEffect(() => {
     const joinMeetingPoint = async (meetingId: string, userId: string) => {
       await guard(async () => {
-        const publicKeys = await joinMeeting(
+        const [publicKeys, data] = await joinMeeting(
           worker,
           serverUrl,
           meetingId,
           userId,
         );
-        onPublicKeys(publicKeys);
+        console.log("Got meeting associated data", data);
+        onMeetingPointReady(publicKeys, data);
       }, toast);
     };
 
@@ -115,21 +116,30 @@ export default function MeetingPoint({
       // By convention the initiator is the first identifier
       const initiatorUserId = identifiers[0];
 
+      const inviteParams = {
+        "name": (session as CreateKeyState).name,
+        "parties": (session as CreateKeyState).parties,
+        "threshold": (session as CreateKeyState).threshold,
+      };
+
       const meetingId = await guard(async () => {
         const meetingId = await createMeeting(
           worker,
           serverUrl,
           identifiers,
           initiatorUserId,
+          inviteParams,
         );
         setMeetingInfo({ meetingId, identifiers });
         return meetingId;
       }, toast);
 
-      // After creating the meeting point, we also
-      // need to join the meeting to be notified of
-      // all the public keys.
-      await joinMeetingPoint(meetingId, initiatorUserId);
+      if (meetingId) {
+        // After creating the meeting point, we also
+        // need to join the meeting to be notified of
+        // all the public keys.
+        await joinMeetingPoint(meetingId, initiatorUserId);
+      }
     };
 
     if (create) {
@@ -147,17 +157,13 @@ export default function MeetingPoint({
   }
 
   if (create) {
-    const inviteParams: Dictionary<string> = {
-      "name": (session as CreateKeyState).name,
-      "parties": (session as CreateKeyState).parties.toString(),
-      "threshold": (session as CreateKeyState).threshold.toString(),
-    };
-
     return <div className="flex flex-col space-y-6">
       <Loader text="Waiting for everybody to join..." />
       <Invitations
         meetingInfo={meetingInfo}
-        inviteParams={inviteParams}
+        inviteParams={{
+          name: (session as CreateKeyState).name
+        }}
         audience={(session as CreateKeyState).audience} />
     </div>;
   }

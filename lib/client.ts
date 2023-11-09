@@ -12,13 +12,14 @@ export type WebassemblyWorker = {
     options: MeetingOptions,
     identifiers: string[],
     initiator: string,
+    data: unknown,
   ) => Promise<string>;
   // Join meeting gets the public keys of all participants.
   joinMeeting: (
     options: MeetingOptions,
     meetingId: string,
     userId: string,
-  ) => Promise<string[]>;
+  ) => Promise<[string[], unknown]>;
 };
 
 // Convert from a ws: (or wss:) protocol to http: or https:.
@@ -74,6 +75,7 @@ export async function createMeeting(
   serverUrl: string,
   identifiers: string[],
   initiator: string,
+  data: unknown,
 ): Promise<string> {
   const server = await fetchServerPublicKey(serverUrl);
   const keypair = await generateKeypair(worker);
@@ -81,7 +83,7 @@ export async function createMeeting(
     server,
     keypair,
   };
-  return await worker.createMeeting(options, identifiers, initiator);
+  return await worker.createMeeting(options, identifiers, initiator, data);
 }
 
 // Join a meeting point for public key exchange.
@@ -90,7 +92,7 @@ export async function joinMeeting(
   serverUrl: string,
   meetingId: string,
   userId: string,
-): Promise<string[]> {
+): Promise<[string[], unknown]> {
   const server = await fetchServerPublicKey(serverUrl);
   const keypair = await generateKeypair(worker);
   const options: MeetingOptions = {

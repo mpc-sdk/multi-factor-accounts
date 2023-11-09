@@ -47,6 +47,8 @@ yarn install
 yarn start
 ```
 
+Note if you re-compile the webassembly bindings you should also restart the development server to clear the parcel cache.
+
 ## Production Build
 
 The production build uses [webpack](https://webpack.js.org/) as it creates a smaller bundle:
