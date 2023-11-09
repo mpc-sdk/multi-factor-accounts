@@ -6,9 +6,14 @@ import Loader from "@/components/Loader";
 export default function SessionRunner({
   loaderText,
   executor,
+  message,
 }: {
   loaderText: string,
   executor: () => Promise<void>,
+  message: React.ReactNode,
 }) {
-  return <Loader text={loaderText} />;
+  return <div className="flex flex-col space-y-6 mt-12">
+    {message}
+    <Loader text={loaderText} />
+  </div>;
 }

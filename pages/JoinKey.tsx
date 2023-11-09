@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { useParams, useSearchParams } from 'react-router-dom';
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
+import KeyAlert from "@/components/KeyAlert";
 import KeyBadge from "@/components/KeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
@@ -53,7 +52,13 @@ export default function JoinKey() {
           threshold={keygenData.get('threshold')}
           parties={keygenData.get('parties')} />
         <SessionRunner
-          loaderText="Generating key share..."
+          loaderText="Creating key share..."
+          message={
+            <KeyAlert
+              title="Generating key share"
+              description="Crunching the numbers to compute your key share securely"
+              />
+          }
           executor={startKeygen} />
       </JoinKeyContent>
     );
@@ -63,14 +68,10 @@ export default function JoinKey() {
     <JoinKeyContent>
       <KeyBadge name={name} />
       <div className="flex flex-col space-y-6 mt-12">
-        <Alert>
-          <Icons.key className="h-4 w-4" />
-          <AlertTitle>Join key</AlertTitle>
-          <AlertDescription>
-            Joining the key, when all participants are here we will proceed to
-            key generation
-          </AlertDescription>
-        </Alert>
+        <KeyAlert
+          title="Join key"
+          description="Joining the key, when all participants are here we will proceed to key generation"
+          />
         <MeetingPoint
           session={session}
           onMeetingPointReady={(keys, data) => {
