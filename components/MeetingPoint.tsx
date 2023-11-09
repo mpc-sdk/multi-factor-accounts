@@ -77,12 +77,13 @@ function Invitations({
 // Create a meeting point.
 export default function MeetingPoint({
   session,
+  onPublicKeys,
 }: {
-  session: SessionState;
+  session: SessionState
+  onPublicKeys: (publicKeys: string[]) => void
 }) {
   const { toast } = useToast();
   const [meetingInfo, setMeetingInfo] = useState<MeetingInfo>(null);
-  const [publicKeys, setPublicKeys] = useState<string[]>(null);
   const worker = useContext(WorkerContext);
   const create = session.ownerType == OwnerType.initiator;
 
@@ -95,7 +96,7 @@ export default function MeetingPoint({
           meetingId,
           userId,
         );
-        setPublicKeys(publicKeys);
+        onPublicKeys(publicKeys);
       }, toast);
     };
 
@@ -139,10 +140,6 @@ export default function MeetingPoint({
         (session as JoinMeeting).userId);
     }
   }, []);
-
-  if (publicKeys !== null) {
-    return <p>Execute the session...</p>;
-  }
 
   if (meetingInfo === null) {
     const loaderText = create ? "Creating meeting..." : "Joining meeting...";

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Badge } from "@/components/ui/badge";
 
 export default function KeyBadge({
@@ -7,13 +7,13 @@ export default function KeyBadge({
   parties,
 }: {
   name: string
-  threshold: number | string
-  parties: number | string
+  threshold?: number | string
+  parties?: number | string
 }) {
   return <div className="flex space-x-2 mt-2">
     <Badge className="mt-2">{name}</Badge>
-    <Badge
+    {threshold && parties && <Badge
       variant="secondary"
-      className="mt-2">{threshold} of {parties}</Badge>
+      className="mt-2">{threshold} of {parties}</Badge>}
   </div>
 }

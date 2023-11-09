@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams, useSearchParams } from 'react-router-dom';
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -7,6 +7,7 @@ import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
 import KeyBadge from "@/components/KeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
+import SessionRunner from "@/components/SessionRunner";
 
 import { SessionState, OwnerType, SessionType } from "@/app/model";
 
@@ -22,13 +23,18 @@ function JoinKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function JoinKey() {
+  const [publicKeys, setPublicKeys] = useState<string[]>(null);
   const { meetingId, userId } = useParams();
-  const [searchParams, _] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const name = searchParams.get('name');
   const parties = searchParams.get('parties');
   const threshold = searchParams.get('threshold');
 
-  if (!meetingId || !userId || !name || !parties || !threshold) {
+  // Check we have all the required parameters
+  const paramsValid = meetingId && userId && name && parties && threshold
+    && !isNaN(parseInt(parties)) && !isNaN(parseInt(threshold));
+
+  if (!paramsValid) {
     return <NotFound />;
   }
 
@@ -38,6 +44,22 @@ export default function JoinKey() {
     meetingId,
     userId,
   };
+
+  const startKeygen = async () => {
+    console.log("Start key generation (participant)..");
+  };
+
+  // Meeting is prepared so we can execute keygen
+  if (publicKeys !== null) {
+    return (
+      <JoinKeyContent>
+        <KeyBadge name={name} threshold={threshold} parties={parties} />
+        <SessionRunner
+          loaderText="Generating key share..."
+          executor={startKeygen} />
+      </JoinKeyContent>
+    );
+  }
 
   return (
     <JoinKeyContent>
@@ -51,7 +73,10 @@ export default function JoinKey() {
             key generation
           </AlertDescription>
         </Alert>
-        <MeetingPoint session={session} />
+        <MeetingPoint
+          session={session}
+          onPublicKeys={(keys) => setPublicKeys(keys)}
+        />
       </div>
     </JoinKeyContent>
   );

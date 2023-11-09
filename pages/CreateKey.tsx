@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
+import KeyBadge from "@/components/KeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
+import SessionRunner from "@/components/SessionRunner";
 
 import KeyShareAudienceForm from "@/forms/KeyShareAudience";
 import KeyShareNameForm from "@/forms/KeyShareName";
@@ -29,6 +31,7 @@ export default function CreateKey() {
       ownerType: OwnerType.initiator,
       sessionType: SessionType.keygen,
     });
+  const [publicKeys, setPublicKeys] = useState<string[]>(null);
 
   const onKeyAudience = (audience: KeyShareAudience) => {
     setCreateKeyState({ ...createKeyState, audience });
@@ -59,6 +62,25 @@ export default function CreateKey() {
     </Button>
   );
 
+  const startKeygen = async () => {
+    console.log("Start key generation (initiator)..");
+  };
+
+  // Meeting is prepared so we can execute keygen
+  if (publicKeys !== null) {
+    return (
+      <CreateKeyContent>
+        <KeyBadge
+          name={createKeyState.name}
+          threshold={createKeyState.threshold}
+          parties={createKeyState.parties} />
+        <SessionRunner
+          loaderText="Generating key share..."
+          executor={startKeygen} />
+      </CreateKeyContent>
+    );
+  }
+
   if (step == 0) {
     return (
       <CreateKeyContent>
@@ -74,10 +96,15 @@ export default function CreateKey() {
   } else if (step == 2) {
     return (
       <CreateKeyContent>
+        <KeyBadge
+          name={createKeyState.name}
+          threshold={createKeyState.threshold}
+          parties={createKeyState.parties} />
         <KeyShareNumberForm
           back={<BackButton />}
           onNext={onKeyParties}
-          label="Participants"
+          defaultValue={createKeyState.parties}
+          label="Parties"
           message={
             <Alert>
               <Icons.key className="h-4 w-4" />
@@ -93,11 +120,15 @@ export default function CreateKey() {
   } else if (step == 3) {
     return (
       <CreateKeyContent>
+        <KeyBadge
+          name={createKeyState.name}
+          threshold={createKeyState.threshold}
+          parties={createKeyState.parties} />
         <KeyShareNumberForm
           back={<BackButton />}
           onNext={onKeyThreshold}
           label="Threshold"
-          defaultValue={createKeyState.parties}
+          defaultValue={createKeyState.threshold || createKeyState.parties}
           max={createKeyState.parties}
           message={
             <Alert>
@@ -121,6 +152,10 @@ export default function CreateKey() {
 
     return (
       <CreateKeyContent>
+        <KeyBadge
+          name={createKeyState.name}
+          threshold={createKeyState.threshold}
+          parties={createKeyState.parties} />
         <div className="flex flex-col space-y-6 mt-12">
           <Alert>
             <Icons.key className="h-4 w-4" />
@@ -143,6 +178,10 @@ export default function CreateKey() {
   } else if (step == 5) {
     return (
       <CreateKeyContent>
+        <KeyBadge
+          name={createKeyState.name}
+          threshold={createKeyState.threshold}
+          parties={createKeyState.parties} />
         <div className="flex flex-col space-y-6 mt-12">
           <Alert>
             <Icons.key className="h-4 w-4" />
@@ -155,6 +194,7 @@ export default function CreateKey() {
           </Alert>
           <MeetingPoint
             session={createKeyState as SessionState}
+            onPublicKeys={(keys) => setPublicKeys(keys)}
           />
         </div>
       </CreateKeyContent>
