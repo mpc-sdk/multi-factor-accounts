@@ -8,6 +8,7 @@ import About from "@/pages/About";
 import Home from "@/pages/Home";
 import Keys from "@/pages/Keys";
 import CreateKey from "@/pages/CreateKey";
+import JoinKey from "@/pages/JoinKey";
 
 import WorkerProvider, { webWorker } from "./providers/worker";
 import ChainProvider from "./providers/chain";
@@ -40,6 +41,7 @@ function Content() {
       <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/keys/create" element={<CreateKey />} />
+      <Route path="/keys/join/:meetingId/:userId" element={<JoinKey />} />
       <Route path="/keys" element={<Keys />} />
       <Route path="*" element={<NotFound />} />
     </Routes>

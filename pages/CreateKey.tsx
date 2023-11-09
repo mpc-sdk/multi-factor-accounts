@@ -13,14 +13,10 @@ import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
 import { CreateKeyState, KeyShareAudience } from "@/app/model";
 
-function CreateKeyHeading() {
-  return <Heading>Create Key</Heading>;
-}
-
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <CreateKeyHeading />
+      <Heading>Create Key</Heading>
       {children}
     </>
   );
@@ -154,6 +150,7 @@ export default function CreateKey() {
             </AlertDescription>
           </Alert>
           <MeetingPoint
+            create={true}
             audience={createKeyState.audience}
             parties={createKeyState.parties}
           />

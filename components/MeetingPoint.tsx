@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import Loader from "@/components/Loader";
 import Icons from "@/components/Icons";
+import Link from "@/components/Link";
 
 import { WorkerContext } from "@/app/providers/worker";
 import { KeyShareAudience, MeetingInfo } from "@/app/model";
@@ -51,10 +52,12 @@ function Invitations({
               <div className="flex-grow">{abbreviateAddress(userId)}</div>
               <div className="space-x-2">
                 {isSelf && (
-                  <Button variant="outline">
-                    <Icons.link className="mr-2 h-4 w-4" />
-                    Open
-                  </Button>
+                  <Link href={url} target="_blank">
+                    <Button variant="outline">
+                      <Icons.link className="mr-2 h-4 w-4" />
+                      Open
+                    </Button>
+                  </Link>
                 )}
                 <Button onClick={() => copyLink(url)}>
                   <Icons.copy className="mr-2 h-4 w-4" />
@@ -73,9 +76,11 @@ function Invitations({
 export default function MeetingPoint({
   parties,
   audience,
+  create,
 }: {
   parties: number;
   audience: KeyShareAudience;
+  create: boolean;
 }) {
   const { toast } = useToast();
   const [meetingInfo, setMeetingInfo] = useState<MeetingInfo>(null);
@@ -106,12 +111,21 @@ export default function MeetingPoint({
       }, toast);
     };
 
-    createMeetingPoint();
+    if (create) {
+      createMeetingPoint();
+    } else {
+      console.log("Join existing meeting...");
+    }
   }, []);
 
   if (meetingInfo == null) {
-    return <Loader text="Creating meeting..." />;
+    const loaderText = create ? "Creating meeting..." : "Joining meeting...";
+    return <Loader text={loaderText} />;
   }
 
-  return <Invitations meetingInfo={meetingInfo} audience={audience} />;
+  if (create) {
+    return <Invitations meetingInfo={meetingInfo} audience={audience} />;
+  }
+
+  return <p>View for joinin the meeting point...</p>;
 }
