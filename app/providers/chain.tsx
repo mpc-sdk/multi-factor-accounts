@@ -1,15 +1,12 @@
 import React, {
   createContext,
-  PropsWithChildren,
   useState,
   useEffect,
 } from "react";
 
 const ChainContext = createContext(null);
 
-type ChainProviderProps = PropsWithChildren<Record<string, unknown>>;
-
-const ChainProvider = (props: ChainProviderProps) => {
+const ChainProvider = ({children}: {children: React.ReactNode}) => {
   const [chain, setChain] = useState<string>(null);
 
   useEffect(() => {
@@ -29,7 +26,7 @@ const ChainProvider = (props: ChainProviderProps) => {
 
   return (
     <ChainContext.Provider value={chain}>
-      {props.children}
+      {children}
     </ChainContext.Provider>
   );
 };

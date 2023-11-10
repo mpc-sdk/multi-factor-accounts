@@ -12,6 +12,7 @@ import JoinKey from "@/pages/JoinKey";
 
 import WorkerProvider, { webWorker } from "./providers/worker";
 import ChainProvider from "./providers/chain";
+import KeypairProvider from "./providers/keypair";
 
 type WorkerMessage = {
   data: { ready: boolean };
@@ -57,9 +58,6 @@ export default function App() {
       const provider = await detectEthereumProvider();
       setProvider(provider);
 
-      // Setup the wasm helpers that run on the main UI thread
-      //await init();
-
       // Now we are ready to render
       setReady(true);
     };
@@ -97,33 +95,15 @@ export default function App() {
     );
   }
 
-  /*
-    <ThemeProvider theme={theme}>
-      <>
-        <CssBaseline />
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <WebSocketProvider>
-            <WorkerProvider>
-              <ChainProvider>
-                <MainAppBar />
-                <Content />
-                <Dialogs />
-                <Snackbars />
-              </ChainProvider>
-            </WorkerProvider>
-          </WebSocketProvider>
-        </div>
-      </>
-    </ThemeProvider>
-  */
-
   return (
     <WorkerProvider>
-      <ChainProvider>
-        <Layout>
-          <Content />
-        </Layout>
-      </ChainProvider>
+      <KeypairProvider>
+        <ChainProvider>
+          <Layout>
+            <Content />
+          </Layout>
+        </ChainProvider>
+      </KeypairProvider>
     </WorkerProvider>
   );
 }

@@ -1,5 +1,13 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
 
+// Noise protocol key information.
+export type Keypair = {
+  // Full key material pem-encoded.
+  pem: string;
+  // Hex-encoded public key intended for debugging.
+  publicKey: string;
+};
+
 // Participant public keys are hex-encoded strings.
 export type PublicKeys = string[];
 

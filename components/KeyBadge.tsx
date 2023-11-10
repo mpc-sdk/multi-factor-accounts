@@ -11,10 +11,10 @@ export default function KeyBadge({
   parties?: number | string;
 }) {
   return (
-    <div className="flex space-x-2 mt-2">
-      <Badge className="mt-2">{name}</Badge>
+    <div className="flex space-x-2">
+      <Badge>{name}</Badge>
       {threshold && parties && (
-        <Badge variant="secondary" className="mt-2">
+        <Badge variant="secondary">
           {threshold} of {parties}
         </Badge>
       )}

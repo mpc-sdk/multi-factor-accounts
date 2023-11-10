@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 
 import { useToast } from "@/components/ui/use-toast";
 
+import { KeypairContext } from '@/app/providers/keypair';
+
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
 import KeyBadge from "@/components/KeyBadge";
+import PublicKeyBadge from "@/components/PublicKeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
 
@@ -32,12 +35,19 @@ function JoinKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function JoinKey() {
+  const keypair = useContext(KeypairContext);
+
   const { toast } = useToast();
   const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
   const [keygenData, setKeygenData] = useState<AssociatedData>(null);
   const { meetingId, userId } = useParams();
   const [searchParams] = useSearchParams();
   const name = searchParams.get("name");
+
+  if (keypair === null) {
+    return null;
+  }
+  const { publicKey } = keypair;
 
   if (!meetingId || !userId || !name) {
     return <NotFound />;
@@ -66,15 +76,22 @@ export default function JoinKey() {
     }, toast);
   };
 
+  const Badges = () => (
+    <div className="flex justify-between items-center mt-2">
+      <KeyBadge
+        name={name}
+        parties={keygenData && keygenData.get("parties") as number}
+        threshold={keygenData && keygenData.get("threshold") as number}
+      />
+      <PublicKeyBadge publicKey={publicKey} />
+    </div>
+  );
+
   // Meeting is prepared so we can execute keygen
   if (publicKeys !== null) {
     return (
       <JoinKeyContent>
-        <KeyBadge
-          name={keygenData.get("name") as string}
-          parties={keygenData.get("parties") as number}
-          threshold={keygenData.get("threshold") as number}
-        />
+        <Badges />
         <SessionRunner
           loaderText="Creating key share..."
           message={
@@ -91,7 +108,7 @@ export default function JoinKey() {
 
   return (
     <JoinKeyContent>
-      <KeyBadge name={name} />
+      <Badges />
       <div className="flex flex-col space-y-6 mt-12">
         <KeyAlert
           title="Join key"

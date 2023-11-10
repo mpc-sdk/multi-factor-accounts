@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+
+import { KeypairContext } from '@/app/providers/keypair';
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -6,6 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
 import KeyBadge from "@/components/KeyBadge";
+import PublicKeyBadge from "@/components/PublicKeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
 
@@ -35,6 +38,7 @@ function CreateKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function CreateKey() {
+  const keypair = useContext(KeypairContext);
   const { toast } = useToast();
   const [step, setStep] = useState(0);
   const [createKeyState, setCreateKeyState] = useState<CreateKeyState>({
@@ -42,6 +46,11 @@ export default function CreateKey() {
     sessionType: SessionType.keygen,
   });
   const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
+
+  if (keypair === null) {
+    return null;
+  }
+  const { publicKey } = keypair;
 
   const onKeyAudience = (audience: KeyShareAudience) => {
     setCreateKeyState({ ...createKeyState, audience });
@@ -87,19 +96,25 @@ export default function CreateKey() {
         publicKeys,
       );
       console.log("key share", keyShare);
-
     }, toast);
   };
+
+  const Badges = () => (
+    <div className="flex justify-between items-center mt-2">
+      <KeyBadge
+        name={createKeyState.name}
+        threshold={createKeyState.threshold}
+        parties={createKeyState.parties}
+      />
+      <PublicKeyBadge publicKey={publicKey} />
+    </div>
+  );
 
   // Meeting is prepared so we can execute keygen
   if (publicKeys !== null) {
     return (
       <CreateKeyContent>
-        <KeyBadge
-          name={createKeyState.name}
-          threshold={createKeyState.threshold}
-          parties={createKeyState.parties}
-        />
+        <Badges />
         <SessionRunner
           loaderText="Creating key share..."
           message={
@@ -129,11 +144,7 @@ export default function CreateKey() {
   } else if (step == 2) {
     return (
       <CreateKeyContent>
-        <KeyBadge
-          name={createKeyState.name}
-          threshold={createKeyState.threshold}
-          parties={createKeyState.parties}
-        />
+        <Badges />
         <KeyShareNumberForm
           back={<BackButton />}
           onNext={onKeyParties}
@@ -151,11 +162,7 @@ export default function CreateKey() {
   } else if (step == 3) {
     return (
       <CreateKeyContent>
-        <KeyBadge
-          name={createKeyState.name}
-          threshold={createKeyState.threshold}
-          parties={createKeyState.parties}
-        />
+        <Badges />
         <KeyShareNumberForm
           back={<BackButton />}
           onNext={onKeyThreshold}
@@ -180,11 +187,7 @@ export default function CreateKey() {
 
     return (
       <CreateKeyContent>
-        <KeyBadge
-          name={createKeyState.name}
-          threshold={createKeyState.threshold}
-          parties={createKeyState.parties}
-        />
+        <Badges />
         <div className="flex flex-col space-y-6 mt-12">
           <KeyAlert
             title="Confirm"
@@ -204,11 +207,7 @@ export default function CreateKey() {
   } else if (step == 5) {
     return (
       <CreateKeyContent>
-        <KeyBadge
-          name={createKeyState.name}
-          threshold={createKeyState.threshold}
-          parties={createKeyState.parties}
-        />
+        <Badges />
         <div className="flex flex-col space-y-6 mt-12">
           <KeyAlert
             title="Invitations"

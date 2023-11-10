@@ -1,5 +1,6 @@
 import {
   Protocol,
+  Keypair,
   KeygenOptions,
   PublicKeys,
   ServerOptions,
@@ -10,11 +11,11 @@ import {
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;
-let keypair: string = null;
+let keypair: Keypair = null;
 
 export type WebassemblyWorker = {
   // Generate a noise protocol keypair using the default pattern.
-  generateKeypair: () => Promise<string>;
+  generateKeypair: () => Promise<[string, string]>;
   // Create meeting gets a meeting identifier.
   createMeeting: (
     options: MeetingOptions,
@@ -70,11 +71,12 @@ export async function fetchServerPublicKey(
 // Generate a keypair or return a cached session keypair.
 export async function generateKeypair(
   worker: WebassemblyWorker,
-): Promise<string> {
+): Promise<Keypair> {
   if (keypair !== null) {
     return keypair;
   }
-  keypair = await worker.generateKeypair();
+  const [pem, publicKey] = await worker.generateKeypair();
+  keypair = {pem, publicKey};
   return keypair;
 }
 
@@ -90,7 +92,7 @@ export async function createMeeting(
   const keypair = await generateKeypair(worker);
   const options: MeetingOptions = {
     server,
-    keypair,
+    keypair: keypair.pem,
   };
   return await worker.createMeeting(options, identifiers, initiator, data);
 }
@@ -106,7 +108,7 @@ export async function joinMeeting(
   const keypair = await generateKeypair(worker);
   const options: MeetingOptions = {
     server,
-    keypair,
+    keypair: keypair.pem,
   };
   return await worker.joinMeeting(options, meetingId, userId);
 }
@@ -122,7 +124,7 @@ export async function keygen(
   const keypair = await generateKeypair(worker);
   const options: KeygenOptions = {
     server,
-    keypair,
+    keypair: keypair.pem,
     protocol: Protocol.gg20,
     parameters,
   };
