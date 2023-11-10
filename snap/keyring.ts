@@ -3,27 +3,23 @@ import type {
   KeyringAccount,
   KeyringRequest,
   SubmitRequestResponse,
-} from '@metamask/keyring-api';
+} from "@metamask/keyring-api";
 
 import {
   EthAccountType,
   EthMethod,
   emitSnapKeyringEvent,
-} from '@metamask/keyring-api';
+} from "@metamask/keyring-api";
 
-import { KeyringEvent } from '@metamask/keyring-api/dist/events';
-import { type Json, type JsonRpcRequest } from '@metamask/utils';
-import { v4 as uuid } from 'uuid';
+import { KeyringEvent } from "@metamask/keyring-api/dist/events";
+import { type Json, type JsonRpcRequest } from "@metamask/utils";
+import { v4 as uuid } from "uuid";
 
-import { saveState } from './stateManagement';
+import { saveState } from "./stateManagement";
 
-import {
-  isEvmChain,
-  isUniqueAddress,
-  throwError,
-} from './util';
+import { isEvmChain, isUniqueAddress, throwError } from "./util";
 
-import packageInfo from '../package.json';
+import packageInfo from "../package.json";
 
 export type KeyringState = {
   wallets: Record<string, Wallet>;
@@ -139,13 +135,21 @@ export class ThresholdKeyring implements Keyring {
 
   async getRequest(id: string): Promise<KeyringRequest> {
     return (
-      this.#state.pendingRequests[id]
-        ?? throwError(`Request '${id}' not found`)
+      this.#state.pendingRequests[id] ?? throwError(`Request '${id}' not found`)
     );
   }
 
   async submitRequest(request: KeyringRequest): Promise<SubmitRequestResponse> {
-    return this.#asyncSubmitRequest(request);
+    this.#state.pendingRequests[request.id] = request;
+    await this.#saveState();
+    const dappUrl = this.#getCurrentUrl();
+    return {
+      pending: true,
+      redirect: {
+        url: dappUrl,
+        message: "Redirecting to Snap Simple Keyring to sign transaction",
+      },
+    };
   }
 
   async approveRequest(id: string): Promise<void> {
@@ -154,8 +158,8 @@ export class ThresholdKeyring implements Keyring {
       throwError(`Request '${id}' not found`);
 
     //const result = this.#handleSigningRequest(
-      //request.method,
-      //request.params ?? [],
+    //request.method,
+    //request.params ?? [],
     //);
     const result = "TODO: handle request data";
 
@@ -179,34 +183,21 @@ export class ThresholdKeyring implements Keyring {
 
   #getCurrentUrl(): string {
     const dappUrlPrefix =
-      process.env.NODE_ENV === 'production'
+      process.env.NODE_ENV === "production"
         ? process.env.DAPP_ORIGIN_PRODUCTION
         : process.env.DAPP_ORIGIN_DEVELOPMENT;
 
+    /*
     const dappVersion: string = packageInfo.version;
-
     // Ensuring that both dappUrlPrefix and dappVersion are truthy
-    if (dappUrlPrefix && dappVersion && process.env.NODE_ENV === 'production') {
-      return `${dappUrlPrefix}${dappVersion}/`;
+    if (dappUrlPrefix && dappVersion && process.env.NODE_ENV === "production") {
+      return `${dappUrlPrefix}/${dappVersion}/`;
     }
+    */
+
     // Default URL if dappUrlPrefix or dappVersion are falsy,
     // or if URL construction fails
     return dappUrlPrefix as string;
-  }
-
-  async #asyncSubmitRequest(
-    request: KeyringRequest,
-  ): Promise<SubmitRequestResponse> {
-    this.#state.pendingRequests[request.id] = request;
-    await this.#saveState();
-    const dappUrl = this.#getCurrentUrl();
-    return {
-      pending: true,
-      redirect: {
-        url: dappUrl,
-        message: 'Redirecting to Snap Simple Keyring to sign transaction',
-      },
-    };
   }
 
   #getWalletByAddress(address: string): Wallet {

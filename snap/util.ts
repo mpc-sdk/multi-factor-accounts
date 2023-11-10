@@ -1,6 +1,6 @@
-import type { Json } from '@metamask/utils';
+import type { Json } from "@metamask/utils";
 
-import type { Wallet } from './keyring';
+import type { Wallet } from "./keyring";
 
 /**
  * Validates whether there are no duplicate addresses
@@ -21,7 +21,7 @@ export function isUniqueAddress(address: string, wallets: Wallet[]): boolean {
  * @returns Returns true if the chain is EVM-based, otherwise false.
  */
 export function isEvmChain(chain: string): boolean {
-  return chain.startsWith('eip155:');
+  return chain.startsWith("eip155:");
 }
 
 /**

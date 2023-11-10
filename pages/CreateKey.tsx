@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 
-import { KeypairContext } from '@/app/providers/keypair';
+import { KeypairContext } from "@/app/providers/keypair";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -25,8 +25,8 @@ import {
   SessionState,
 } from "@/app/model";
 
-import guard from '@/lib/guard';
-import { keygen, WebassemblyWorker } from '@/lib/client';
+import guard from "@/lib/guard";
+import { keygen, WebassemblyWorker } from "@/lib/client";
 
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -198,10 +198,7 @@ export default function CreateKey() {
       <CreateKeyContent>
         <Badges />
         <div className="flex flex-col space-y-6 mt-12">
-          <KeyAlert
-            title="Confirm"
-            description={message}
-          />
+          <KeyAlert title="Confirm" description={message} />
           <div className="flex justify-between">
             <BackButton />
             <Button onClick={() => setStep(step + 1)}>Create key</Button>

@@ -1,13 +1,13 @@
-import { KeyringRpcMethod } from '@metamask/keyring-api';
+import { KeyringRpcMethod } from "@metamask/keyring-api";
 
 export enum InternalMethod {
-  ToggleSyncApprovals = 'snap.internal.toggleSynchronousApprovals',
-  IsSynchronousMode = 'snap.internal.isSynchronousMode',
+  ToggleSyncApprovals = "snap.internal.toggleSynchronousApprovals",
+  IsSynchronousMode = "snap.internal.isSynchronousMode",
 }
 
 export const originPermissions = new Map<string, string[]>([
   [
-    'metamask',
+    "metamask",
     [
       // Keyring methods
       KeyringRpcMethod.ListAccounts,
@@ -21,7 +21,7 @@ export const originPermissions = new Map<string, string[]>([
     ],
   ],
   [
-    'http://localhost:7070',
+    "http://localhost:7070",
     [
       // Keyring methods
       KeyringRpcMethod.ListAccounts,
@@ -41,7 +41,7 @@ export const originPermissions = new Map<string, string[]>([
     ],
   ],
   [
-    'https://tss.ac',
+    "https://tss.ac",
     [
       // Keyring methods
       KeyringRpcMethod.ListAccounts,

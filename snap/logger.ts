@@ -27,7 +27,7 @@ type LoggerContext = {
  * @returns The default logging level.
  */
 function getDefaultLevel(): LogLevel {
-  return process.env.NODE_ENV === 'development'
+  return process.env.NODE_ENV === "development"
     ? LogLevel.DEBUG
     : LogLevel.WARN;
 }

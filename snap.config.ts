@@ -9,8 +9,8 @@ const config: SnapConfig = {
     crypto: true,
   },
   environment: {
-    DAPP_ORIGIN_PRODUCTION: 'https://tss.ac',
-    DAPP_ORIGIN_DEVELOPMENT: 'http://localhost:7070',
+    DAPP_ORIGIN_PRODUCTION: "https://tss.ac",
+    DAPP_ORIGIN_DEVELOPMENT: "http://localhost:7070",
   },
   output: {
     path: "bundle",

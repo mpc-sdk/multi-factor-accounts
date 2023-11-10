@@ -1,16 +1,16 @@
 import {
   MethodNotSupportedError,
   handleKeyringRequest,
-} from '@metamask/keyring-api';
+} from "@metamask/keyring-api";
 import type {
   OnKeyringRequestHandler,
   OnRpcRequestHandler,
-} from '@metamask/snaps-types';
+} from "@metamask/snaps-types";
 
-import { ThresholdKeyring } from './keyring';
-import { logger } from './logger';
-import { InternalMethod, originPermissions } from './permissions';
-import { getState } from './stateManagement';
+import { ThresholdKeyring } from "./keyring";
+import { logger } from "./logger";
+import { InternalMethod, originPermissions } from "./permissions";
+import { getState } from "./stateManagement";
 
 let keyring: ThresholdKeyring;
 

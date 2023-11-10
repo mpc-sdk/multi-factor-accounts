@@ -3,7 +3,7 @@ import { useParams, useSearchParams } from "react-router-dom";
 
 import { useToast } from "@/components/ui/use-toast";
 
-import { KeypairContext } from '@/app/providers/keypair';
+import { KeypairContext } from "@/app/providers/keypair";
 
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
@@ -22,8 +22,8 @@ import {
 
 import NotFound from "@/pages/NotFound";
 
-import guard from '@/lib/guard';
-import { keygen, WebassemblyWorker } from '@/lib/client';
+import guard from "@/lib/guard";
+import { keygen, WebassemblyWorker } from "@/lib/client";
 
 function JoinKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -70,7 +70,7 @@ export default function JoinKey() {
           parties: keygenData.get("parties") as number,
           // Threshold is human-friendly but for the protocol
           // we need to cross the threshold hence the -1
-          threshold: keygenData.get("threshold") as number - 1,
+          threshold: (keygenData.get("threshold") as number) - 1,
         },
         null, // Participants MUST be null when joining
       );
@@ -82,8 +82,8 @@ export default function JoinKey() {
     <div className="flex justify-between items-center mt-2">
       <KeyBadge
         name={name}
-        parties={keygenData && keygenData.get("parties") as number}
-        threshold={keygenData && keygenData.get("threshold") as number}
+        parties={keygenData && (keygenData.get("parties") as number)}
+        threshold={keygenData && (keygenData.get("threshold") as number)}
       />
       <PublicKeyBadge publicKey={publicKey} />
     </div>

@@ -1,17 +1,12 @@
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  useContext,
-} from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
 
-import { Keypair } from '@/app/model';
+import { Keypair } from "@/app/model";
 import { WorkerContext } from "@/app/providers/worker";
-import { generateKeypair } from '@/lib/client';
+import { generateKeypair } from "@/lib/client";
 
 const KeypairContext = createContext(null);
 
-const KeypairProvider = ({children}: {children: React.ReactNode}) => {
+const KeypairProvider = ({ children }: { children: React.ReactNode }) => {
   const worker = useContext(WorkerContext);
   const [keypair, setKeypair] = useState<Keypair>(null);
 
