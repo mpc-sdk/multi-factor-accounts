@@ -70,7 +70,7 @@ export default function JoinKey() {
           parties: keygenData.get("parties") as number,
           threshold: keygenData.get("threshold") as number,
         },
-        publicKeys,
+        null, // Participants MUST be null when joining
       );
       console.log("key share", keyShare);
     }, toast);

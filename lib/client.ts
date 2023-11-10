@@ -114,11 +114,15 @@ export async function joinMeeting(
 }
 
 // Perform key generation.
+//
+// Only the initiator needs to submit the participant public keys,
+// participants joining do not need to specify the participants
+// and MUST pass null.
 export async function keygen(
   worker: WebassemblyWorker,
   serverUrl: string,
   parameters: Parameters,
-  participants: PublicKeys,
+  participants?: PublicKeys,
 ): Promise<KeyShare> {
   const server = await fetchServerPublicKey(serverUrl);
   const keypair = await generateKeypair(worker);

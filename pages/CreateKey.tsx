@@ -185,18 +185,16 @@ export default function CreateKey() {
         ? "just for me"
         : "shared with other people";
 
+    const message = `Create a new key ${audienceLabel} split into ${parties} shares and require ${threshold} participants to sign.`;
+
     return (
       <CreateKeyContent>
         <Badges />
         <div className="flex flex-col space-y-6 mt-12">
           <KeyAlert
             title="Confirm"
-            description="Check the settings for the new key and confirm"
+            description={message}
           />
-          <p>
-            Create a new key {audienceLabel} split into {parties} shares and
-            require {threshold} participants to sign.
-          </p>
           <div className="flex justify-between">
             <BackButton />
             <Button onClick={() => setStep(step + 1)}>Create key</Button>
