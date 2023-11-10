@@ -27,6 +27,14 @@ Compile the webassembly bindings:
 (cd sdk && cargo make bindings)
 ```
 
+To debug the webassembly compile with the `tracing` feature flag:
+
+```
+(cd sdk && cargo make bindings-debug)
+```
+
+Which will enable `tracing` output to the browser console.
+
 ## Relay Server
 
 A backend relay server must be running for meeting points and relaying messages, to start a server using the default config (you must have already generated a keypair for the server):
