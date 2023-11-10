@@ -86,7 +86,7 @@ export default function App() {
     );
   }
 
-  if (provider !== window.ethereum) {
+  if (provider !== ethereum) {
     return (
       <p>
         The wallet provider is not correct, do you have multiple wallets

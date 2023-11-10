@@ -59,6 +59,8 @@
     "@ethersproject/hash": "^5.7.0",
     "@hookform/resolvers": "^3.3.2",
     "@metamask/detect-provider": "^2.0.0",
+    "@metamask/keyring-api": "1.1.0",
+    "@metamask/snaps-types": "^3.1.0",
     "@mpc-sdk/mpc-bindings": "workspace:^",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-navigation-menu": "^1.1.4",
