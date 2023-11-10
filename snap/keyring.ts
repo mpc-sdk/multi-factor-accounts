@@ -75,9 +75,9 @@ export class ThresholdKeyring implements Keyring {
           EthMethod.PersonalSign,
           EthMethod.Sign,
           EthMethod.SignTransaction,
-          EthMethod.SignTypedDataV1,
-          EthMethod.SignTypedDataV3,
-          EthMethod.SignTypedDataV4,
+          //EthMethod.SignTypedDataV1,
+          //EthMethod.SignTypedDataV3,
+          //EthMethod.SignTypedDataV4,
         ],
         type: EthAccountType.Eoa,
       };
