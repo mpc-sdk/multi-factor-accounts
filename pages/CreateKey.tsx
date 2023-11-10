@@ -86,14 +86,21 @@ export default function CreateKey() {
   const startKeygen = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start key generation (initiator)..");
     await guard(async () => {
+      // Public keys includes all members of the meeting but when
+      // we initiate key generation the participants list should not
+      // include the public key of the initiator
+      const participants = publicKeys.filter((key) => key !== publicKey);
+
       const keyShare = await keygen(
         worker,
         serverUrl,
         {
           parties: createKeyState.parties,
-          threshold: createKeyState.threshold,
+          // Threshold is human-friendly but for the protocol
+          // we need to cross the threshold hence the -1
+          threshold: createKeyState.threshold - 1,
         },
-        publicKeys,
+        participants,
       );
       console.log("key share", keyShare);
     }, toast);

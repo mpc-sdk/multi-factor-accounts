@@ -68,7 +68,9 @@ export default function JoinKey() {
         serverUrl,
         {
           parties: keygenData.get("parties") as number,
-          threshold: keygenData.get("threshold") as number,
+          // Threshold is human-friendly but for the protocol
+          // we need to cross the threshold hence the -1
+          threshold: keygenData.get("threshold") as number - 1,
         },
         null, // Participants MUST be null when joining
       );
