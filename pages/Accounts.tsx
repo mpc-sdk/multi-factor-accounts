@@ -5,6 +5,18 @@ import type { KeyringAccount } from "@metamask/keyring-api";
 
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
 import KeyAlert from "@/components/KeyAlert";
@@ -16,6 +28,46 @@ import { createAccount, getWalletByAddress } from '@/lib/keyring';
 import { abbreviateAddress, toUint8Array, download } from '@/lib/utils';
 import { ExportedAccount } from '@/app/model';
 import guard from '@/lib/guard';
+
+function ExportAccount({account}: {account: KeyringAccount}) {
+  const { toast } = useToast();
+  const exportAccount = async (account: KeyringAccount) => {
+    await guard(async () => {
+      const { address } = account;
+      const wallet = await getWalletByAddress(account.address);
+      const exported: ExportedAccount = {
+        address,
+        privateKey: wallet.privateKey,
+      };
+      const fileName = `${address}.json`;
+      const value = JSON.stringify(exported, undefined, 2);
+      download(fileName, toUint8Array(value));
+    }, toast);
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline">
+          <Icons.download className="h-4 w-4" />
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Export account</AlertDialogTitle>
+          <AlertDialogDescription>
+            Exporting this account will download the private key to your computer unencrypted; you should copy the file to safe encrypted storage such as a password manager and delete the downloaded file from your disc.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={() => exportAccount(account)}>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+
+}
 
 function AccountsContent({ children }: { children?: React.ReactNode }) {
 
@@ -77,7 +129,6 @@ function NoAccounts() {
 }
 
 export default function Accounts() {
-  const { toast } = useToast();
   const { accounts, loaded } = useSelector(accountsSelector);
 
   if (!loaded) {
@@ -104,20 +155,6 @@ export default function Accounts() {
     console.log(account);
   };
 
-  const exportAccount = async (account: KeyringAccount) => {
-    await guard(async () => {
-      const { address } = account;
-      const wallet = await getWalletByAddress(account.address);
-      const exported: ExportedAccount = {
-        address,
-        privateKey: wallet.privateKey,
-      };
-      const fileName = `${address}.json`;
-      const value = JSON.stringify(exported, undefined, 2);
-      download(fileName, toUint8Array(value));
-    }, toast);
-  };
-
   return <AccountsContent>
     <div className="mt-12 border rounded-md">
       {accounts.map((account) => {
@@ -126,10 +163,10 @@ export default function Accounts() {
           className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between">
           {abbreviateAddress(account.address)}
           <div className="flex space-x-4">
-            <Button variant="outline" onClick={() => exportAccount(account)}>
-              <Icons.download className="h-4 w-4" />
-            </Button>
-            <Button variant="destructive" onClick={() => deleteAccount(account)}>
+            <ExportAccount account={account} />
+            <Button
+              variant="destructive"
+              onClick={() => deleteAccount(account)}>
               <Icons.remove className="h-4 w-4" />
             </Button>
           </div>

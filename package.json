@@ -62,6 +62,7 @@
     "@metamask/keyring-api": "1.1.0",
     "@metamask/snaps-types": "^3.1.0",
     "@mpc-sdk/mpc-bindings": "workspace:^",
+    "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",
     "@radix-ui/react-navigation-menu": "^1.1.4",
     "@radix-ui/react-radio-group": "^1.1.3",
