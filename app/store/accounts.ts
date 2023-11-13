@@ -24,10 +24,13 @@ const accountSlice = createSlice({
       state.accounts = payload;
       state.loaded = true;
     },
+    invalidateAccounts: (state) => {
+      state.loaded = false;
+    },
   },
 });
 
-export const { setAccounts } = accountSlice.actions;
+export const { setAccounts, invalidateAccounts } = accountSlice.actions;
 export const accountsSelector = (state: { accounts: AccountState }) =>
   state.accounts;
 export default accountSlice.reducer;

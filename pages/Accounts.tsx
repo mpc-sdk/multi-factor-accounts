@@ -1,5 +1,5 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
@@ -23,8 +23,12 @@ import KeyAlert from "@/components/KeyAlert";
 import ChainBadge from "@/components/ChainBadge";
 import AccountsLoader from "@/components/AccountsLoader";
 
-import { accountsSelector } from "@/app/store/accounts";
-import { createAccount, getWalletByAddress } from '@/lib/keyring';
+import { accountsSelector, invalidateAccounts } from "@/app/store/accounts";
+import {
+  createAccount,
+  deleteAccount,
+  getWalletByAddress,
+} from '@/lib/keyring';
 import { abbreviateAddress, toUint8Array, download } from '@/lib/utils';
 import { ExportedAccount } from '@/app/model';
 import guard from '@/lib/guard';
@@ -61,7 +65,8 @@ function ExportAccount({account}: {account: KeyringAccount}) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => exportAccount(account)}>Continue</AlertDialogAction>
+          <AlertDialogAction
+            onClick={() => exportAccount(account)}>Continue</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -129,6 +134,9 @@ function NoAccounts() {
 }
 
 export default function Accounts() {
+  const { toast } = useToast();
+  const dispatch = useDispatch();
+  const [refresh, setRefresh] = useState(0);
   const { accounts, loaded } = useSelector(accountsSelector);
 
   if (!loaded) {
@@ -139,20 +147,12 @@ export default function Accounts() {
     return <NoAccounts />;
   }
 
-  /*
-  const testGetWalletByAddress = async (address: string) => {
-    const wallet = await getWalletByAddress(address);
-    console.log("Got wallet", wallet);
-  };
-
-
-          <Button className=""
-            onClick={() => testGetWalletByAddress(account.address)}>W</Button>
-  */
-
-  const deleteAccount = async (account: KeyringAccount) => {
-    console.log("deleting...");
-    console.log(account);
+  const removeAccount = async (account: KeyringAccount) => {
+    await guard(async () => {
+      await deleteAccount(account.id);
+      await dispatch(invalidateAccounts());
+      setRefresh(refresh + 1);
+    }, toast);
   };
 
   return <AccountsContent>
@@ -166,7 +166,7 @@ export default function Accounts() {
             <ExportAccount account={account} />
             <Button
               variant="destructive"
-              onClick={() => deleteAccount(account)}>
+              onClick={() => removeAccount(account)}>
               <Icons.remove className="h-4 w-4" />
             </Button>
           </div>

@@ -21,6 +21,11 @@ export async function listAccounts(): Promise<KeyringAccount[]> {
   return await client.listAccounts();
 }
 
+export async function deleteAccount(id: string): Promise<void> {
+  const client = getKeyringClient();
+  return await client.deleteAccount(id);
+}
+
 export async function getWalletByAddress(address: string): Promise<Wallet> {
   return await ethereum.request({
     method: 'wallet_invokeSnap',

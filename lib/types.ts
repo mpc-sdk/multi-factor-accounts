@@ -10,4 +10,3 @@ export type Wallet = {
   account: KeyringAccount;
   privateKey: PrivateKey;
 };
-
