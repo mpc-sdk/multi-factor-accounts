@@ -63,9 +63,12 @@ export class ThresholdKeyring implements Keyring {
       throw new Error(`Account address must be given to create an account.`);
     }
 
+    console.log("Creating account with address", address);
+
     if (!isUniqueAddress(address, Object.values(this.#state.wallets))) {
       throw new Error(`Account address already in use: ${address}`);
     }
+
     // The private key should not be stored in the account options since the
     // account object is exposed to external components, such as MetaMask and
     // the snap UI.
@@ -142,8 +145,7 @@ export class ThresholdKeyring implements Keyring {
 
   async getRequest(id: string): Promise<KeyringRequest> {
     return (
-      this.#state.pendingRequests[id]
-        ?? throwError(`Request '${id}' not found`)
+      this.#state.pendingRequests[id] ?? throwError(`Request '${id}' not found`)
     );
   }
 

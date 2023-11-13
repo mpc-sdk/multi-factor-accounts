@@ -15,7 +15,7 @@ export default function Home() {
         <Link href="https://github.com/mpc-sdk/tss-snap">source code</Link>
         &nbsp;on github.
       </Paragraph>
-      <SnapConnect redirect="/keys" />
+      <SnapConnect redirect="/accounts" />
     </>
   );
 }
