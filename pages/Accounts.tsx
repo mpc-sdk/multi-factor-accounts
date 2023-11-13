@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
+import { fromZodError } from 'zod-validation-error';
 
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,7 @@ import {
 import { abbreviateAddress, toUint8Array, download } from '@/lib/utils';
 import { ExportedAccount } from '@/app/model';
 import guard from '@/lib/guard';
+import { gg20 } from '@/lib/schemas';
 
 function ExportAccount({account}: {account: KeyringAccount}) {
   const { toast } = useToast();
@@ -75,9 +77,23 @@ function ExportAccount({account}: {account: KeyringAccount}) {
 }
 
 function AccountsContent({ children }: { children?: React.ReactNode }) {
+  const { toast } = useToast();
 
   const importAccount = async () => {
     console.log("Import account...");
+    const data = {};
+
+    await guard(async () => {
+      const result = gg20.safeParse(data);
+
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        throw validationError;
+        //throw new Error(result.error.issues[0].message);
+      }
+
+    }, toast);
+
   };
 
   return (
