@@ -1,5 +1,12 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
 
+import { PrivateKey } from '@/lib/types';
+
+export type ExportedAccount = {
+  address: string;
+  privateKey: PrivateKey;
+};
+
 // Noise protocol key information.
 export type Keypair = {
   // Full key material pem-encoded.

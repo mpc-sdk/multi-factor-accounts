@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
 import KeyAlert from "@/components/KeyAlert";
@@ -13,7 +13,9 @@ import AccountsLoader from "@/components/AccountsLoader";
 
 import { accountsSelector } from "@/app/store/accounts";
 import { createAccount, getWalletByAddress } from '@/lib/keyring';
-import { abbreviateAddress } from '@/lib/utils';
+import { abbreviateAddress, toUint8Array, download } from '@/lib/utils';
+import { ExportedAccount } from '@/app/model';
+import guard from '@/lib/guard';
 
 function AccountsContent({ children }: { children?: React.ReactNode }) {
 
@@ -75,6 +77,7 @@ function NoAccounts() {
 }
 
 export default function Accounts() {
+  const { toast } = useToast();
   const { accounts, loaded } = useSelector(accountsSelector);
 
   if (!loaded) {
@@ -102,12 +105,17 @@ export default function Accounts() {
   };
 
   const exportAccount = async (account: KeyringAccount) => {
-    console.log("exporting...");
-    console.log(account.address);
-
-    const wallet = await getWalletByAddress(account.address);
-
-    console.log("export", wallet);
+    await guard(async () => {
+      const { address } = account;
+      const wallet = await getWalletByAddress(account.address);
+      const exported: ExportedAccount = {
+        address,
+        privateKey: wallet.privateKey,
+      };
+      const fileName = `${address}.json`;
+      const value = JSON.stringify(exported, undefined, 2);
+      download(fileName, toUint8Array(value));
+    }, toast);
   };
 
   return <AccountsContent>

@@ -7,6 +7,25 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function toUint8Array(value: string): Uint8Array {
+  const encoder = new TextEncoder();
+  return encoder.encode(value);
+}
+
+export function fromUint8Array(value: Uint8Array): string {
+  const decoder = new TextDecoder();
+  return decoder.decode(value);
+}
+
+export function download(fileName: string, buffer: Uint8Array, type?: string) {
+  const blob = new Blob(
+    [buffer], { type: type || "application/octet-stream" });
+  const link = document.createElement("a");
+  link.href = window.URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+}
+
 // Generate an invitation URL.
 export function inviteUrl(
   prefix: string,
