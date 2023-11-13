@@ -13,10 +13,10 @@ import { accountsSelector } from "@/app/store/accounts";
 
 //import {createAccount} from '@/lib/keyring';
 
-function KeysContent({ children }: { children?: React.ReactNode }) {
+function AccountsContent({ children }: { children?: React.ReactNode }) {
   return (
     <>
-      <Heading>Keys</Heading>
+      <Heading>Accounts</Heading>
       <ChainBadge className="mt-2" />
       {children}
     </>
@@ -37,7 +37,7 @@ function NoAccounts() {
   */
 
   return (
-    <KeysContent>
+    <AccountsContent>
       <div className="mt-12">
         <KeyAlert
           title="No accounts yet!"
@@ -49,7 +49,7 @@ function NoAccounts() {
           </Link>
         </div>
       </div>
-    </KeysContent>
+    </AccountsContent>
   );
 }
 
@@ -60,11 +60,13 @@ export default function Accounts() {
     return <AccountsLoader />;
   }
 
-  console.log("Got accounts length", accounts.length);
-
   if (accounts.length == 0) {
     return <NoAccounts />;
   }
 
-  return <KeysContent />;
+  return <AccountsContent>
+    {accounts.map((account) => {
+      return <div key={account.id}>{account.address}</div>;
+    })}
+  </AccountsContent>;
 }
