@@ -20,9 +20,7 @@ let keyring: ThresholdKeyring;
 async function getKeyring(): Promise<ThresholdKeyring> {
   if (!keyring) {
     const state = await getState();
-    if (!keyring) {
-      keyring = new ThresholdKeyring(state);
-    }
+    keyring = new ThresholdKeyring(state);
   }
   return keyring;
 }
@@ -54,22 +52,18 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
     );
   }
 
-  /*
   // Handle custom methods.
   switch (request.method) {
-    case InternalMethod.ToggleSyncApprovals: {
-      return (await getKeyring()).toggleSyncApprovals();
+    case InternalMethod.GetWalletByAddress: {
+      const address = (request.params as Record<string, unknown>).address as string;
+      logger.info("get wallet", address);
+      const keyring = await getKeyring();
+      return await keyring.getWalletByAddress(address);
     }
-
-    case InternalMethod.IsSynchronousMode: {
-      return (await getKeyring()).isSynchronousMode();
-    }
-
     default: {
       throw new MethodNotSupportedError(request.method);
     }
   }
-  */
 };
 
 export const onKeyringRequest: OnKeyringRequestHandler = async ({

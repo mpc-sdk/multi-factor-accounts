@@ -210,12 +210,11 @@ export class ThresholdKeyring implements Keyring {
     return dappUrlPrefix as string;
   }
 
-  #getWalletByAddress(address: string): Wallet {
+  getWalletByAddress(address: string): Wallet {
     const match = Object.values(this.#state.wallets).find(
       (wallet) =>
         wallet.account.address.toLowerCase() === address.toLowerCase(),
     );
-
     return match ?? throwError(`Account '${address}' not found`);
   }
 

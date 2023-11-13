@@ -20,3 +20,16 @@ export async function listAccounts(): Promise<KeyringAccount[]> {
   const client = getKeyringClient();
   return await client.listAccounts();
 }
+
+export async function getWalletByAddress(address: string): Promise<unknown> {
+  return await ethereum.request({
+    method: 'wallet_invokeSnap',
+    params: {
+      snapId,
+      request: {
+        method: 'snap.internal.getWalletByAddress',
+        params: { address },
+      },
+    },
+  });
+};
