@@ -1,6 +1,6 @@
 import type { Json } from "@metamask/utils";
 
-import type { Wallet } from "./keyring";
+import { Wallet } from "@/lib/types";
 
 /**
  * Validates whether there are no duplicate addresses

@@ -1,7 +1,7 @@
 import snapId from "@/lib/snap-id";
-import { KeyringSnapRpcClient } from "@metamask/keyring-api";
+import { KeyringAccount, KeyringSnapRpcClient } from "@metamask/keyring-api";
 
-import type { KeyringAccount } from "@metamask/keyring-api";
+import { Wallet } from '@/lib/types';
 
 const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum);
 
@@ -21,7 +21,7 @@ export async function listAccounts(): Promise<KeyringAccount[]> {
   return await client.listAccounts();
 }
 
-export async function getWalletByAddress(address: string): Promise<unknown> {
+export async function getWalletByAddress(address: string): Promise<Wallet> {
   return await ethereum.request({
     method: 'wallet_invokeSnap',
     params: {
@@ -31,5 +31,5 @@ export async function getWalletByAddress(address: string): Promise<unknown> {
         params: { address },
       },
     },
-  });
-};
+  }) as Wallet;
+}

@@ -21,14 +21,11 @@ import { isEvmChain, isUniqueAddress, throwError } from "./util";
 
 import packageInfo from "../package.json";
 
+import { Wallet, PrivateKey } from '@/lib/types';
+
 export type KeyringState = {
   wallets: Record<string, Wallet>;
   pendingRequests: Record<string, KeyringRequest>;
-};
-
-export type Wallet = {
-  account: KeyringAccount;
-  privateKey: string;
 };
 
 export class ThresholdKeyring implements Keyring {
@@ -52,7 +49,7 @@ export class ThresholdKeyring implements Keyring {
   async createAccount(
     options: Record<string, Json> = {},
   ): Promise<KeyringAccount> {
-    const privateKey = options?.privateKey as string;
+    const privateKey = options?.privateKey as PrivateKey;
     const address = options?.address as string;
 
     if (!privateKey) {
@@ -62,8 +59,6 @@ export class ThresholdKeyring implements Keyring {
     if (!address) {
       throw new Error(`Account address must be given to create an account.`);
     }
-
-    console.log("Creating account with address", address);
 
     if (!isUniqueAddress(address, Object.values(this.#state.wallets))) {
       throw new Error(`Account address already in use: ${address}`);
