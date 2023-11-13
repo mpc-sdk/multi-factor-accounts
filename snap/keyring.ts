@@ -52,9 +52,16 @@ export class ThresholdKeyring implements Keyring {
   async createAccount(
     options: Record<string, Json> = {},
   ): Promise<KeyringAccount> {
-    const { privateKey, address } = this.#getKeyPair(
-      options?.privateKey as string | undefined,
-    );
+    const privateKey = options?.privateKey as string;
+    const address = options?.address as string;
+
+    if (!privateKey) {
+      throw new Error(`Private key share must be given to create an account.`);
+    }
+
+    if (!address) {
+      throw new Error(`Account address must be given to create an account.`);
+    }
 
     if (!isUniqueAddress(address, Object.values(this.#state.wallets))) {
       throw new Error(`Account address already in use: ${address}`);
@@ -135,7 +142,8 @@ export class ThresholdKeyring implements Keyring {
 
   async getRequest(id: string): Promise<KeyringRequest> {
     return (
-      this.#state.pendingRequests[id] ?? throwError(`Request '${id}' not found`)
+      this.#state.pendingRequests[id]
+        ?? throwError(`Request '${id}' not found`)
     );
   }
 
@@ -207,13 +215,6 @@ export class ThresholdKeyring implements Keyring {
     );
 
     return match ?? throwError(`Account '${address}' not found`);
-  }
-
-  #getKeyPair(privateKey?: string): {
-    privateKey: string;
-    address: string;
-  } {
-    throw new Error("Implement #getKeyPair()");
   }
 
   async #saveState(): Promise<void> {
