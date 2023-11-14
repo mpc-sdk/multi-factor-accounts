@@ -1,11 +1,9 @@
 // Types shared between the snap and the dapp.
-import { Dictionary } from '@/lib/utils';
+import { Dictionary } from "@/lib/utils";
 
-import { LocalKey } from '@/lib/schemas';
+import { LocalKey } from "@/lib/schemas";
 
-import type {
-  KeyringAccount,
-} from "@metamask/keyring-api";
+import type { KeyringAccount } from "@metamask/keyring-api";
 
 export type Wallet = {
   account: KeyringAccount;
@@ -29,4 +27,4 @@ export type PrivateKey = {
   keyshareId: string;
   address: string;
   parameters: Parameters;
-}
+};

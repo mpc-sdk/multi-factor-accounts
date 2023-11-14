@@ -55,7 +55,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   // Handle custom methods.
   switch (request.method) {
     case InternalMethod.GetWalletByAddress: {
-      const address = (request.params as Record<string, unknown>).address as string;
+      const address = (request.params as Record<string, unknown>)
+        .address as string;
       logger.info("get wallet", address);
       const keyring = await getKeyring();
       return await keyring.getWalletByAddress(address);

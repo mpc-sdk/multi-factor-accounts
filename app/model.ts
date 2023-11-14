@@ -1,9 +1,9 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
 
-import { Dictionary } from '@/lib/utils';
-import { PrivateKey, Parameters } from '@/lib/types';
+import { Dictionary } from "@/lib/utils";
+import { PrivateKey, Parameters } from "@/lib/types";
 
-export { Parameters } from '@/lib/types';
+export { Parameters } from "@/lib/types";
 
 export type ExportedAccount = {
   address: string;

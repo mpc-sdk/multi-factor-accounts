@@ -2,9 +2,9 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toBeHex } from "ethers";
 
-import { RawKey, rawKey } from '@/lib/schemas';
-import { PrivateKey, ProtocolId } from '@/lib/types';
-import { fromZodError } from 'zod-validation-error';
+import { RawKey, rawKey } from "@/lib/schemas";
+import { PrivateKey, ProtocolId } from "@/lib/types";
+import { fromZodError } from "zod-validation-error";
 
 // Utility for merging class names.
 export function cn(...inputs: ClassValue[]) {
@@ -22,8 +22,7 @@ export function fromUint8Array(value: Uint8Array): string {
 }
 
 export function download(fileName: string, buffer: Uint8Array, type?: string) {
-  const blob = new Blob(
-    [buffer], { type: type || "application/octet-stream" });
+  const blob = new Blob([buffer], { type: type || "application/octet-stream" });
   const link = document.createElement("a");
   link.href = window.URL.createObjectURL(blob);
   link.download = fileName;
@@ -107,22 +106,22 @@ export function abbreviateAddress(address: string): string {
 
 // Validate raw key data and convert to the private key format.
 export function convertRawKey(keyData: unknown): PrivateKey {
-    try {
-      const data: RawKey = rawKey.parse(keyData);
-      const privateKey: PrivateKey = {
-        protocolId: ProtocolId.gg20,
-        address: data.address,
-        publicKey: data.publicKey,
-        privateKey: data.privateKey.gg20,
-        keyshareId: data.privateKey.gg20.i.toString(),
-        parameters: {
-          parties: data.privateKey.gg20.n,
-          threshold: data.privateKey.gg20.t,
-        },
-      };
-      return privateKey;
-    } catch(error) {
-      const validationError = fromZodError(error);
-      throw validationError;
-    }
+  try {
+    const data: RawKey = rawKey.parse(keyData);
+    const privateKey: PrivateKey = {
+      protocolId: ProtocolId.gg20,
+      address: data.address,
+      publicKey: data.publicKey,
+      privateKey: data.privateKey.gg20,
+      keyshareId: data.privateKey.gg20.i.toString(),
+      parameters: {
+        parties: data.privateKey.gg20.n,
+        threshold: data.privateKey.gg20.t,
+      },
+    };
+    return privateKey;
+  } catch (error) {
+    const validationError = fromZodError(error);
+    throw validationError;
+  }
 }

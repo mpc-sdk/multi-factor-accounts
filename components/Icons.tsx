@@ -1,4 +1,14 @@
-import { Loader2, KeySquare, Copy, Link, FileX2, Download, Import, Plus } from "lucide-react";
+import {
+  Loader2,
+  KeySquare,
+  Copy,
+  Link,
+  FileX2,
+  Download,
+  Import,
+  Plus,
+  Coffee,
+} from "lucide-react";
 
 const Icons = {
   spinner: Loader2,
@@ -9,6 +19,7 @@ const Icons = {
   download: Download,
   upload: Import,
   plus: Plus,
+  coffee: Coffee,
 };
 
 export default Icons;

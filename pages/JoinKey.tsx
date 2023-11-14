@@ -98,12 +98,12 @@ export default function JoinKey() {
   );
 
   if (keyShare !== null) {
-      return (
-        <JoinKeyContent>
-          <Badges />
-          <SaveKeyShare keyShare={keyShare} name={name} />
-        </JoinKeyContent>
-      );
+    return (
+      <JoinKeyContent>
+        <Badges />
+        <SaveKeyShare keyShare={keyShare} name={name} />
+      </JoinKeyContent>
+    );
   }
 
   // Meeting is prepared so we can execute keygen

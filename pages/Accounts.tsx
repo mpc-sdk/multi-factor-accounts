@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
@@ -28,12 +28,17 @@ import {
   createAccount,
   deleteAccount,
   getWalletByAddress,
-} from '@/lib/keyring';
-import { abbreviateAddress, toUint8Array, download, convertRawKey } from '@/lib/utils';
-import { ExportedAccount } from '@/app/model';
-import guard from '@/lib/guard';
+} from "@/lib/keyring";
+import {
+  abbreviateAddress,
+  toUint8Array,
+  download,
+  convertRawKey,
+} from "@/lib/utils";
+import { ExportedAccount } from "@/app/model";
+import guard from "@/lib/guard";
 
-function ExportAccount({account}: {account: KeyringAccount}) {
+function ExportAccount({ account }: { account: KeyringAccount }) {
   const { toast } = useToast();
   const exportAccount = async (account: KeyringAccount) => {
     await guard(async () => {
@@ -60,18 +65,21 @@ function ExportAccount({account}: {account: KeyringAccount}) {
         <AlertDialogHeader>
           <AlertDialogTitle>Export account</AlertDialogTitle>
           <AlertDialogDescription>
-            Exporting this account will download the private key to your computer unencrypted; you should copy the file to safe encrypted storage such as a password manager and delete the downloaded file from your disc.
+            Exporting this account will download the private key to your
+            computer unencrypted; you should copy the file to safe encrypted
+            storage such as a password manager and delete the downloaded file
+            from your disc.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={() => exportAccount(account)}>Continue</AlertDialogAction>
+          <AlertDialogAction onClick={() => exportAccount(account)}>
+            Continue
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  )
-
+  );
 }
 
 function AccountsContent({ children }: { children?: React.ReactNode }) {
@@ -91,7 +99,6 @@ function AccountsContent({ children }: { children?: React.ReactNode }) {
       }
     }, toast);
     */
-
   };
 
   return (
@@ -154,32 +161,39 @@ export default function Accounts() {
     }, toast);
   };
 
-  return <AccountsContent>
-    <div className="mt-12 border rounded-md">
-      {accounts.map((account) => {
-        const { name, numShares, parameters } = account.options;
-        return <div
-          key={account.id}
-          className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between">
-          <div>
-            <div>{name}</div>
-            <div className="text-sm">
-              {abbreviateAddress(account.address)}
+  return (
+    <AccountsContent>
+      <div className="mt-12 border rounded-md">
+        {accounts.map((account) => {
+          const { name, numShares, parameters } = account.options;
+          return (
+            <div
+              key={account.id}
+              className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between"
+            >
+              <div>
+                <div>{name}</div>
+                <div className="text-sm">
+                  {abbreviateAddress(account.address)}
+                </div>
+                <div className="text-sm">
+                  {numShares} shares in a {parameters.threshold + 1} of{" "}
+                  {parameters.parties} key
+                </div>
+              </div>
+              <div className="flex space-x-4">
+                <ExportAccount account={account} />
+                <Button
+                  variant="destructive"
+                  onClick={() => removeAccount(account)}
+                >
+                  <Icons.remove className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
-            <div className="text-sm">
-              {numShares} shares in a {parameters.threshold + 1} of {parameters.parties} key
-            </div>
-          </div>
-          <div className="flex space-x-4">
-            <ExportAccount account={account} />
-            <Button
-              variant="destructive"
-              onClick={() => removeAccount(account)}>
-              <Icons.remove className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>;
-      })}
-    </div>
-  </AccountsContent>;
+          );
+        })}
+      </div>
+    </AccountsContent>
+  );
 }

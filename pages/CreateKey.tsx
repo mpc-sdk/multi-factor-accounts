@@ -127,12 +127,12 @@ export default function CreateKey() {
   );
 
   if (keyShare !== null) {
-      return (
-        <CreateKeyContent>
-          <Badges />
-          <SaveKeyShare keyShare={keyShare} name={createKeyState.name} />
-        </CreateKeyContent>
-      );
+    return (
+      <CreateKeyContent>
+        <Badges />
+        <SaveKeyShare keyShare={keyShare} name={createKeyState.name} />
+      </CreateKeyContent>
+    );
   }
 
   // Meeting is prepared so we can execute keygen

@@ -19,7 +19,7 @@ import { saveState } from "./stateManagement";
 
 import packageInfo from "../package.json";
 
-import { Wallet, PrivateKey } from '@/lib/types';
+import { Wallet, PrivateKey } from "@/lib/types";
 
 /**
  * Throws an error with the specified message.
@@ -83,7 +83,9 @@ export class ThresholdKeyring implements Keyring {
     }
 
     if (!keyshareId) {
-      throw new Error(`Key share identifier must be given to create an account.`);
+      throw new Error(
+        `Key share identifier must be given to create an account.`,
+      );
     }
 
     // The private key should not be stored in the account options since the
@@ -98,22 +100,23 @@ export class ThresholdKeyring implements Keyring {
     try {
       const existingWallet = this.findWalletByAddress(address);
 
-      const account: KeyringAccount = existingWallet !== undefined
-        ? existingWallet.account
-        : {
-            id: uuid(),
-            options,
-            address,
-            methods: [
-              EthMethod.PersonalSign,
-              EthMethod.Sign,
-              EthMethod.SignTransaction,
-              //EthMethod.SignTypedDataV1,
-              //EthMethod.SignTypedDataV3,
-              //EthMethod.SignTypedDataV4,
-            ],
-            type: EthAccountType.Eoa,
-          };
+      const account: KeyringAccount =
+        existingWallet !== undefined
+          ? existingWallet.account
+          : {
+              id: uuid(),
+              options,
+              address,
+              methods: [
+                EthMethod.PersonalSign,
+                EthMethod.Sign,
+                EthMethod.SignTransaction,
+                //EthMethod.SignTypedDataV1,
+                //EthMethod.SignTypedDataV3,
+                //EthMethod.SignTypedDataV4,
+              ],
+              type: EthAccountType.Eoa,
+            };
 
       let wallet: Wallet = { account, privateKey: {} };
       wallet.privateKey[keyshareId] = privateKey;
@@ -255,10 +258,10 @@ export class ThresholdKeyring implements Keyring {
    * @param wallets - The array of wallets to search for duplicate addresses.
    * @returns Returns the wallet or undefined.
    */
-  findWalletByAddress(
-    address: string): Wallet | undefined {
-    return Object.values(this.#state.wallets)
-        .find((wallet) => wallet.account.address === address);
+  findWalletByAddress(address: string): Wallet | undefined {
+    return Object.values(this.#state.wallets).find(
+      (wallet) => wallet.account.address === address,
+    );
   }
 
   getWalletByAddress(address: string): Wallet {
