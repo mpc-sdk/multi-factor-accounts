@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
-import { fromZodError } from 'zod-validation-error';
 
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -30,10 +29,9 @@ import {
   deleteAccount,
   getWalletByAddress,
 } from '@/lib/keyring';
-import { abbreviateAddress, toUint8Array, download } from '@/lib/utils';
+import { abbreviateAddress, toUint8Array, download, convertRawKey } from '@/lib/utils';
 import { ExportedAccount } from '@/app/model';
 import guard from '@/lib/guard';
-import { gg20 } from '@/lib/schemas';
 
 function ExportAccount({account}: {account: KeyringAccount}) {
   const { toast } = useToast();
@@ -81,8 +79,9 @@ function AccountsContent({ children }: { children?: React.ReactNode }) {
 
   const importAccount = async () => {
     console.log("Import account...");
-    const data = {};
 
+    /*
+    const data = {};
     await guard(async () => {
       try {
         gg20.parse(data);
@@ -91,6 +90,7 @@ function AccountsContent({ children }: { children?: React.ReactNode }) {
         throw validationError;
       }
     }, toast);
+    */
 
   };
 
@@ -120,13 +120,6 @@ function AccountsContent({ children }: { children?: React.ReactNode }) {
 }
 
 function NoAccounts() {
-  const testCreateAccount = async () => {
-    const address = "0xff520E5600107b16B3c1C01E0B01941C7217e7ff";
-    const privateKey = JSON.stringify({"foo": "bar"});
-
-    await createAccount(address, privateKey);
-  };
-
   return (
     <AccountsContent>
       <div className="mt-12">
@@ -134,14 +127,6 @@ function NoAccounts() {
           title="No accounts yet!"
           description="To get started create a new key."
         />
-        <div className="flex justify-end">
-          <Button className="mt-8"
-            onClick={testCreateAccount}>Create a TESTkey</Button>
-
-          <Link to="/keys/create">
-            <Button className="mt-8">Create a new key</Button>
-          </Link>
-        </div>
       </div>
     </AccountsContent>
   );
@@ -172,10 +157,19 @@ export default function Accounts() {
   return <AccountsContent>
     <div className="mt-12 border rounded-md">
       {accounts.map((account) => {
+        const { name, numShares, parameters } = account.options;
         return <div
           key={account.id}
           className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between">
-          {abbreviateAddress(account.address)}
+          <div>
+            <div>{name}</div>
+            <div className="text-sm">
+              {abbreviateAddress(account.address)}
+            </div>
+            <div className="text-sm">
+              {numShares} shares in a {parameters.threshold + 1} of {parameters.parties} key
+            </div>
+          </div>
           <div className="flex space-x-4">
             <ExportAccount account={account} />
             <Button

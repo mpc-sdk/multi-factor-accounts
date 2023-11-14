@@ -17,11 +17,28 @@ import { v4 as uuid } from "uuid";
 
 import { saveState } from "./stateManagement";
 
-import { isEvmChain, findWalletByAddress, throwError } from "./util";
-
 import packageInfo from "../package.json";
 
 import { Wallet, PrivateKey } from '@/lib/types';
+
+/**
+ * Throws an error with the specified message.
+ *
+ * @param message - The error message.
+ */
+export function throwError(message: string): never {
+  throw new Error(message);
+}
+
+/**
+ * Determines whether the given CAIP-2 chain ID represents an EVM-based chain.
+ *
+ * @param chain - The CAIP-2 chain ID to check.
+ * @returns Returns true if the chain is EVM-based, otherwise false.
+ */
+export function isEvmChain(chain: string): boolean {
+  return chain.startsWith("eip155:");
+}
 
 export type KeyringState = {
   wallets: Record<string, Wallet>;
@@ -54,15 +71,15 @@ export class ThresholdKeyring implements Keyring {
     options: Record<string, Json> = {},
   ): Promise<KeyringAccount> {
     const privateKey = options?.privateKey as PrivateKey;
-    const address = options?.address as string;
-    const keyshareId = options?.keyshareId as string;
 
     if (!privateKey) {
       throw new Error(`Private key share must be given to create an account.`);
     }
 
+    const { address, keyshareId } = privateKey;
+
     if (!address) {
-      throw new Error(`Account address must be given to create an account.`);
+      throw new Error(`Address  must be given to create an account.`);
     }
 
     if (!keyshareId) {
@@ -72,30 +89,31 @@ export class ThresholdKeyring implements Keyring {
     // The private key should not be stored in the account options since the
     // account object is exposed to external components, such as MetaMask and
     // the snap UI.
-    if (options?.privateKey) {
+    if (privateKey) {
+      const { parameters } = privateKey;
       delete options.privateKey;
+      options.parameters = parameters;
     }
 
     try {
-      const existingWallet = findWalletByAddress(
-        address, Object.values(this.#state.wallets));
+      const existingWallet = this.findWalletByAddress(address);
 
       const account: KeyringAccount = existingWallet !== undefined
         ? existingWallet.account
         : {
-          id: uuid(),
-          options,
-          address,
-          methods: [
-            EthMethod.PersonalSign,
-            EthMethod.Sign,
-            EthMethod.SignTransaction,
-            //EthMethod.SignTypedDataV1,
-            //EthMethod.SignTypedDataV3,
-            //EthMethod.SignTypedDataV4,
-          ],
-          type: EthAccountType.Eoa,
-        };
+            id: uuid(),
+            options,
+            address,
+            methods: [
+              EthMethod.PersonalSign,
+              EthMethod.Sign,
+              EthMethod.SignTransaction,
+              //EthMethod.SignTypedDataV1,
+              //EthMethod.SignTypedDataV3,
+              //EthMethod.SignTypedDataV4,
+            ],
+            type: EthAccountType.Eoa,
+          };
 
       let wallet: Wallet = { account, privateKey: {} };
       wallet.privateKey[keyshareId] = privateKey;
@@ -103,6 +121,9 @@ export class ThresholdKeyring implements Keyring {
         existingWallet.privateKey[keyshareId] = privateKey;
         wallet = existingWallet;
       }
+
+      // Keep track of how many key shares are in this account for the UI
+      account.options.numShares = Object.keys(wallet.privateKey).length;
 
       if (!existingWallet) {
         await this.#emitEvent(KeyringEvent.AccountCreated, { account });
@@ -227,11 +248,21 @@ export class ThresholdKeyring implements Keyring {
     return dappUrlPrefix as string;
   }
 
+  /**
+   * Find the first wallet with the given address.
+   *
+   * @param address - The address to validate for duplication.
+   * @param wallets - The array of wallets to search for duplicate addresses.
+   * @returns Returns the wallet or undefined.
+   */
+  findWalletByAddress(
+    address: string): Wallet | undefined {
+    return Object.values(this.#state.wallets)
+        .find((wallet) => wallet.account.address === address);
+  }
+
   getWalletByAddress(address: string): Wallet {
-    const match = Object.values(this.#state.wallets).find(
-      (wallet) =>
-        wallet.account.address.toLowerCase() === address.toLowerCase(),
-    );
+    const match = this.findWalletByAddress(address);
     return match ?? throwError(`Account '${address}' not found`);
   }
 

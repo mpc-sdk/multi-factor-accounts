@@ -1,18 +1,17 @@
 import snapId from "@/lib/snap-id";
 import { KeyringAccount, KeyringSnapRpcClient } from "@metamask/keyring-api";
 
-import { Wallet } from '@/lib/types';
+import { Wallet, PrivateKey } from '@/lib/types';
 
 const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum);
 
-export async function createAccount(address: string, privateKey: string) {
+export async function createAccount(privateKey: PrivateKey, name: string) {
   const client = getKeyringClient();
   console.log(
     "Calling createAccount on keyring client...",
-    address,
-    privateKey,
+    privateKey.address,
   );
-  const newAccount = await client.createAccount({ address, privateKey });
+  const newAccount = await client.createAccount({ privateKey, name });
   console.log("newAccount", newAccount);
 }
 

@@ -11,6 +11,7 @@ import KeyBadge from "@/components/KeyBadge";
 import PublicKeyBadge from "@/components/PublicKeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
+import SaveKeyShare from "@/components/SaveKeyShare";
 
 import KeyShareAudienceForm from "@/forms/KeyShareAudience";
 import KeyShareNameForm from "@/forms/KeyShareName";
@@ -25,8 +26,10 @@ import {
   SessionState,
 } from "@/app/model";
 
+import { PrivateKey } from "@/lib/types";
 import guard from "@/lib/guard";
 import { keygen, WebassemblyWorker } from "@/lib/client";
+import { convertRawKey } from "@/lib/utils";
 
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -41,6 +44,7 @@ export default function CreateKey() {
   const keypair = useContext(KeypairContext);
   const { toast } = useToast();
   const [step, setStep] = useState(0);
+  const [keyShare, setKeyShare] = useState<PrivateKey>(null);
   const [createKeyState, setCreateKeyState] = useState<CreateKeyState>({
     ownerType: OwnerType.initiator,
     sessionType: SessionType.keygen,
@@ -103,6 +107,11 @@ export default function CreateKey() {
         participants,
       );
       console.log("key share", keyShare);
+
+      setKeyShare(convertRawKey(keyShare));
+
+      // Save the new key share in the keyring account
+      //await createAccount(convertRawKey(keyShare), createKeyState.name);
     }, toast);
   };
 
@@ -116,6 +125,15 @@ export default function CreateKey() {
       <PublicKeyBadge publicKey={publicKey} />
     </div>
   );
+
+  if (keyShare !== null) {
+      return (
+        <CreateKeyContent>
+          <Badges />
+          <SaveKeyShare keyShare={keyShare} name={createKeyState.name} />
+        </CreateKeyContent>
+      );
+  }
 
   // Meeting is prepared so we can execute keygen
   if (publicKeys !== null) {

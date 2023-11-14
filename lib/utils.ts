@@ -2,6 +2,10 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toBeHex } from "ethers";
 
+import { RawKey, rawKey } from '@/lib/schemas';
+import { PrivateKey, ProtocolId } from '@/lib/types';
+import { fromZodError } from 'zod-validation-error';
+
 // Utility for merging class names.
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -54,10 +58,12 @@ export type Dictionary<T> = {
 };
 
 const chains: Dictionary<string> = {
-  "0x01": "Mainnet",
+  "0x01": "Ethereum Mainnet",
+  "0xe708": "Linea Mainnet",
   "0x03": "Ropsten",
   "0x04": "Rinkeby",
   "0x05": "Goerli",
+  "0xe704": "Linea Goerli",
   "0x2a": "Kovan",
   "0xaa36a7": "Sepolia",
   "0x0539": "Localhost 8545",
@@ -65,6 +71,7 @@ const chains: Dictionary<string> = {
 
 // Get human-readable chain name from it's identifier.
 export function getChainName(value: string | number): string {
+  console.log(value);
   return chains[toBeHex(BigInt(value))];
 }
 
@@ -96,4 +103,26 @@ export function abbreviateAddress(address: string): string {
   const start = address.substr(0, 5);
   const end = address.substr(address.length - 5);
   return `${start}...${end}`;
+}
+
+// Validate raw key data and convert to the private key format.
+export function convertRawKey(keyData: unknown): PrivateKey {
+    try {
+      const data: RawKey = rawKey.parse(keyData);
+      const privateKey: PrivateKey = {
+        protocolId: ProtocolId.gg20,
+        address: data.address,
+        publicKey: data.publicKey,
+        privateKey: data.privateKey.gg20,
+        keyshareId: data.privateKey.gg20.i.toString(),
+        parameters: {
+          parties: data.privateKey.gg20.n,
+          threshold: data.privateKey.gg20.t,
+        },
+      };
+      return privateKey;
+    } catch(error) {
+      const validationError = fromZodError(error);
+      throw validationError;
+    }
 }

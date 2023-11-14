@@ -1,7 +1,9 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
 
 import { Dictionary } from '@/lib/utils';
-import { PrivateKey } from '@/lib/types';
+import { PrivateKey, Parameters } from '@/lib/types';
+
+export { Parameters } from '@/lib/types';
 
 export type ExportedAccount = {
   address: string;
@@ -29,12 +31,6 @@ export type KeygenOptions = {
   protocol: Protocol;
   keypair: string;
   parameters: Parameters;
-};
-
-// Key parameters.
-export type Parameters = {
-  parties: number;
-  threshold: number;
 };
 
 // Types of sessions.

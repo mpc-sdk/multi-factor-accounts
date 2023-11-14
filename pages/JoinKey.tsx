@@ -11,6 +11,7 @@ import KeyBadge from "@/components/KeyBadge";
 import PublicKeyBadge from "@/components/PublicKeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
+import SaveKeyShare from "@/components/SaveKeyShare";
 
 import {
   PublicKeys,
@@ -22,8 +23,10 @@ import {
 
 import NotFound from "@/pages/NotFound";
 
+import { PrivateKey } from "@/lib/types";
 import guard from "@/lib/guard";
 import { keygen, WebassemblyWorker } from "@/lib/client";
+import { convertRawKey } from "@/lib/utils";
 
 function JoinKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -39,6 +42,7 @@ export default function JoinKey() {
 
   const { toast } = useToast();
   const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
+  const [keyShare, setKeyShare] = useState<PrivateKey>(null);
   const [keygenData, setKeygenData] = useState<AssociatedData>(null);
   const { meetingId, userId } = useParams();
   const [searchParams] = useSearchParams();
@@ -75,6 +79,10 @@ export default function JoinKey() {
         null, // Participants MUST be null when joining
       );
       console.log("key share", keyShare);
+
+      setKeyShare(convertRawKey(keyShare));
+
+      //await createAccount(convertRawKey(keyShare), name);
     }, toast);
   };
 
@@ -88,6 +96,15 @@ export default function JoinKey() {
       <PublicKeyBadge publicKey={publicKey} />
     </div>
   );
+
+  if (keyShare !== null) {
+      return (
+        <JoinKeyContent>
+          <Badges />
+          <SaveKeyShare keyShare={keyShare} name={name} />
+        </JoinKeyContent>
+      );
+  }
 
   // Meeting is prepared so we can execute keygen
   if (publicKeys !== null) {
