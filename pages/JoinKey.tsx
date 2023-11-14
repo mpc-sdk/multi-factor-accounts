@@ -7,6 +7,7 @@ import { KeypairContext } from "@/app/providers/keypair";
 
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
+import CreateKeyAlert from "@/components/CreateKeyAlert";
 import KeyBadge from "@/components/KeyBadge";
 import PublicKeyBadge from "@/components/PublicKeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
@@ -113,12 +114,7 @@ export default function JoinKey() {
         <Badges />
         <SessionRunner
           loaderText="Creating key share..."
-          message={
-            <KeyAlert
-              title="Generating key share"
-              description="Crunching the numbers to compute your key share securely"
-            />
-          }
+          message={<CreateKeyAlert />}
           executor={startKeygen}
         />
       </JoinKeyContent>

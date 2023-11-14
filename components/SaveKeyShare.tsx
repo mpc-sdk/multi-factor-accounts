@@ -38,9 +38,9 @@ export default function SaveKeyShare({
     <div className="flex flex-col space-y-6 mt-12">
       <KeyAlert
         title="Key share ready!"
-        description={`Your key share in ${name} is ready, now you just need to save it in MetaMask or download and save it to safe encrypted storage.`}
+        description="Your key share is ready, now you just need to save it in MetaMask or download and save it to safe encrypted storage such as a password maanager or encrypted disc."
       />
-      <div className="flex justify-end">
+      <div className="flex justify-end space-x-4">
         <Button variant="outline" onClick={downloadKeyShare}>
           Download
         </Button>

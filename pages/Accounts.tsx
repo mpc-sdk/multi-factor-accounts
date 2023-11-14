@@ -5,6 +5,7 @@ import type { KeyringAccount } from "@metamask/keyring-api";
 
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,17 +25,9 @@ import ChainBadge from "@/components/ChainBadge";
 import AccountsLoader from "@/components/AccountsLoader";
 
 import { accountsSelector, invalidateAccounts } from "@/app/store/accounts";
-import {
-  createAccount,
-  deleteAccount,
-  getWalletByAddress,
-} from "@/lib/keyring";
-import {
-  abbreviateAddress,
-  toUint8Array,
-  download,
-  convertRawKey,
-} from "@/lib/utils";
+import { deleteAccount, getWalletByAddress } from "@/lib/keyring";
+import { abbreviateAddress, toUint8Array, download } from "@/lib/utils";
+import { Parameters } from "@/lib/types";
 import { ExportedAccount } from "@/app/model";
 import guard from "@/lib/guard";
 
@@ -165,7 +158,11 @@ export default function Accounts() {
     <AccountsContent>
       <div className="mt-12 border rounded-md">
         {accounts.map((account) => {
-          const { name, numShares, parameters } = account.options;
+          const { name, numShares, parameters } = account.options as {
+            name: string;
+            numShares: number;
+            parameters: Parameters;
+          };
           return (
             <div
               key={account.id}
@@ -176,10 +173,10 @@ export default function Accounts() {
                 <div className="text-sm">
                   {abbreviateAddress(account.address)}
                 </div>
-                <div className="text-sm">
-                  {numShares} shares in a {parameters.threshold + 1} of{" "}
-                  {parameters.parties} key
-                </div>
+                <Badge variant="outline" className="mt-4">
+                  {numShares} share{numShares > 1 ? 's' : ''} in a {parameters.threshold + 1} of{" "}
+                  {parameters.parties}
+                </Badge>
               </div>
               <div className="flex space-x-4">
                 <ExportAccount account={account} />

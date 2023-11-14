@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
+import CreateKeyAlert from "@/components/CreateKeyAlert";
 import KeyBadge from "@/components/KeyBadge";
 import PublicKeyBadge from "@/components/PublicKeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
@@ -142,12 +143,7 @@ export default function CreateKey() {
         <Badges />
         <SessionRunner
           loaderText="Creating key share..."
-          message={
-            <KeyAlert
-              title="Generating key share"
-              description="Crunching the numbers to compute your key share securely"
-            />
-          }
+          message={<CreateKeyAlert />}
           executor={startKeygen}
         />
       </CreateKeyContent>
