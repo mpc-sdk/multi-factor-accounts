@@ -6,8 +6,9 @@ import {
   ServerOptions,
   MeetingOptions,
   KeyShare,
-  Parameters,
 } from "@/app/model";
+
+import { Parameters } from '@/lib/types';
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;

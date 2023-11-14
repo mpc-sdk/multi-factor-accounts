@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
 import { useToast } from "@/components/ui/use-toast";
@@ -23,12 +23,12 @@ import Icons from "@/components/Icons";
 import KeyAlert from "@/components/KeyAlert";
 import ChainBadge from "@/components/ChainBadge";
 import AccountsLoader from "@/components/AccountsLoader";
-import FileUpload from "@/components/FileUpload";
-import ImportAccount from "@/components/ImportAccount";
+
+import NotFound from "@/pages/NotFound";
 
 import { accountsSelector, invalidateAccounts } from "@/app/store/accounts";
-import { deleteAccount } from "@/lib/keyring";
-import { abbreviateAddress, fromUint8Array } from "@/lib/utils";
+import { deleteAccount, getAccountByAddress } from "@/lib/keyring";
+import { abbreviateAddress } from "@/lib/utils";
 import { Parameters } from "@/lib/types";
 import { exportAccount } from "@/lib/import-export";
 import guard from "@/lib/guard";
@@ -64,15 +64,7 @@ function ExportAccount({ account }: { account: KeyringAccount }) {
   );
 }
 
-function AccountsContent({
-  children,
-  onImportComplete,
-}: {
-  children?: React.ReactNode
-  onImportComplete: () => void
-}) {
-  const { toast } = useToast();
-
+function AccountContent({ children }: { children?: React.ReactNode }) {
   return (
     <>
       <div className="flex items-center justify-between">
@@ -81,7 +73,6 @@ function AccountsContent({
           <ChainBadge className="mt-2" />
         </div>
         <div className="flex space-x-4">
-          <ImportAccount onImportComplete={onImportComplete} />
           <Link to="/keys/create">
             <Button>
               <Icons.plus className="h-4 w-4 mr-2" />
@@ -95,87 +86,53 @@ function AccountsContent({
   );
 }
 
-function NoAccounts({onImportComplete}: {onImportComplete: () => void}) {
+function NoAccounts() {
   return (
-    <AccountsContent onImportComplete={onImportComplete}>
+    <AccountContent>
       <div className="mt-12">
         <KeyAlert
           title="No accounts yet!"
           description="To get started create a new key."
         />
       </div>
-    </AccountsContent>
+    </AccountContent>
   );
 }
 
-export default function Accounts() {
+export default function Account() {
   const { toast } = useToast();
+  const { address } = useParams();
   const dispatch = useDispatch();
-  const [refresh, setRefresh] = useState(0);
-  const { accounts, loaded } = useSelector(accountsSelector);
+  const [account, setAccount] = useState(null);
+  const [loaded, setLoaded] = useState(null);
 
-  if (!loaded) {
-    return <AccountsLoader />;
-  }
+  useEffect(() => {
+    const loadAccountInfo = async () => {
+      const account = await getAccountByAddress(address);
 
-  const onChanged = async () => {
-    await dispatch(invalidateAccounts());
-    setRefresh(refresh + 1);
-  };
+      console.log("loaded account", account);
 
-  if (accounts.length == 0) {
-    return <NoAccounts onImportComplete={onChanged} />;
+      setLoaded(true);
+      setAccount(account);
+    };
+    loadAccountInfo();
+  }, []);
+
+  if (loaded && !account) {
+    return <NotFound />;
   }
 
   const removeAccount = async (account: KeyringAccount) => {
     await guard(async () => {
       await deleteAccount(account.id);
-      onChanged();
+      await dispatch(invalidateAccounts());
+      //setRefresh(refresh + 1);
     }, toast);
   };
 
   return (
-    <AccountsContent onImportComplete={onChanged}>
-      <div className="mt-12 border rounded-md">
-        {accounts.map((account) => {
-          const { name, numShares, parameters } = account.options as {
-            name: string;
-            numShares: number;
-            parameters: Parameters;
-          };
-          return (
-            <div
-              key={account.id}
-              className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between"
-            >
-              <div>
-                <div>{name}</div>
-                <div className="text-sm">
-                  {abbreviateAddress(account.address)}
-                </div>
-                <Badge variant="outline" className="mt-4">
-                  {numShares} share{numShares > 1 ? 's' : ''} in a {parameters.threshold + 1} of{" "}
-                  {parameters.parties}
-                </Badge>
-              </div>
-              <div className="flex space-x-4">
-                <Link to={`/accounts/${account.address}`}>
-                  <Button variant="outline">
-                    <Icons.pencil className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <ExportAccount account={account} />
-                <Button
-                  variant="destructive"
-                  onClick={() => removeAccount(account)}
-                >
-                  <Icons.remove className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </AccountsContent>
+    <AccountContent>
+      <p>{address}</p>
+    </AccountContent>
   );
 }

@@ -78,10 +78,29 @@ export const rawKey = z.object({
   address: z.string(),
 });
 
+export const parameters = z.object({
+  parties: z.number(),
+  threshold: z.number(),
+});
+
+export const privateKey = z.object({
+  privateKey: localKey,
+  publicKey: z.string(),
+  address: z.string(),
+  keyshareId: z.string(),
+  parameters: parameters,
+});
+
+  //protocolId: ProtocolId;
+  //privateKey: LocalKey;
+  //publicKey: string;
+  //keyshareId: string;
+  //address: string;
+  //parameters: Parameters;
+
 export const exportedKey = z
   .object({
-    privateKey: z.record(keyShare),
-    publicKey: z.string(),
+    privateKey: z.record(privateKey),
     address: z.string(),
   })
   .required();
@@ -89,3 +108,4 @@ export const exportedKey = z
 export type ExportedKey = z.infer<typeof exportedKey>;
 export type LocalKey = z.infer<typeof localKey>;
 export type RawKey = z.infer<typeof rawKey>;
+export type PrivateKey = z.infer<typeof privateKey>;

@@ -8,6 +8,7 @@ import {
   Import,
   Plus,
   Coffee,
+  Pencil,
 } from "lucide-react";
 
 const Icons = {
@@ -20,6 +21,7 @@ const Icons = {
   upload: Import,
   plus: Plus,
   coffee: Coffee,
+  pencil: Pencil,
 };
 
 export default Icons;

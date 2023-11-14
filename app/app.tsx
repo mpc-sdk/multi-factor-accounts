@@ -7,6 +7,7 @@ import NotFound from "@/pages/NotFound";
 import About from "@/pages/About";
 import Home from "@/pages/Home";
 import Accounts from "@/pages/Accounts";
+import Account from "@/pages/Account";
 import CreateKey from "@/pages/CreateKey";
 import JoinKey from "@/pages/JoinKey";
 
@@ -44,6 +45,7 @@ function Content() {
       <Route path="/keys/create" element={<CreateKey />} />
       <Route path="/keys/join/:meetingId/:userId" element={<JoinKey />} />
       <Route path="/accounts" element={<Accounts />} />
+      <Route path="/accounts/:address" element={<Account />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

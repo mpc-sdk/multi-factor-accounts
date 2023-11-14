@@ -22,6 +22,19 @@ export async function deleteAccount(id: string): Promise<void> {
   return await client.deleteAccount(id);
 }
 
+export async function getAccountByAddress(address: string): Promise<KeyringAccount> {
+  return (await ethereum.request({
+    method: "wallet_invokeSnap",
+    params: {
+      snapId,
+      request: {
+        method: "snap.internal.getAccountByAddress",
+        params: { address },
+      },
+    },
+  })) as KeyringAccount;
+}
+
 export async function getWalletByAddress(address: string): Promise<Wallet> {
   return (await ethereum.request({
     method: "wallet_invokeSnap",

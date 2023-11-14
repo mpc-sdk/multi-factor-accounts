@@ -1,14 +1,5 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
-
-import { Dictionary } from "@/lib/utils";
-import { PrivateKey, Parameters } from "@/lib/types";
-
-export { Parameters } from "@/lib/types";
-
-export type ExportedAccount = {
-  address: string;
-  privateKey: Dictionary<PrivateKey>;
-};
+import { Parameters } from "@/lib/types";
 
 // Noise protocol key information.
 export type Keypair = {
