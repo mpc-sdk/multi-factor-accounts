@@ -8,7 +8,7 @@ import {
   KeyShare,
 } from "@/app/model";
 
-import { Parameters } from '@/lib/types';
+import { Parameters } from "@/lib/types";
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;

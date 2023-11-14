@@ -19,7 +19,11 @@ import Icons from "@/components/Icons";
 
 import { exportAccount } from "@/lib/import-export";
 
-export default function ExportAccount({ account }: { account: KeyringAccount }) {
+export default function ExportAccount({
+  account,
+}: {
+  account: KeyringAccount;
+}) {
   const { toast } = useToast();
 
   return (
@@ -42,7 +46,9 @@ export default function ExportAccount({ account }: { account: KeyringAccount }) 
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => exportAccount(account.address, toast)}>
+          <AlertDialogAction
+            onClick={() => exportAccount(account.address, toast)}
+          >
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

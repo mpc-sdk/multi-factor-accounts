@@ -2,7 +2,11 @@ import React, { useState } from "react";
 
 import { getDroppedFiles, humanFileSize } from "@/lib/utils";
 
-export default function FileUploadReader({onSelect}: {onSelect: (file: File) => void}) {
+export default function FileUploadReader({
+  onSelect,
+}: {
+  onSelect: (file: File) => void;
+}) {
   const [file, setFile] = useState(null);
   const [fileInput, setFileInput] = useState(null);
 
@@ -41,7 +45,6 @@ export default function FileUploadReader({onSelect}: {onSelect: (file: File) => 
     }
   };
 
-
   /*
                   <IconButton
                     onClick={removeFile}
@@ -63,25 +66,22 @@ export default function FileUploadReader({onSelect}: {onSelect: (file: File) => 
         <div
           onDragOver={onDragOver}
           onDrop={onDrop}
-          className="rounded-md border p-4 cursor-pointer">
+          className="rounded-md border p-4 cursor-pointer"
+        >
           <div>
             {file ? (
               <div className="flex">
                 <div className="flex">
                   <div>
                     <p>{file.name}</p>
-                    <p className="text-sm">
-                      {humanFileSize(file.size)}
-                    </p>
+                    <p className="text-sm">{humanFileSize(file.size)}</p>
                   </div>
                 </div>
               </div>
             ) : (
               <>
                 <p>Tap to select a file</p>
-                <p className="text-sm">
-                  Or drop the file here
-                </p>
+                <p className="text-sm">Or drop the file here</p>
               </>
             )}
           </div>

@@ -19,8 +19,8 @@ function AccountsContent({
   children,
   onImportComplete,
 }: {
-  children?: React.ReactNode
-  onImportComplete: () => void
+  children?: React.ReactNode;
+  onImportComplete: () => void;
 }) {
   return (
     <>
@@ -44,7 +44,7 @@ function AccountsContent({
   );
 }
 
-function NoAccounts({onImportComplete}: {onImportComplete: () => void}) {
+function NoAccounts({ onImportComplete }: { onImportComplete: () => void }) {
   return (
     <AccountsContent onImportComplete={onImportComplete}>
       <div className="mt-12">

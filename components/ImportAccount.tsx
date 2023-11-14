@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { fromZodError } from 'zod-validation-error';
+import { fromZodError } from "zod-validation-error";
 
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -23,9 +23,13 @@ import { createAccount } from "@/lib/keyring";
 import { fromUint8Array } from "@/lib/utils";
 import guard from "@/lib/guard";
 
-import {exportedKey, ExportedKey} from '@/lib/schemas';
+import { exportedKey, ExportedKey } from "@/lib/schemas";
 
-export default function ImportAccount({onImportComplete}: {onImportComplete: () => void}) {
+export default function ImportAccount({
+  onImportComplete,
+}: {
+  onImportComplete: () => void;
+}) {
   const { toast } = useToast();
   const [importShares, setImportShares] = useState<ExportedKey>(null);
 
@@ -37,7 +41,7 @@ export default function ImportAccount({onImportComplete}: {onImportComplete: () 
       try {
         const importShares: ExportedKey = exportedKey.parse(keystore);
         setImportShares(importShares);
-      } catch(error) {
+      } catch (error) {
         const validationError = fromZodError(error);
         throw validationError;
       }
@@ -54,14 +58,11 @@ export default function ImportAccount({onImportComplete}: {onImportComplete: () 
     }, toast);
   };
 
-  const action = importShares === null
-    ? (
+  const action =
+    importShares === null ? (
       <Button disabled>Continue</Button>
-    )
-    : (
-      <AlertDialogAction onClick={importAccount}>
-        Continue
-      </AlertDialogAction>
+    ) : (
+      <AlertDialogAction onClick={importAccount}>Continue</AlertDialogAction>
     );
 
   return (

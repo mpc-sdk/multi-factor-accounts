@@ -16,39 +16,38 @@ import Loader from "@/components/Loader";
 import NotFound from "@/pages/NotFound";
 
 import { deleteAccount, getAccountByAddress } from "@/lib/keyring";
-import { abbreviateAddress } from "@/lib/utils";
 import guard from "@/lib/guard";
 
-function AccountContent({ account, children }: { account: KeyringAccount, children?: React.ReactNode }) {
-
+function AccountContent({
+  account,
+  children,
+}: {
+  account: KeyringAccount;
+  children?: React.ReactNode;
+}) {
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const removeAccount = async (account: KeyringAccount) => {
     await guard(async () => {
       await deleteAccount(account.id);
-      navigate('/accounts');
+      navigate("/accounts");
     }, toast);
   };
 
-  const name = account?.options?.name as string ?? 'Untitled account';
+  const name = (account?.options?.name as string) ?? "Untitled account";
 
   return (
     <>
       <div className="flex items-center justify-between">
         <div>
-          <Link href="/#/accounts">
-            Accounts
-          </Link>
+          <Link href="/#/accounts">Accounts</Link>
           <Heading>{name}</Heading>
           <ChainBadge className="mt-2" />
         </div>
         <div className="flex space-x-4">
           <ExportAccount account={account} />
-          <Button
-            variant="destructive"
-            onClick={() => removeAccount(account)}
-          >
+          <Button variant="destructive" onClick={() => removeAccount(account)}>
             <Icons.remove className="h-4 w-4 mr-2" />
             Delete
           </Button>
@@ -83,7 +82,7 @@ export default function Account() {
     numShares: number;
   };
 
-  const sharesList = Array.apply(null, Array(numShares));
+  const sharesList = Array.from(Array(numShares));
 
   return (
     <AccountContent account={account}>
@@ -91,15 +90,18 @@ export default function Account() {
         <div className="flex">
           <SharesBadge account={account} />
         </div>
-
         <div className="rounded-md border">
           {sharesList.map((share, index) => {
-            return <div className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between">
-              <div>Share {index + 1}</div>
-            </div>;
+            return (
+              <div
+                key={index}
+                className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between"
+              >
+                <div>Share {index + 1}</div>
+              </div>
+            );
           })}
         </div>
-
       </div>
     </AccountContent>
   );
