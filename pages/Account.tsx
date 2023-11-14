@@ -1,84 +1,57 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import Heading from "@/components/Heading";
+import Link from "@/components/Link";
 import Icons from "@/components/Icons";
-import KeyAlert from "@/components/KeyAlert";
 import ChainBadge from "@/components/ChainBadge";
-import AccountsLoader from "@/components/AccountsLoader";
+import ExportAccount from "@/components/ExportAccount";
+import SharesBadge from "@/components/SharesBadge";
+import Loader from "@/components/Loader";
 
 import NotFound from "@/pages/NotFound";
 
-import { accountsSelector, invalidateAccounts } from "@/app/store/accounts";
 import { deleteAccount, getAccountByAddress } from "@/lib/keyring";
 import { abbreviateAddress } from "@/lib/utils";
-import { Parameters } from "@/lib/types";
-import { exportAccount } from "@/lib/import-export";
 import guard from "@/lib/guard";
 
-function ExportAccount({ account }: { account: KeyringAccount }) {
+function AccountContent({ account, children }: { account: KeyringAccount, children?: React.ReactNode }) {
+
   const { toast } = useToast();
+  const navigate = useNavigate();
 
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="outline">
-          <Icons.download className="h-4 w-4" />
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Export account</AlertDialogTitle>
-          <AlertDialogDescription>
-            Exporting this account will download the private key to your
-            computer unencrypted; you should copy the file to safe encrypted
-            storage such as a password manager and delete the downloaded file
-            from your disc.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => exportAccount(account.address, toast)}>
-            Continue
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  );
-}
+  const removeAccount = async (account: KeyringAccount) => {
+    await guard(async () => {
+      await deleteAccount(account.id);
+      navigate('/accounts');
+    }, toast);
+  };
 
-function AccountContent({ children }: { children?: React.ReactNode }) {
+  const name = account?.options?.name as string ?? 'Untitled account';
+
   return (
     <>
       <div className="flex items-center justify-between">
         <div>
-          <Heading>Accounts</Heading>
+          <Link href="/#/accounts">
+            Accounts
+          </Link>
+          <Heading>{name}</Heading>
           <ChainBadge className="mt-2" />
         </div>
         <div className="flex space-x-4">
-          <Link to="/keys/create">
-            <Button>
-              <Icons.plus className="h-4 w-4 mr-2" />
-              New
-            </Button>
-          </Link>
+          <ExportAccount account={account} />
+          <Button
+            variant="destructive"
+            onClick={() => removeAccount(account)}
+          >
+            <Icons.remove className="h-4 w-4 mr-2" />
+            Delete
+          </Button>
         </div>
       </div>
       {children}
@@ -86,53 +59,48 @@ function AccountContent({ children }: { children?: React.ReactNode }) {
   );
 }
 
-function NoAccounts() {
-  return (
-    <AccountContent>
-      <div className="mt-12">
-        <KeyAlert
-          title="No accounts yet!"
-          description="To get started create a new key."
-        />
-      </div>
-    </AccountContent>
-  );
-}
-
 export default function Account() {
-  const { toast } = useToast();
   const { address } = useParams();
-  const dispatch = useDispatch();
   const [account, setAccount] = useState(null);
   const [loaded, setLoaded] = useState(null);
 
   useEffect(() => {
     const loadAccountInfo = async () => {
       const account = await getAccountByAddress(address);
-
-      console.log("loaded account", account);
-
       setLoaded(true);
       setAccount(account);
     };
     loadAccountInfo();
   }, []);
 
-  if (loaded && !account) {
+  if (!loaded) {
+    return <Loader text="Loading account..." />;
+  } else if (loaded && !account) {
     return <NotFound />;
   }
 
-  const removeAccount = async (account: KeyringAccount) => {
-    await guard(async () => {
-      await deleteAccount(account.id);
-      await dispatch(invalidateAccounts());
-      //setRefresh(refresh + 1);
-    }, toast);
+  const { numShares } = account.options as {
+    numShares: number;
   };
 
+  const sharesList = Array.apply(null, Array(numShares));
+
   return (
-    <AccountContent>
-      <p>{address}</p>
+    <AccountContent account={account}>
+      <div className="mt-12 flex flex-col space-y-6">
+        <div className="flex">
+          <SharesBadge account={account} />
+        </div>
+
+        <div className="rounded-md border">
+          {sharesList.map((share, index) => {
+            return <div className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between">
+              <div>Share {index + 1}</div>
+            </div>;
+          })}
+        </div>
+
+      </div>
     </AccountContent>
   );
 }

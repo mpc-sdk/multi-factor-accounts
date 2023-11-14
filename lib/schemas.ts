@@ -83,20 +83,16 @@ export const parameters = z.object({
   threshold: z.number(),
 });
 
+export const protocolId = z.enum(["gg20"]);
+
 export const privateKey = z.object({
+  protocolId: protocolId,
   privateKey: localKey,
   publicKey: z.string(),
   address: z.string(),
   keyshareId: z.string(),
   parameters: parameters,
 });
-
-  //protocolId: ProtocolId;
-  //privateKey: LocalKey;
-  //publicKey: string;
-  //keyshareId: string;
-  //address: string;
-  //parameters: Parameters;
 
 export const exportedKey = z
   .object({
@@ -108,4 +104,6 @@ export const exportedKey = z
 export type ExportedKey = z.infer<typeof exportedKey>;
 export type LocalKey = z.infer<typeof localKey>;
 export type RawKey = z.infer<typeof rawKey>;
+export type Parameters = z.infer<typeof parameters>;
 export type PrivateKey = z.infer<typeof privateKey>;
+export type ProtocolId = z.infer<typeof protocolId>;

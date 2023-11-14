@@ -1,13 +1,9 @@
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import type { KeyringAccount } from "@metamask/keyring-api";
 
 import { fromZodError } from 'zod-validation-error';
 
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,18 +16,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
-import KeyAlert from "@/components/KeyAlert";
-import ChainBadge from "@/components/ChainBadge";
-import AccountsLoader from "@/components/AccountsLoader";
 import FileUpload from "@/components/FileUpload";
 
-import { accountsSelector, invalidateAccounts } from "@/app/store/accounts";
 import { createAccount } from "@/lib/keyring";
-import { abbreviateAddress, fromUint8Array } from "@/lib/utils";
-import { Parameters } from "@/lib/types";
-import { exportAccount } from "@/lib/import-export";
+import { fromUint8Array } from "@/lib/utils";
 import guard from "@/lib/guard";
 
 import {exportedKey, ExportedKey} from '@/lib/schemas';
@@ -57,7 +46,8 @@ export default function ImportAccount({onImportComplete}: {onImportComplete: () 
 
   const importAccount = async () => {
     await guard(async () => {
-      for(const [_, privateKey] of Object.entries(importShares.privateKey)) {
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+      for (const [_, privateKey] of Object.entries(importShares.privateKey)) {
         await createAccount(privateKey, "Imported account");
       }
       onImportComplete();

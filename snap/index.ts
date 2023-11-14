@@ -58,8 +58,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       const address = (request.params as Record<string, unknown>)
         .address as string;
       const keyring = await getKeyring();
-      const wallet = await keyring.getWalletByAddress(address);
-      return wallet.account;
+      const wallet = await keyring.findWalletByAddress(address);
+      return wallet?.account;
     }
     case InternalMethod.GetWalletByAddress: {
       const address = (request.params as Record<string, unknown>)

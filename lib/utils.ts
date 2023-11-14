@@ -70,7 +70,6 @@ const chains: Dictionary<string> = {
 
 // Get human-readable chain name from it's identifier.
 export function getChainName(value: string | number): string {
-  console.log(value);
   return chains[toBeHex(BigInt(value))];
 }
 
