@@ -17,7 +17,7 @@ import { v4 as uuid } from "uuid";
 
 import { saveState } from "./stateManagement";
 
-import { isEvmChain, isUniqueAddress, throwError } from "./util";
+import { isEvmChain, findWalletByAddress, throwError } from "./util";
 
 import packageInfo from "../package.json";
 
@@ -46,11 +46,16 @@ export class ThresholdKeyring implements Keyring {
     );
   }
 
+  // Add a private key share to an account using an upsert.
+  //
+  // Creates the account if it does not exist otherwise creates
+  // or overwrites the key share.
   async createAccount(
     options: Record<string, Json> = {},
   ): Promise<KeyringAccount> {
     const privateKey = options?.privateKey as PrivateKey;
     const address = options?.address as string;
+    const keyshareId = options?.keyshareId as string;
 
     if (!privateKey) {
       throw new Error(`Private key share must be given to create an account.`);
@@ -60,8 +65,8 @@ export class ThresholdKeyring implements Keyring {
       throw new Error(`Account address must be given to create an account.`);
     }
 
-    if (!isUniqueAddress(address, Object.values(this.#state.wallets))) {
-      throw new Error(`Account address already in use: ${address}`);
+    if (!keyshareId) {
+      throw new Error(`Key share identifier must be given to create an account.`);
     }
 
     // The private key should not be stored in the account options since the
@@ -72,22 +77,39 @@ export class ThresholdKeyring implements Keyring {
     }
 
     try {
-      const account: KeyringAccount = {
-        id: uuid(),
-        options,
-        address,
-        methods: [
-          EthMethod.PersonalSign,
-          EthMethod.Sign,
-          EthMethod.SignTransaction,
-          //EthMethod.SignTypedDataV1,
-          //EthMethod.SignTypedDataV3,
-          //EthMethod.SignTypedDataV4,
-        ],
-        type: EthAccountType.Eoa,
-      };
-      await this.#emitEvent(KeyringEvent.AccountCreated, { account });
-      this.#state.wallets[account.id] = { account, privateKey };
+      const existingWallet = findWalletByAddress(
+        address, Object.values(this.#state.wallets));
+
+      const account: KeyringAccount = existingWallet !== undefined
+        ? existingWallet.account
+        : {
+          id: uuid(),
+          options,
+          address,
+          methods: [
+            EthMethod.PersonalSign,
+            EthMethod.Sign,
+            EthMethod.SignTransaction,
+            //EthMethod.SignTypedDataV1,
+            //EthMethod.SignTypedDataV3,
+            //EthMethod.SignTypedDataV4,
+          ],
+          type: EthAccountType.Eoa,
+        };
+
+      let wallet: Wallet = { account, privateKey: {} };
+      wallet.privateKey[keyshareId] = privateKey;
+      if (existingWallet) {
+        existingWallet.privateKey[keyshareId] = privateKey;
+        wallet = existingWallet;
+      }
+
+      if (!existingWallet) {
+        await this.#emitEvent(KeyringEvent.AccountCreated, { account });
+      } else {
+        await this.#emitEvent(KeyringEvent.AccountUpdated, { account });
+      }
+      this.#state.wallets[account.id] = wallet;
       await this.#saveState();
       return account;
     } catch (error) {

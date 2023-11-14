@@ -1,4 +1,5 @@
 // Types shared between the snap and the dapp.
+import { Dictionary } from '@/lib/utils';
 
 import type {
   KeyringAccount,
@@ -6,7 +7,7 @@ import type {
 
 export type Wallet = {
   account: KeyringAccount;
-  privateKey: PrivateKey;
+  privateKey: Dictionary<PrivateKey>;
 };
 
 export enum ProtocolId {
@@ -17,6 +18,7 @@ export type PrivateKey = {
   protocolId: ProtocolId;
   privateKey: LocalKey;
   publicKey: number[];
+  keyshareId: string;
   address: string;
 }
 

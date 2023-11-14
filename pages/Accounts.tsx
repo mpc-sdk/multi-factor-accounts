@@ -84,14 +84,12 @@ function AccountsContent({ children }: { children?: React.ReactNode }) {
     const data = {};
 
     await guard(async () => {
-      const result = gg20.safeParse(data);
-
-      if (!result.success) {
-        const validationError = fromZodError(result.error);
+      try {
+        gg20.parse(data);
+      } catch(error) {
+        const validationError = fromZodError(error);
         throw validationError;
-        //throw new Error(result.error.issues[0].message);
       }
-
     }, toast);
 
   };

@@ -3,15 +3,15 @@ import type { Json } from "@metamask/utils";
 import { Wallet } from "@/lib/types";
 
 /**
- * Validates whether there are no duplicate addresses
- * in the provided array of wallets.
+ * Find the first wallet with the given address.
  *
  * @param address - The address to validate for duplication.
  * @param wallets - The array of wallets to search for duplicate addresses.
- * @returns Returns true if no duplicate addresses are found, otherwise false.
+ * @returns Returns the wallet or undefined.
  */
-export function isUniqueAddress(address: string, wallets: Wallet[]): boolean {
-  return !wallets.find((wallet) => wallet.account.address === address);
+export function findWalletByAddress(
+  address: string, wallets: Wallet[]): Wallet | undefined {
+  return wallets.find((wallet) => wallet.account.address === address);
 }
 
 /**
