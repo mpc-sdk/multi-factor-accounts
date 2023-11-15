@@ -1,6 +1,7 @@
 import type {
   Keyring,
   KeyringAccount,
+  KeyringAccountData,
   KeyringRequest,
   SubmitRequestResponse,
 } from "@metamask/keyring-api";
@@ -249,6 +250,12 @@ export class ThresholdKeyring implements Keyring {
     // Default URL if dappUrlPrefix or dappVersion are falsy,
     // or if URL construction fails
     return dappUrlPrefix as string;
+  }
+
+  async exportAccount(id: string): Promise<KeyringAccountData> {
+    const wallet = this.#state.wallets[id]
+      || throwError(`Account ${id} does not exist`);
+    return wallet.privateKey as KeyringAccountData;
   }
 
   /**

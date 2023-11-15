@@ -1,5 +1,5 @@
 import snapId from "@/lib/snap-id";
-import { KeyringAccount, KeyringSnapRpcClient } from "@metamask/keyring-api";
+import { KeyringAccount, KeyringSnapRpcClient, KeyringAccountData } from "@metamask/keyring-api";
 
 import { Wallet, PrivateKey } from "@/lib/types";
 
@@ -20,6 +20,11 @@ export async function listAccounts(): Promise<KeyringAccount[]> {
 export async function deleteAccount(id: string): Promise<void> {
   const client = getKeyringClient();
   return await client.deleteAccount(id);
+}
+
+export async function exportAccount(id: string): Promise<KeyringAccountData> {
+  const client = getKeyringClient();
+  return await client.exportAccount(id);
 }
 
 export async function getAccountByAddress(

@@ -17,7 +17,8 @@ import {
 
 import Icons from "@/components/Icons";
 
-import { exportAccount } from "@/lib/import-export";
+import { exportAccount } from "@/lib/keyring";
+import guard  from "@/lib/guard";
 
 export default function ExportAccount({
   account,
@@ -25,6 +26,13 @@ export default function ExportAccount({
   account: KeyringAccount;
 }) {
   const { toast } = useToast();
+
+  const downloadAccount = async () => {
+    await guard(async () => {
+      const data = await exportAccount(account.id);
+      console.log(data);
+    }, toast);
+  };
 
   return (
     <AlertDialog>
