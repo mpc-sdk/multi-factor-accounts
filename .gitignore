@@ -12,3 +12,4 @@ bundle.js
 *.bak
 *.log
 *.tgz
+/keyshare.json

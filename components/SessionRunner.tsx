@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from "react";
 
 import Loader from "@/components/Loader";
 import { WorkerContext } from "@/app/providers/worker";
-import { WebassemblyWorker } from '@/lib/client';
+import { WebassemblyWorker } from "@/lib/client";
 
 import serverUrl from "@/lib/server-url";
 

@@ -3,14 +3,16 @@ import { useParams, useSearchParams } from "react-router-dom";
 
 import { useToast } from "@/components/ui/use-toast";
 
-import { KeypairContext } from '@/app/providers/keypair';
+import { KeypairContext } from "@/app/providers/keypair";
 
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
+import CreateKeyAlert from "@/components/CreateKeyAlert";
 import KeyBadge from "@/components/KeyBadge";
 import PublicKeyBadge from "@/components/PublicKeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
+import SaveKeyShare from "@/components/SaveKeyShare";
 
 import {
   PublicKeys,
@@ -22,8 +24,10 @@ import {
 
 import NotFound from "@/pages/NotFound";
 
-import guard from '@/lib/guard';
-import { keygen, WebassemblyWorker } from '@/lib/client';
+import { PrivateKey } from "@/lib/types";
+import guard from "@/lib/guard";
+import { keygen, WebassemblyWorker } from "@/lib/client";
+import { convertRawKey } from "@/lib/utils";
 
 function JoinKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -39,6 +43,7 @@ export default function JoinKey() {
 
   const { toast } = useToast();
   const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
+  const [keyShare, setKeyShare] = useState<PrivateKey>(null);
   const [keygenData, setKeygenData] = useState<AssociatedData>(null);
   const { meetingId, userId } = useParams();
   const [searchParams] = useSearchParams();
@@ -70,11 +75,15 @@ export default function JoinKey() {
           parties: keygenData.get("parties") as number,
           // Threshold is human-friendly but for the protocol
           // we need to cross the threshold hence the -1
-          threshold: keygenData.get("threshold") as number - 1,
+          threshold: (keygenData.get("threshold") as number) - 1,
         },
         null, // Participants MUST be null when joining
       );
       console.log("key share", keyShare);
+
+      setKeyShare(convertRawKey(keyShare));
+
+      //await createAccount(convertRawKey(keyShare), name);
     }, toast);
   };
 
@@ -82,12 +91,21 @@ export default function JoinKey() {
     <div className="flex justify-between items-center mt-2">
       <KeyBadge
         name={name}
-        parties={keygenData && keygenData.get("parties") as number}
-        threshold={keygenData && keygenData.get("threshold") as number}
+        parties={keygenData && (keygenData.get("parties") as number)}
+        threshold={keygenData && (keygenData.get("threshold") as number)}
       />
       <PublicKeyBadge publicKey={publicKey} />
     </div>
   );
+
+  if (keyShare !== null) {
+    return (
+      <JoinKeyContent>
+        <Badges />
+        <SaveKeyShare keyShare={keyShare} name={name} />
+      </JoinKeyContent>
+    );
+  }
 
   // Meeting is prepared so we can execute keygen
   if (publicKeys !== null) {
@@ -96,12 +114,7 @@ export default function JoinKey() {
         <Badges />
         <SessionRunner
           loaderText="Creating key share..."
-          message={
-            <KeyAlert
-              title="Generating key share"
-              description="Crunching the numbers to compute your key share securely"
-            />
-          }
+          message={<CreateKeyAlert />}
           executor={startKeygen}
         />
       </JoinKeyContent>

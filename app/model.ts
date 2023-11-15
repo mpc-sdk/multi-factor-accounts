@@ -1,4 +1,5 @@
 import { Transaction, TransactionReceiptParams } from "ethers";
+import { Parameters } from "@/lib/types";
 
 // Noise protocol key information.
 export type Keypair = {
@@ -21,12 +22,6 @@ export type KeygenOptions = {
   protocol: Protocol;
   keypair: string;
   parameters: Parameters;
-};
-
-// Key parameters.
-export type Parameters = {
-  parties: number;
-  threshold: number;
 };
 
 // Types of sessions.

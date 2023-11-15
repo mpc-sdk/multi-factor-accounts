@@ -6,8 +6,9 @@ import {
   ServerOptions,
   MeetingOptions,
   KeyShare,
-  Parameters,
 } from "@/app/model";
+
+import { Parameters } from "@/lib/types";
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;
@@ -76,7 +77,7 @@ export async function generateKeypair(
     return keypair;
   }
   const [pem, publicKey] = await worker.generateKeypair();
-  keypair = {pem, publicKey};
+  keypair = { pem, publicKey };
   return keypair;
 }
 

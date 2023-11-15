@@ -1,9 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import keysReducer from "./keys";
+import accountsReducer from "./accounts";
 
 const store = configureStore({
   reducer: {
-    keys: keysReducer,
+    accounts: accountsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

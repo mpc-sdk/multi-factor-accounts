@@ -1,23 +1,23 @@
-import React, {
-  createContext,
-  useState,
-  useEffect,
-} from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { MetaMaskContext } from "@/app/providers/metamask";
 
 const ChainContext = createContext(null);
 
-const ChainProvider = ({children}: {children: React.ReactNode}) => {
+const ChainProvider = ({ children }: { children: React.ReactNode }) => {
+  const [state] = useContext(MetaMaskContext);
   const [chain, setChain] = useState<string>(null);
 
   useEffect(() => {
-    ethereum.on("chainChanged", handleChainChanged);
+    if (state.hasMetaMask) {
+      ethereum.on("chainChanged", handleChainChanged);
 
-    const loadChainInfo = async () => {
-      const chainId = await ethereum.request({ method: "eth_chainId" });
-      setChain(chainId as string);
-    };
+      const loadChainInfo = async () => {
+        const chainId = await ethereum.request({ method: "eth_chainId" });
+        setChain(chainId as string);
+      };
 
-    loadChainInfo();
+      loadChainInfo();
+    }
   }, []);
 
   function handleChainChanged(chainId: string) {
@@ -25,9 +25,7 @@ const ChainProvider = ({children}: {children: React.ReactNode}) => {
   }
 
   return (
-    <ChainContext.Provider value={chain}>
-      {children}
-    </ChainContext.Provider>
+    <ChainContext.Provider value={chain}>{children}</ChainContext.Provider>
   );
 };
 

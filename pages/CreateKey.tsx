@@ -1,16 +1,18 @@
 import React, { useState, useContext } from "react";
 
-import { KeypairContext } from '@/app/providers/keypair';
+import { KeypairContext } from "@/app/providers/keypair";
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
+import CreateKeyAlert from "@/components/CreateKeyAlert";
 import KeyBadge from "@/components/KeyBadge";
 import PublicKeyBadge from "@/components/PublicKeyBadge";
 import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
+import SaveKeyShare from "@/components/SaveKeyShare";
 
 import KeyShareAudienceForm from "@/forms/KeyShareAudience";
 import KeyShareNameForm from "@/forms/KeyShareName";
@@ -25,8 +27,10 @@ import {
   SessionState,
 } from "@/app/model";
 
-import guard from '@/lib/guard';
-import { keygen, WebassemblyWorker } from '@/lib/client';
+import { PrivateKey } from "@/lib/types";
+import guard from "@/lib/guard";
+import { keygen, WebassemblyWorker } from "@/lib/client";
+import { convertRawKey } from "@/lib/utils";
 
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
@@ -41,6 +45,7 @@ export default function CreateKey() {
   const keypair = useContext(KeypairContext);
   const { toast } = useToast();
   const [step, setStep] = useState(0);
+  const [keyShare, setKeyShare] = useState<PrivateKey>(null);
   const [createKeyState, setCreateKeyState] = useState<CreateKeyState>({
     ownerType: OwnerType.initiator,
     sessionType: SessionType.keygen,
@@ -103,6 +108,11 @@ export default function CreateKey() {
         participants,
       );
       console.log("key share", keyShare);
+
+      setKeyShare(convertRawKey(keyShare));
+
+      // Save the new key share in the keyring account
+      //await createAccount(convertRawKey(keyShare), createKeyState.name);
     }, toast);
   };
 
@@ -117,6 +127,15 @@ export default function CreateKey() {
     </div>
   );
 
+  if (keyShare !== null) {
+    return (
+      <CreateKeyContent>
+        <Badges />
+        <SaveKeyShare keyShare={keyShare} name={createKeyState.name} />
+      </CreateKeyContent>
+    );
+  }
+
   // Meeting is prepared so we can execute keygen
   if (publicKeys !== null) {
     return (
@@ -124,12 +143,7 @@ export default function CreateKey() {
         <Badges />
         <SessionRunner
           loaderText="Creating key share..."
-          message={
-            <KeyAlert
-              title="Generating key share"
-              description="Crunching the numbers to compute your key share securely"
-            />
-          }
+          message={<CreateKeyAlert />}
           executor={startKeygen}
         />
       </CreateKeyContent>
@@ -198,10 +212,7 @@ export default function CreateKey() {
       <CreateKeyContent>
         <Badges />
         <div className="flex flex-col space-y-6 mt-12">
-          <KeyAlert
-            title="Confirm"
-            description={message}
-          />
+          <KeyAlert title="Confirm" description={message} />
           <div className="flex justify-between">
             <BackButton />
             <Button onClick={() => setStep(step + 1)}>Create key</Button>
