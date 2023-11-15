@@ -4,10 +4,12 @@ import { Parameters } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 
 export default function SharesBadge({ account }: { account: KeyringAccount }) {
-  const { numShares, parameters } = account.options as {
-    numShares: number;
+  const { shares, parameters } = account.options as {
+    shares: string[];
     parameters: Parameters;
   };
+
+  const numShares = shares.length;
 
   return (
     <Badge variant="outline" className="mt-4">

@@ -126,8 +126,8 @@ export class ThresholdKeyring implements Keyring {
         wallet = existingWallet;
       }
 
-      // Keep track of how many key shares are in this account for the UI
-      account.options.numShares = Object.keys(wallet.privateKey).length;
+      // Keep track of the share identifiers
+      account.options.shares = Object.keys(wallet.privateKey);
 
       if (!existingWallet) {
         await this.#emitEvent(KeyringEvent.AccountCreated, { account });

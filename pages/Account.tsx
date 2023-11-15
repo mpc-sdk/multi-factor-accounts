@@ -49,7 +49,7 @@ function AccountContent({
           <ChainBadge className="mt-2" />
         </div>
         <div className="flex space-x-4">
-          <ExportAccount account={account} />
+          <ExportAccount account={account} buttonText="Export" />
           <Button variant="destructive" onClick={() => removeAccount(account)}>
             <Icons.remove className="h-4 w-4 mr-2" />
             Delete
@@ -81,12 +81,6 @@ export default function Account() {
     return <NotFound />;
   }
 
-  const { numShares } = account.options as {
-    numShares: number;
-  };
-
-  const sharesList = Array.from(Array(numShares));
-
   return (
     <AccountContent account={account}>
       <div className="mt-12 flex flex-col space-y-6">
@@ -94,13 +88,19 @@ export default function Account() {
           <SharesBadge account={account} />
         </div>
         <div className="rounded-md border">
-          {sharesList.map((share, index) => {
+          {account.options.shares.map((keyShareId, index) => {
             return (
               <div
                 key={index}
                 className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between"
               >
-                <div>Share {index + 1}</div>
+                <div className="flex space-x-4">
+                  <div className="border-r pr-4">{index + 1}</div>
+                  <div>Share {keyShareId}</div>
+                </div>
+                <div>
+                  <ExportAccount account={account} keyShareId={keyShareId} />
+                </div>
               </div>
             );
           })}
