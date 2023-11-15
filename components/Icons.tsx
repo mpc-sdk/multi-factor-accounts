@@ -9,6 +9,7 @@ import {
   Plus,
   Coffee,
   Pencil,
+  Trash,
 } from "lucide-react";
 
 const Icons = {
@@ -22,6 +23,7 @@ const Icons = {
   plus: Plus,
   coffee: Coffee,
   pencil: Pencil,
+  trash: Trash,
 };
 
 export default Icons;
