@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
@@ -15,6 +16,7 @@ import Loader from "@/components/Loader";
 
 import NotFound from "@/pages/NotFound";
 
+import { invalidateAccounts } from "@/app/store/accounts";
 import { deleteAccount, getAccountByAddress } from "@/lib/keyring";
 import guard from "@/lib/guard";
 
@@ -25,12 +27,14 @@ function AccountContent({
   account: KeyringAccount;
   children?: React.ReactNode;
 }) {
+  const dispatch = useDispatch();
   const { toast } = useToast();
   const navigate = useNavigate();
 
   const removeAccount = async (account: KeyringAccount) => {
     await guard(async () => {
       await deleteAccount(account.id);
+      await dispatch(invalidateAccounts());
       navigate("/");
     }, toast);
   };
