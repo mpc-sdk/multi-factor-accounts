@@ -10,10 +10,10 @@ import KeyAlert from "@/components/KeyAlert";
 import ChainBadge from "@/components/ChainBadge";
 import AccountsLoader from "@/components/AccountsLoader";
 import ImportAccount from "@/components/ImportAccount";
+import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 
 import { accountsSelector, invalidateAccounts } from "@/app/store/accounts";
-import { abbreviateAddress } from "@/lib/utils";
 
 function AccountsContent({
   children,
@@ -24,20 +24,20 @@ function AccountsContent({
 }) {
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div>
+      <div>
+        <div className="flex items-center justify-between">
           <Heading>Accounts</Heading>
-          <ChainBadge className="mt-2" />
+          <div className="flex space-x-4">
+            <ImportAccount onImportComplete={onImportComplete} />
+            <Link to="/keys/create">
+              <Button>
+                <Icons.plus className="h-4 w-4 mr-2" />
+                New
+              </Button>
+            </Link>
+          </div>
         </div>
-        <div className="flex space-x-4">
-          <ImportAccount onImportComplete={onImportComplete} />
-          <Link to="/keys/create">
-            <Button>
-              <Icons.plus className="h-4 w-4 mr-2" />
-              New
-            </Button>
-          </Link>
-        </div>
+        <ChainBadge className="mt-2" />
       </div>
       {children}
     </>
@@ -85,16 +85,15 @@ export default function Accounts() {
           return (
             <div
               key={account.id}
-              className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between"
+              className="[&:not(:last-child)]:border-b p-4 flex justify-between items-center"
             >
-              <div>
+              <div className="flex flex-col space-y-2">
                 <div>{name}</div>
-                <div className="text-sm">
-                  {abbreviateAddress(account.address)}
-                </div>
                 <SharesBadge account={account} />
+                <AddressBadge address={account.address} />
               </div>
-              <div className="flex space-x-4">
+
+              <div className="flex justify-end">
                 <Link to={`/accounts/${account.address}`}>
                   <Button variant="outline">
                     <Icons.pencil className="h-4 w-4" />

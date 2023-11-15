@@ -25,6 +25,19 @@ export async function deleteAccount(id: string): Promise<void> {
   return await client.deleteAccount(id);
 }
 
+export async function deleteKeyShare(id: string, keyShareId: string): Promise<boolean> {
+  return (await ethereum.request({
+    method: "wallet_invokeSnap",
+    params: {
+      snapId,
+      request: {
+        method: "snap.internal.deleteKeyShare",
+        params: { id, keyShareId },
+      },
+    },
+  })) as boolean;
+}
+
 export async function exportAccount(id: string): Promise<KeyringAccountData> {
   const client = getKeyringClient();
   return await client.exportAccount(id);

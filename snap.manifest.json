@@ -7,7 +7,7 @@
     "url": "https://github.com/mpc-sdk/tss-snap"
   },
   "source": {
-    "shasum": "W1JqiZpMx6O1npImuuCLYAKWnzhFfHwMbawinBvHSlc=",
+    "shasum": "aXJQh8L7+5v6jRdEOT3Tvduz1W8rVKFXbLDs80GePNQ=",
     "location": {
       "npm": {
         "filePath": "bundle/bundle.js",
@@ -19,7 +19,10 @@
   },
   "initialPermissions": {
     "endowment:keyring": {
-      "allowedOrigins": ["https://tss.ac", "http://localhost:7070"]
+      "allowedOrigins": [
+        "https://tss.ac",
+        "http://localhost:7070"
+      ]
     },
     "endowment:rpc": {
       "dapps": true,

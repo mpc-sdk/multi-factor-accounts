@@ -24,7 +24,7 @@ import {
   Dictionary,
   digest,
   abbreviateAddress,
-  copyToClipboard,
+  copyWithToast,
   inviteUrl,
 } from "@/lib/utils";
 
@@ -39,11 +39,7 @@ function Invitations({
 }) {
   const { toast } = useToast();
   const copyLink = async (value: string) => {
-    await copyToClipboard(value);
-    toast({
-      title: "Done",
-      description: "Copied to your clipboard",
-    });
+    await copyWithToast(value, toast);
   };
 
   const participants = meetingInfo.identifiers.slice(1);

@@ -24,20 +24,30 @@ import guard from "@/lib/guard";
 
 export default function ExportAccount({
   account,
+  buttonText,
+  keyShareId,
 }: {
-  account: KeyringAccount;
+  account: KeyringAccount
+  buttonText?: string
+  keyShareId?: string
 }) {
   const { toast } = useToast();
 
   const downloadAccount = async () => {
     await guard(async () => {
-      const privateKey = (await exportAccount(account.id)) as KeyShares;
+      const wallet = (await exportAccount(account.id)) as KeyShares;
 
-      const addresses = keyShareAddress(privateKey);
+      const addresses = keyShareAddress(wallet);
       const address = addresses[0];
-
       if (!address) {
         throw new Error("Unable to determine address from key shares");
+      }
+
+      let privateKey = wallet;
+      if (keyShareId) {
+        const keySharePrivateKey = privateKey[keyShareId];
+        privateKey = {};
+        privateKey[keyShareId] = keySharePrivateKey;
       }
 
       const exportedAccount = {
@@ -54,8 +64,8 @@ export default function ExportAccount({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="outline">
-          <Icons.download className="h-4 w-4 mr-2" />
-          Export
+          <Icons.download className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`} />
+          {buttonText}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

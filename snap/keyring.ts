@@ -126,8 +126,8 @@ export class ThresholdKeyring implements Keyring {
         wallet = existingWallet;
       }
 
-      // Keep track of how many key shares are in this account for the UI
-      account.options.numShares = Object.keys(wallet.privateKey).length;
+      // Keep track of the share identifiers
+      account.options.shares = Object.keys(wallet.privateKey);
 
       if (!existingWallet) {
         await this.#emitEvent(KeyringEvent.AccountCreated, { account });
@@ -176,6 +176,35 @@ export class ThresholdKeyring implements Keyring {
       await this.#emitEvent(KeyringEvent.AccountDeleted, { id });
       delete this.#state.wallets[id];
       await this.#saveState();
+    } catch (error) {
+      throwError((error as Error).message);
+    }
+  }
+
+  /**
+   *  Delete a key share by identifier.
+   *
+   *  If the key share is the last remaining key share the entire account
+   *  is removed.
+   *
+   *  Returns true if the account was deleted.
+   */
+  async deleteKeyShare(id: string, keyShareId: string): Promise<boolean> {
+    try {
+      const wallet = this.#state.wallets[id];
+      delete wallet?.privateKey[keyShareId];
+      const { account } = wallet;
+      account.options.shares = Object.keys(wallet.privateKey);
+      // Deleting the last share so completely remove the account
+      if (account.options.shares.length === 0) {
+        await this.deleteAccount(id);
+        return true;
+      } else {
+        await this.#emitEvent(KeyringEvent.AccountUpdated, { account });
+        this.#state.wallets[id] = wallet;
+        await this.#saveState();
+        return false;
+      }
     } catch (error) {
       throwError((error as Error).message);
     }

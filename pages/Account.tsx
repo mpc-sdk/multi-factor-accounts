@@ -1,24 +1,19 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
-import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
-
 import Heading from "@/components/Heading";
 import Link from "@/components/Link";
-import Icons from "@/components/Icons";
 import ChainBadge from "@/components/ChainBadge";
 import ExportAccount from "@/components/ExportAccount";
+import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 import Loader from "@/components/Loader";
+import DeleteAccount from "@/components/DeleteAccount";
 
 import NotFound from "@/pages/NotFound";
 
-import { invalidateAccounts } from "@/app/store/accounts";
-import { deleteAccount, getAccountByAddress } from "@/lib/keyring";
-import guard from "@/lib/guard";
+import { getAccountByAddress } from "@/lib/keyring";
 
 function AccountContent({
   account,
@@ -27,34 +22,28 @@ function AccountContent({
   account: KeyringAccount;
   children?: React.ReactNode;
 }) {
-  const dispatch = useDispatch();
-  const { toast } = useToast();
   const navigate = useNavigate();
 
-  const removeAccount = async (account: KeyringAccount) => {
-    await guard(async () => {
-      await deleteAccount(account.id);
-      await dispatch(invalidateAccounts());
-      navigate("/");
-    }, toast);
+  const onDeleted = async () => {
+    navigate("/");
   };
 
   const name = (account?.options?.name as string) ?? "Untitled account";
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div>
+      <div>
+        <div className="flex items-center justify-between">
           <Heading>{name}</Heading>
-          <ChainBadge className="mt-2" />
+          <div className="flex space-x-4">
+            <ExportAccount account={account} buttonText="Export" />
+            <DeleteAccount
+              account={account}
+              buttonText="Delete"
+              onDeleted={onDeleted} />
+          </div>
         </div>
-        <div className="flex space-x-4">
-          <ExportAccount account={account} />
-          <Button variant="destructive" onClick={() => removeAccount(account)}>
-            <Icons.remove className="h-4 w-4 mr-2" />
-            Delete
-          </Button>
-        </div>
+        <ChainBadge className="mt-2" />
       </div>
       {children}
     </>
@@ -62,6 +51,7 @@ function AccountContent({
 }
 
 export default function Account() {
+  const navigate = useNavigate();
   const { address } = useParams();
   const [account, setAccount] = useState(null);
   const [loaded, setLoaded] = useState(null);
@@ -73,7 +63,7 @@ export default function Account() {
       setAccount(account);
     };
     loadAccountInfo();
-  }, []);
+  }, [account]);
 
   if (!loaded) {
     return <Loader text="Loading account..." />;
@@ -81,26 +71,39 @@ export default function Account() {
     return <NotFound />;
   }
 
-  const { numShares } = account.options as {
-    numShares: number;
+  const onDeleted = async (accountDeleted: boolean) => {
+    setAccount(null);
+    setLoaded(false);
+    if (accountDeleted) {
+      navigate("/");
+    }
   };
-
-  const sharesList = Array.from(Array(numShares));
 
   return (
     <AccountContent account={account}>
       <div className="mt-12 flex flex-col space-y-6">
-        <div className="flex">
+        <div className="flex items-center justify-between">
           <SharesBadge account={account} />
+          <AddressBadge address={account.address} />
         </div>
         <div className="rounded-md border">
-          {sharesList.map((share, index) => {
+          {account.options.shares.map((keyShareId: string, index: number) => {
             return (
               <div
                 key={index}
                 className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between"
               >
-                <div>Share {index + 1}</div>
+                <div className="flex space-x-4">
+                  <div className="border-r pr-4">{index + 1}</div>
+                  <div>Share {keyShareId}</div>
+                </div>
+                <div className="flex space-x-4">
+                  <ExportAccount account={account} keyShareId={keyShareId} />
+                  <DeleteAccount
+                    account={account}
+                    keyShareId={keyShareId}
+                    onDeleted={onDeleted} />
+                </div>
               </div>
             );
           })}

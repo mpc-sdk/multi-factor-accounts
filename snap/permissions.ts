@@ -3,6 +3,7 @@ import { KeyringRpcMethod } from "@metamask/keyring-api";
 export enum InternalMethod {
   GetAccountByAddress = "snap.internal.getAccountByAddress",
   GetWalletByAddress = "snap.internal.getWalletByAddress",
+  DeleteKeyShare = "snap.internal.deleteKeyShare",
 }
 
 export const originPermissions = new Map<string, string[]>([
@@ -39,6 +40,7 @@ export const originPermissions = new Map<string, string[]>([
       // Custom methods
       InternalMethod.GetAccountByAddress,
       InternalMethod.GetWalletByAddress,
+      InternalMethod.DeleteKeyShare,
     ],
   ],
   [
@@ -59,6 +61,7 @@ export const originPermissions = new Map<string, string[]>([
       // Custom methods
       InternalMethod.GetAccountByAddress,
       InternalMethod.GetWalletByAddress,
+      InternalMethod.DeleteKeyShare,
     ],
   ],
 ]);

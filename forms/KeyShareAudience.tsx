@@ -21,8 +21,10 @@ import {
 } from "@/components/ui/form";
 
 export default function KeyShareAudienceForm({
+  back,
   onNext,
 }: {
+  back?: React.ReactNode;
   onNext: (audience: KeyShareAudience) => void;
 }) {
   const FormSchema = z.object({
@@ -85,7 +87,12 @@ export default function KeyShareAudienceForm({
               </FormItem>
             )}
           />
-          <div className="flex justify-end">
+          <div
+            className={`flex ${
+              back == null ? "justify-end" : "justify-between"
+            }`}
+          >
+            {back}
             <Button type="submit">Next</Button>
           </div>
         </form>

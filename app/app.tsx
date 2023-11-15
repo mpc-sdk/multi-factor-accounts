@@ -59,7 +59,6 @@ function GuardMetaMask({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useContext(MetaMaskContext);
 
   const onConnect = async () => {
-    console.log("Snap onConnect fired...");
     const installedSnap = await getSnap();
     dispatch({
       type: MetaMaskActions.SetInstalled,
@@ -74,9 +73,6 @@ function GuardMetaMask({ children }: { children: React.ReactNode }) {
   if (state.hasMetaMask && !state.installedSnap) {
     return <InstallSnap onConnect={onConnect} />;
   }
-
-  console.log("metamask state", state);
-  console.log(state.installedSnap);
 
   return children;
 }
