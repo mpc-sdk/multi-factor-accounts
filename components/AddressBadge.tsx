@@ -11,7 +11,7 @@ export default function AddressBadge({address, className}: {address: string, cla
     await copyWithToast(address, toast);
   };
 
-  return <Badge onClick={copyAddress} className={className ?? 'cursor-pointer'} variant="outline">
+  return <Badge onClick={copyAddress} className={className ?? 'cursor-pointer'} variant="secondary">
     <Icons.copy className="h-4 w-4 mr-2" />
     {abbreviateAddress(address)}
   </Badge>;
