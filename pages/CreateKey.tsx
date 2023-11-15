@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { KeypairContext } from "@/app/providers/keypair";
 
 import { Button } from "@/components/ui/button";
@@ -32,6 +32,15 @@ import guard from "@/lib/guard";
 import { keygen, WebassemblyWorker } from "@/lib/client";
 import { convertRawKey } from "@/lib/utils";
 
+function BackButton({onClick}: {onClick: () => void}) {
+  // NOTE: the type="button" is required so form submission on
+  // NOTE: enter key works as expected.
+  return <Button
+    type="button" variant="outline" onClick={onClick}>
+    Back
+  </Button>
+}
+
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
   return (
     <>
@@ -42,6 +51,7 @@ function CreateKeyContent({ children }: { children: React.ReactNode }) {
 }
 
 export default function CreateKey() {
+  const navigate = useNavigate();
   const keypair = useContext(KeypairContext);
   const { toast } = useToast();
   const [step, setStep] = useState(0);
@@ -79,14 +89,6 @@ export default function CreateKey() {
     setCreateKeyState(newState);
     setStep(step + 1);
   };
-
-  const BackButton = () => (
-    // NOTE: the type="button" is required so form submission on
-    // NOTE: enter key works as expected.
-    <Button type="button" variant="outline" onClick={() => setStep(step - 1)}>
-      Back
-    </Button>
-  );
 
   const startKeygen = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start key generation (initiator)..");
@@ -146,16 +148,21 @@ export default function CreateKey() {
     );
   }
 
+  const backToAccounts = () => navigate('/');
+  const defaultBack = () => setStep(step - 1);
+
   if (step == 0) {
     return (
       <CreateKeyContent>
-        <KeyShareAudienceForm onNext={onKeyAudience} />
+        <KeyShareAudienceForm onNext={onKeyAudience}
+          back={<BackButton onClick={backToAccounts} />} />
       </CreateKeyContent>
     );
   } else if (step == 1) {
     return (
       <CreateKeyContent>
-        <KeyShareNameForm onNext={onKeyName} back={<BackButton />} />
+        <KeyShareNameForm onNext={onKeyName}
+          back={<BackButton onClick={defaultBack} />} />
       </CreateKeyContent>
     );
   } else if (step == 2) {
@@ -163,7 +170,7 @@ export default function CreateKey() {
       <CreateKeyContent>
         <Badges />
         <KeyShareNumberForm
-          back={<BackButton />}
+          back={<BackButton onClick={defaultBack} />}
           onNext={onKeyParties}
           defaultValue={createKeyState.parties}
           label="Parties"
@@ -181,7 +188,7 @@ export default function CreateKey() {
       <CreateKeyContent>
         <Badges />
         <KeyShareNumberForm
-          back={<BackButton />}
+          back={<BackButton onClick={defaultBack} />}
           onNext={onKeyThreshold}
           label="Threshold"
           defaultValue={createKeyState.threshold || createKeyState.parties}
@@ -210,7 +217,7 @@ export default function CreateKey() {
         <div className="flex flex-col space-y-6 mt-12">
           <KeyAlert title="Confirm" description={message} />
           <div className="flex justify-between">
-            <BackButton />
+            <BackButton onClick={defaultBack} />
             <Button onClick={() => setStep(step + 1)}>Create key</Button>
           </div>
         </div>

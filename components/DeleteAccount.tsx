@@ -49,8 +49,6 @@ export default function DeleteAccount({
         await dispatch(invalidateAccounts());
         onDeleted(true);
       }
-
-      console.log("Do remove account");
     }, toast);
   };
 

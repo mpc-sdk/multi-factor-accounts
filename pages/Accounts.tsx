@@ -24,20 +24,20 @@ function AccountsContent({
 }) {
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div>
+      <div>
+        <div className="flex items-center justify-between">
           <Heading>Accounts</Heading>
-          <ChainBadge className="mt-2" />
+          <div className="flex space-x-4">
+            <ImportAccount onImportComplete={onImportComplete} />
+            <Link to="/keys/create">
+              <Button>
+                <Icons.plus className="h-4 w-4 mr-2" />
+                New
+              </Button>
+            </Link>
+          </div>
         </div>
-        <div className="flex space-x-4">
-          <ImportAccount onImportComplete={onImportComplete} />
-          <Link to="/keys/create">
-            <Button>
-              <Icons.plus className="h-4 w-4 mr-2" />
-              New
-            </Button>
-          </Link>
-        </div>
+        <ChainBadge className="mt-2" />
       </div>
       {children}
     </>

@@ -32,18 +32,18 @@ function AccountContent({
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div>
+      <div>
+        <div className="flex items-center justify-between">
           <Heading>{name}</Heading>
-          <ChainBadge className="mt-2" />
+          <div className="flex space-x-4">
+            <ExportAccount account={account} buttonText="Export" />
+            <DeleteAccount
+              account={account}
+              buttonText="Delete"
+              onDeleted={onDeleted} />
+          </div>
         </div>
-        <div className="flex space-x-4">
-          <ExportAccount account={account} buttonText="Export" />
-          <DeleteAccount
-            account={account}
-            buttonText="Delete"
-            onDeleted={onDeleted} />
-        </div>
+        <ChainBadge className="mt-2" />
       </div>
       {children}
     </>
