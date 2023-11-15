@@ -11,6 +11,7 @@ import Link from "@/components/Link";
 import Icons from "@/components/Icons";
 import ChainBadge from "@/components/ChainBadge";
 import ExportAccount from "@/components/ExportAccount";
+import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 import Loader from "@/components/Loader";
 
@@ -84,11 +85,12 @@ export default function Account() {
   return (
     <AccountContent account={account}>
       <div className="mt-12 flex flex-col space-y-6">
-        <div className="flex">
+        <div className="flex items-center justify-between">
           <SharesBadge account={account} />
+          <AddressBadge address={account.address} />
         </div>
         <div className="rounded-md border">
-          {account.options.shares.map((keyShareId, index) => {
+          {account.options.shares.map((keyShareId: string, index: number) => {
             return (
               <div
                 key={index}

@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { toBeHex } from "ethers";
-
+import { ToasterToast } from "@/components/ui/use-toast";
 import { RawKey, rawKey } from "@/lib/schemas";
 import { KeyShares, PrivateKey, ProtocolId } from "@/lib/types";
 import { fromZodError } from "zod-validation-error";
@@ -55,6 +55,17 @@ export function inviteUrl(
 // Copy some text to the clipboard.
 export async function copyToClipboard(text: string) {
   await window.navigator.clipboard.writeText(text);
+}
+
+export async function copyWithToast(
+  text: string,
+  toast: (val: ToasterToast) => void,
+) {
+  await copyToClipboard(text);
+  toast({
+    title: "Done",
+    description: "Copied to your clipboard",
+  });
 }
 
 export type Dictionary<T> = {
