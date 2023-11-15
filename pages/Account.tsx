@@ -31,7 +31,7 @@ function AccountContent({
   const removeAccount = async (account: KeyringAccount) => {
     await guard(async () => {
       await deleteAccount(account.id);
-      navigate("/accounts");
+      navigate("/");
     }, toast);
   };
 
@@ -41,7 +41,6 @@ function AccountContent({
     <>
       <div className="flex items-center justify-between">
         <div>
-          <Link href="/#/accounts">Accounts</Link>
           <Heading>{name}</Heading>
           <ChainBadge className="mt-2" />
         </div>
@@ -102,6 +101,8 @@ export default function Account() {
             );
           })}
         </div>
+
+        <Link href="/#/">Back to Accounts</Link>
       </div>
     </AccountContent>
   );

@@ -18,6 +18,7 @@ import {
 import Icons from "@/components/Icons";
 
 import { exportAccount } from "@/lib/keyring";
+import { toUint8Array, download } from "@/lib/utils";
 import guard  from "@/lib/guard";
 
 export default function ExportAccount({
@@ -29,8 +30,20 @@ export default function ExportAccount({
 
   const downloadAccount = async () => {
     await guard(async () => {
-      const data = await exportAccount(account.id);
-      console.log(data);
+      const privateKey = await exportAccount(account.id);
+
+      // FIXME: find the address
+      const address = "";
+
+      const exportedAccount = {
+        privateKey,
+        address,
+      };
+
+      const fileName = `${address}.json`;
+      const value = JSON.stringify(exportedAccount, undefined, 2);
+      download(fileName, toUint8Array(value));
+
     }, toast);
   };
 
@@ -55,7 +68,7 @@ export default function ExportAccount({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => exportAccount(account.address, toast)}
+            onClick={downloadAccount}
           >
             Continue
           </AlertDialogAction>

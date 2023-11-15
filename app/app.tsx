@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Routes, Route } from "react-router-dom";
-import detectEthereumProvider from "@metamask/detect-provider";
 
 import Layout from "@/pages/Layout";
 import NotFound from "@/pages/NotFound";
 import About from "@/pages/About";
-import Home from "@/pages/Home";
 import Accounts from "@/pages/Accounts";
 import Account from "@/pages/Account";
 import CreateKey from "@/pages/CreateKey";
 import JoinKey from "@/pages/JoinKey";
+import NoMetaMask from "@/pages/NoMetaMask";
+import InstallSnap from "@/pages/InstallSnap";
 
-import WorkerProvider, { webWorker } from "./providers/worker";
-import ChainProvider from "./providers/chain";
-import KeypairProvider from "./providers/keypair";
+import MetaMaskProvider, { MetaMaskContext, MetaMaskActions } from "@/app/providers/metamask";
+import WorkerProvider, { webWorker } from "@/app/providers/worker";
+import ChainProvider from "@/app/providers/chain";
+import KeypairProvider from "@/app/providers/keypair";
+import { getSnap } from '@/lib/snap';
 
 type WorkerMessage = {
   data: { ready: boolean };
@@ -40,38 +42,54 @@ type WorkerMessage = {
 function Content() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
       <Route path="/about" element={<About />} />
       <Route path="/keys/create" element={<CreateKey />} />
       <Route path="/keys/join/:meetingId/:userId" element={<JoinKey />} />
-      <Route path="/accounts" element={<Accounts />} />
+      <Route path="/" element={<Accounts />} />
       <Route path="/accounts/:address" element={<Account />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
 
+function GuardMetaMask({ children }: { children: React.ReactNode }) {
+  const [state, dispatch] = useContext(MetaMaskContext);
+
+  const onConnect = async () => {
+    console.log("Snap onConnect fired...");
+    const installedSnap = await getSnap();
+    dispatch({
+      type: MetaMaskActions.SetInstalled,
+      payload: installedSnap,
+    });
+  };
+
+  if (!state.hasMetaMask) {
+    return <NoMetaMask />;
+  }
+
+  if (state.hasMetaMask && !state.installedSnap) {
+    return <InstallSnap onConnect={onConnect} />
+  }
+
+  console.log("metamask state", state);
+  console.log(state.installedSnap);
+
+  return children;
+}
+
+
 export default function App() {
   const [ready, setReady] = useState(false);
-  const [provider, setProvider] = useState(null);
 
   useEffect(() => {
-    const initialize = async () => {
-      const provider = await detectEthereumProvider();
-      setProvider(provider);
-
-      // Now we are ready to render
-      setReady(true);
-    };
-
     // Wait for the worker webassembly to be ready
     const onWorkerReady = (msg: WorkerMessage) => {
       if (msg.data.ready) {
         webWorker.removeEventListener("message", onWorkerReady);
-        initialize();
+        setReady(true);
       }
     };
-
     webWorker.addEventListener("message", onWorkerReady);
   }, []);
 
@@ -79,33 +97,19 @@ export default function App() {
     return null;
   }
 
-  if (!provider) {
-    return (
-      <p>
-        Failed to detect an ethereum provider, please install&nbsp;
-        <a href="https://metamask.io/flask/">MetaMask Flask</a>
-      </p>
-    );
-  }
-
-  if (provider !== ethereum) {
-    return (
-      <p>
-        The wallet provider is not correct, do you have multiple wallets
-        installed?
-      </p>
-    );
-  }
-
   return (
-    <WorkerProvider>
-      <KeypairProvider>
-        <ChainProvider>
+    <MetaMaskProvider>
+      <WorkerProvider>
+        <KeypairProvider>
           <Layout>
-            <Content />
+            <GuardMetaMask>
+              <ChainProvider>
+                <Content />
+              </ChainProvider>
+            </GuardMetaMask>
           </Layout>
-        </ChainProvider>
-      </KeypairProvider>
-    </WorkerProvider>
+        </KeypairProvider>
+      </WorkerProvider>
+    </MetaMaskProvider>
   );
 }
