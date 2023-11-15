@@ -18,7 +18,7 @@ import Loader from "@/components/Loader";
 import NotFound from "@/pages/NotFound";
 
 import { invalidateAccounts } from "@/app/store/accounts";
-import { deleteAccount, getAccountByAddress } from "@/lib/keyring";
+import { deleteAccount, deleteKeyShare, getAccountByAddress } from "@/lib/keyring";
 import guard from "@/lib/guard";
 
 function AccountContent({
@@ -63,6 +63,8 @@ function AccountContent({
 }
 
 export default function Account() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { address } = useParams();
   const [account, setAccount] = useState(null);
   const [loaded, setLoaded] = useState(null);
@@ -74,13 +76,23 @@ export default function Account() {
       setAccount(account);
     };
     loadAccountInfo();
-  }, []);
+  }, [account]);
 
   if (!loaded) {
     return <Loader text="Loading account..." />;
   } else if (loaded && !account) {
     return <NotFound />;
   }
+
+  const removeKeyShare = async (id: string, keyShareId: string) => {
+    const accountDeleted = await deleteKeyShare(id, keyShareId);
+    await dispatch(invalidateAccounts());
+    setAccount(null);
+    setLoaded(false);
+    if (accountDeleted) {
+      navigate("/");
+    }
+  };
 
   return (
     <AccountContent account={account}>
@@ -100,8 +112,13 @@ export default function Account() {
                   <div className="border-r pr-4">{index + 1}</div>
                   <div>Share {keyShareId}</div>
                 </div>
-                <div>
+                <div className="flex space-x-4">
                   <ExportAccount account={account} keyShareId={keyShareId} />
+                  <Button
+                    variant="destructive"
+                    onClick={() => removeKeyShare(account.id, keyShareId)}>
+                    <Icons.remove className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             );

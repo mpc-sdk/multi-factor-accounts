@@ -79,11 +79,8 @@ export default function JoinKey() {
         },
         null, // Participants MUST be null when joining
       );
-      console.log("key share", keyShare);
 
       setKeyShare(convertRawKey(keyShare));
-
-      //await createAccount(convertRawKey(keyShare), name);
     }, toast);
   };
 

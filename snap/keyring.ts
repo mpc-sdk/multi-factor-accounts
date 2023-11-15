@@ -181,6 +181,35 @@ export class ThresholdKeyring implements Keyring {
     }
   }
 
+  /**
+   *  Delete a key share by identifier.
+   *
+   *  If the key share is the last remaining key share the entire account
+   *  is removed.
+   *
+   *  Returns true if the account was deleted.
+   */
+  async deleteKeyShare(id: string, keyShareId: string): Promise<boolean> {
+    try {
+      const wallet = this.#state.wallets[id];
+      delete wallet?.privateKey[keyShareId];
+      const { account } = wallet;
+      account.options.shares = Object.keys(wallet.privateKey);
+      // Deleting the last share so completely remove the account
+      if (account.options.shares.length === 0) {
+        await this.deleteAccount(id);
+        return true;
+      } else {
+        await this.#emitEvent(KeyringEvent.AccountUpdated, { account });
+        this.#state.wallets[id] = wallet;
+        await this.#saveState();
+        return false;
+      }
+    } catch (error) {
+      throwError((error as Error).message);
+    }
+  }
+
   async listRequests(): Promise<KeyringRequest[]> {
     return Object.values(this.#state.pendingRequests);
   }

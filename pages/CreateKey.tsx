@@ -107,12 +107,8 @@ export default function CreateKey() {
         },
         participants,
       );
-      console.log("key share", keyShare);
 
       setKeyShare(convertRawKey(keyShare));
-
-      // Save the new key share in the keyring account
-      //await createAccount(convertRawKey(keyShare), createKeyState.name);
     }, toast);
   };
 
