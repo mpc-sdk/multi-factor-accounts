@@ -11,11 +11,14 @@ import JoinKey from "@/pages/JoinKey";
 import NoMetaMask from "@/pages/NoMetaMask";
 import InstallSnap from "@/pages/InstallSnap";
 
-import MetaMaskProvider, { MetaMaskContext, MetaMaskActions } from "@/app/providers/metamask";
+import MetaMaskProvider, {
+  MetaMaskContext,
+  MetaMaskActions,
+} from "@/app/providers/metamask";
 import WorkerProvider, { webWorker } from "@/app/providers/worker";
 import ChainProvider from "@/app/providers/chain";
 import KeypairProvider from "@/app/providers/keypair";
-import { getSnap } from '@/lib/snap';
+import { getSnap } from "@/lib/snap";
 
 type WorkerMessage = {
   data: { ready: boolean };
@@ -69,7 +72,7 @@ function GuardMetaMask({ children }: { children: React.ReactNode }) {
   }
 
   if (state.hasMetaMask && !state.installedSnap) {
-    return <InstallSnap onConnect={onConnect} />
+    return <InstallSnap onConnect={onConnect} />;
   }
 
   console.log("metamask state", state);
@@ -77,7 +80,6 @@ function GuardMetaMask({ children }: { children: React.ReactNode }) {
 
   return children;
 }
-
 
 export default function App() {
   const [ready, setReady] = useState(false);

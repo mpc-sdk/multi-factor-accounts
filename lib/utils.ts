@@ -3,12 +3,17 @@ import { twMerge } from "tailwind-merge";
 import { toBeHex } from "ethers";
 
 import { RawKey, rawKey } from "@/lib/schemas";
-import { PrivateKey, ProtocolId } from "@/lib/types";
+import { KeyShares, PrivateKey, ProtocolId } from "@/lib/types";
 import { fromZodError } from "zod-validation-error";
 
 // Utility for merging class names.
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+// Get a list of addresses in the collection of key shares.
+export function keyShareAddress(keyShares: KeyShares): string[] {
+  return Object.values(keyShares).map((k) => k.address);
 }
 
 export function toUint8Array(value: string): Uint8Array {

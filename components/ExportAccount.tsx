@@ -18,8 +18,9 @@ import {
 import Icons from "@/components/Icons";
 
 import { exportAccount } from "@/lib/keyring";
-import { toUint8Array, download } from "@/lib/utils";
-import guard  from "@/lib/guard";
+import { KeyShares } from "@/lib/types";
+import { toUint8Array, download, keyShareAddress } from "@/lib/utils";
+import guard from "@/lib/guard";
 
 export default function ExportAccount({
   account,
@@ -30,20 +31,22 @@ export default function ExportAccount({
 
   const downloadAccount = async () => {
     await guard(async () => {
-      const privateKey = await exportAccount(account.id);
+      const privateKey = (await exportAccount(account.id)) as KeyShares;
 
-      // FIXME: find the address
-      const address = "";
+      const addresses = keyShareAddress(privateKey);
+      const address = addresses[0];
+
+      if (!address) {
+        throw new Error("Unable to determine address from key shares");
+      }
 
       const exportedAccount = {
         privateKey,
-        address,
       };
 
       const fileName = `${address}.json`;
       const value = JSON.stringify(exportedAccount, undefined, 2);
       download(fileName, toUint8Array(value));
-
     }, toast);
   };
 
@@ -67,9 +70,7 @@ export default function ExportAccount({
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={downloadAccount}
-          >
+          <AlertDialogAction onClick={downloadAccount}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

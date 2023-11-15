@@ -1,7 +1,7 @@
-import snapPackageInfo from '../package.json';
+import snapPackageInfo from "../package.json";
 
-export const defaultSnapId = process.env.SNAP_ID ||
-  `local:${location.protocol}//${location.host}/`;
+export const defaultSnapId =
+  process.env.SNAP_ID || `local:${location.protocol}//${location.host}/`;
 
 export type GetSnapsResponse = Record<string, Snap>;
 
@@ -19,7 +19,7 @@ export type Snap = {
  */
 export const getSnaps = async (): Promise<GetSnapsResponse> => {
   return (await ethereum.request({
-    method: 'wallet_getSnaps',
+    method: "wallet_getSnaps",
   })) as unknown as GetSnapsResponse;
 };
 
@@ -31,13 +31,13 @@ export const getSnaps = async (): Promise<GetSnapsResponse> => {
  */
 export const connectSnap = async (
   snapId: string = defaultSnapId,
-  params: Record<'version' | string, unknown> = {
+  params: Record<"version" | string, unknown> = {
     version: snapPackageInfo.version,
   },
 ) => {
   console.log("Connect to snap", snapId);
   await ethereum.request({
-    method: 'wallet_requestSnaps',
+    method: "wallet_requestSnaps",
     params: {
       [snapId]: params,
     },
@@ -59,9 +59,9 @@ export const getSnap = async (version?: string): Promise<Snap | undefined> => {
         snap.id === defaultSnapId && (!version || snap.version === version),
     );
   } catch (error) {
-    console.log('Failed to obtain installed snap', error);
+    console.log("Failed to obtain installed snap", error);
     return undefined;
   }
 };
 
-export const isLocalSnap = (snapId: string) => snapId.startsWith('local:');
+export const isLocalSnap = (snapId: string) => snapId.startsWith("local:");

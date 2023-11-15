@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { MetaMaskContext } from '@/app/providers/metamask';
+import { MetaMaskContext } from "@/app/providers/metamask";
 
 const ChainContext = createContext(null);
 

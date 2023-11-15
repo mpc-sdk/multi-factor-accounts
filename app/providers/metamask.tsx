@@ -1,7 +1,7 @@
-import type { Dispatch, ReactNode, Reducer } from 'react';
-import React, { createContext, useEffect, useReducer } from 'react';
+import type { Dispatch, ReactNode, Reducer } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 
-import { getSnap, Snap } from '@/lib/snap';
+import { getSnap, Snap } from "@/lib/snap";
 
 export type MetaMaskState = {
   hasMetaMask: boolean;
@@ -26,9 +26,9 @@ export const MetaMaskContext = createContext<
 ]);
 
 export enum MetaMaskActions {
-  SetInstalled = 'SetInstalled',
-  SetMetaMaskDetected = 'SetMetaMaskDetected',
-  SetError = 'SetError',
+  SetInstalled = "SetInstalled",
+  SetMetaMaskDetected = "SetMetaMaskDetected",
+  SetError = "SetError",
 }
 
 const reducer: Reducer<MetaMaskState, MetaMaskDispatch> = (state, action) => {
@@ -60,8 +60,12 @@ const reducer: Reducer<MetaMaskState, MetaMaskDispatch> = (state, action) => {
  * @param props.children - React component to be wrapped by the Provider.
  * @returns JSX.
  */
-export default function MetaMaskProvider({ children }: { children: ReactNode }) {
-  if (typeof window === 'undefined') {
+export default function MetaMaskProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  if (typeof window === "undefined") {
     return <>{children}</>;
   }
 
@@ -73,7 +77,7 @@ export default function MetaMaskProvider({ children }: { children: ReactNode }) 
        * Detect if MetaMask is installed.
        */
       async function detectMetaMask() {
-        const isMetaMaskDetected = typeof ethereum !== 'undefined';
+        const isMetaMaskDetected = typeof ethereum !== "undefined";
 
         dispatch({
           type: MetaMaskActions.SetMetaMaskDetected,

@@ -1,5 +1,9 @@
 import { defaultSnapId as snapId } from "@/lib/snap";
-import { KeyringAccount, KeyringSnapRpcClient, KeyringAccountData } from "@metamask/keyring-api";
+import {
+  KeyringAccount,
+  KeyringSnapRpcClient,
+  KeyringAccountData,
+} from "@metamask/keyring-api";
 
 import { Wallet, PrivateKey } from "@/lib/types";
 

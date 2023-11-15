@@ -94,14 +94,13 @@ export const privateKey = z.object({
   parameters: parameters,
 });
 
-export const exportedKey = z
+export const keyShares = z
   .object({
     privateKey: z.record(privateKey),
-    address: z.string(),
   })
   .required();
 
-export type ExportedKey = z.infer<typeof exportedKey>;
+export type KeyShares = z.infer<typeof keyShares>;
 export type LocalKey = z.infer<typeof localKey>;
 export type RawKey = z.infer<typeof rawKey>;
 export type Parameters = z.infer<typeof parameters>;

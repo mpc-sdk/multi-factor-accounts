@@ -23,7 +23,7 @@ import { createAccount } from "@/lib/keyring";
 import { fromUint8Array } from "@/lib/utils";
 import guard from "@/lib/guard";
 
-import { exportedKey, ExportedKey } from "@/lib/schemas";
+import { keyShares, KeyShares } from "@/lib/schemas";
 
 export default function ImportAccount({
   onImportComplete,
@@ -31,7 +31,7 @@ export default function ImportAccount({
   onImportComplete: () => void;
 }) {
   const { toast } = useToast();
-  const [importShares, setImportShares] = useState<ExportedKey>(null);
+  const [importShares, setImportShares] = useState<KeyShares>(null);
 
   const readFile = async (file: File) => {
     await guard(async () => {
@@ -39,7 +39,7 @@ export default function ImportAccount({
       const contents = fromUint8Array(new Uint8Array(buffer));
       const keystore = JSON.parse(contents);
       try {
-        const importShares: ExportedKey = exportedKey.parse(keystore);
+        const importShares: KeyShares = keyShares.parse(keystore);
         setImportShares(importShares);
       } catch (error) {
         const validationError = fromZodError(error);
