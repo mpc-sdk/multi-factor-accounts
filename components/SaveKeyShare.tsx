@@ -5,6 +5,8 @@ import KeyAlert from "@/components/KeyAlert";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
+import { DownloadKeyShare } from '@/components/ExportAccount';
+
 import { createAccount } from "@/lib/keyring";
 import { invalidateAccounts } from "@/app/store/accounts";
 import { PrivateKey } from "@/lib/types";
@@ -20,12 +22,6 @@ export default function SaveKeyShare({
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
-
-  const downloadKeyShare = async () => {
-    await guard(async () => {
-      //await createAccount(keyShare, name);
-    }, toast);
-  };
 
   const saveKeyShare = async () => {
     await guard(async () => {
@@ -46,9 +42,7 @@ export default function SaveKeyShare({
         description="Your key share is ready, now you just need to save it in MetaMask or download and save it to safe encrypted storage such as a password maanager or encrypted disc."
       />
       <div className="flex justify-end space-x-4">
-        <Button variant="outline" onClick={downloadKeyShare}>
-          Download
-        </Button>
+        <DownloadKeyShare keyShare={keyShare} buttonText="Download" />
         <Button onClick={saveKeyShare}>Save to MetaMask</Button>
       </div>
     </div>

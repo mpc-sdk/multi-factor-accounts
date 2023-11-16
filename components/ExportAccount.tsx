@@ -18,9 +18,77 @@ import {
 import Icons from "@/components/Icons";
 
 import { exportAccount } from "@/lib/keyring";
-import { KeyShares } from "@/lib/types";
+import { PrivateKey, KeyShares } from "@/lib/types";
 import { toUint8Array, download, keyShareAddress } from "@/lib/utils";
 import guard from "@/lib/guard";
+
+function downloadKeyShares(
+  address: string,
+  privateKey: KeyShares,
+  keyShareId?: string,
+) {
+  const exportedAccount = { privateKey };
+  let fileName = `${address}.json`;
+  if (keyShareId) {
+    fileName = `${address}-${keyShareId}.json`;
+  }
+  const value = JSON.stringify(exportedAccount, undefined, 2);
+  download(fileName, toUint8Array(value));
+}
+
+function AlertHeader() {
+  return (
+    <AlertDialogHeader>
+      <AlertDialogTitle>Export account</AlertDialogTitle>
+      <AlertDialogDescription>
+        Exporting this account will download the private key to your
+        computer unencrypted; you should copy the file to safe encrypted
+        storage such as a password manager and delete the downloaded file
+        from your disc.
+      </AlertDialogDescription>
+    </AlertDialogHeader>
+  );
+}
+
+export function DownloadKeyShare({
+  keyShare,
+  buttonText,
+}: {
+  keyShare: PrivateKey,
+  buttonText?: string
+}) {
+  const { toast } = useToast();
+
+  const downloadKeyShare = async () => {
+    await guard(async () => {
+      const { address } = keyShare;
+      const { i: keyShareId } = keyShare.privateKey;
+      const keyShares: KeyShares = {};
+      keyShares[keyShareId.toString()] = keyShare;
+      await downloadKeyShares(address, keyShares, keyShareId.toString());
+    }, toast);
+  };
+
+  return (
+    <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline">
+          <Icons.download className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`} />
+          {buttonText}
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertHeader />
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={downloadKeyShare}>
+            Continue
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
+}
 
 export default function ExportAccount({
   account,
@@ -50,13 +118,7 @@ export default function ExportAccount({
         privateKey[keyShareId] = keySharePrivateKey;
       }
 
-      const exportedAccount = {
-        privateKey,
-      };
-
-      const fileName = `${address}.json`;
-      const value = JSON.stringify(exportedAccount, undefined, 2);
-      download(fileName, toUint8Array(value));
+      downloadKeyShares(address, privateKey, keyShareId);
     }, toast);
   };
 
@@ -69,15 +131,7 @@ export default function ExportAccount({
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Export account</AlertDialogTitle>
-          <AlertDialogDescription>
-            Exporting this account will download the private key to your
-            computer unencrypted; you should copy the file to safe encrypted
-            storage such as a password manager and delete the downloaded file
-            from your disc.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
+        <AlertHeader />
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction onClick={downloadAccount}>
@@ -88,3 +142,4 @@ export default function ExportAccount({
     </AlertDialog>
   );
 }
+
