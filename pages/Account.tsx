@@ -40,7 +40,8 @@ function AccountContent({
             <DeleteAccount
               account={account}
               buttonText="Delete"
-              onDeleted={onDeleted} />
+              onDeleted={onDeleted}
+            />
           </div>
         </div>
         <ChainBadge className="mt-2" />
@@ -102,7 +103,8 @@ export default function Account() {
                   <DeleteAccount
                     account={account}
                     keyShareId={keyShareId}
-                    onDeleted={onDeleted} />
+                    onDeleted={onDeleted}
+                  />
                 </div>
               </div>
             );

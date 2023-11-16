@@ -3,7 +3,13 @@ import type { KeyringAccount } from "@metamask/keyring-api";
 import { Parameters } from "@/lib/types";
 import { Badge } from "@/components/ui/badge";
 
-export default function SharesBadge({ account, className }: { account: KeyringAccount, className?: string }) {
+export default function SharesBadge({
+  account,
+  className,
+}: {
+  account: KeyringAccount;
+  className?: string;
+}) {
   const { shares, parameters } = account.options as {
     shares: string[];
     parameters: Parameters;

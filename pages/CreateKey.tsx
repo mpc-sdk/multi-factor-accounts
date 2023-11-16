@@ -32,13 +32,14 @@ import guard from "@/lib/guard";
 import { keygen, WebassemblyWorker } from "@/lib/client";
 import { convertRawKey } from "@/lib/utils";
 
-function BackButton({onClick}: {onClick: () => void}) {
+function BackButton({ onClick }: { onClick: () => void }) {
   // NOTE: the type="button" is required so form submission on
   // NOTE: enter key works as expected.
-  return <Button
-    type="button" variant="outline" onClick={onClick}>
-    Back
-  </Button>
+  return (
+    <Button type="button" variant="outline" onClick={onClick}>
+      Back
+    </Button>
+  );
 }
 
 function CreateKeyContent({ children }: { children: React.ReactNode }) {
@@ -148,21 +149,25 @@ export default function CreateKey() {
     );
   }
 
-  const backToAccounts = () => navigate('/');
+  const backToAccounts = () => navigate("/");
   const defaultBack = () => setStep(step - 1);
 
   if (step == 0) {
     return (
       <CreateKeyContent>
-        <KeyShareAudienceForm onNext={onKeyAudience}
-          back={<BackButton onClick={backToAccounts} />} />
+        <KeyShareAudienceForm
+          onNext={onKeyAudience}
+          back={<BackButton onClick={backToAccounts} />}
+        />
       </CreateKeyContent>
     );
   } else if (step == 1) {
     return (
       <CreateKeyContent>
-        <KeyShareNameForm onNext={onKeyName}
-          back={<BackButton onClick={defaultBack} />} />
+        <KeyShareNameForm
+          onNext={onKeyName}
+          back={<BackButton onClick={defaultBack} />}
+        />
       </CreateKeyContent>
     );
   } else if (step == 2) {

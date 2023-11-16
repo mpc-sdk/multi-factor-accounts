@@ -5,7 +5,7 @@ import KeyAlert from "@/components/KeyAlert";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
-import { DownloadKeyShare } from '@/components/ExportAccount';
+import { DownloadKeyShare } from "@/components/ExportAccount";
 
 import { createAccount } from "@/lib/keyring";
 import { invalidateAccounts } from "@/app/store/accounts";

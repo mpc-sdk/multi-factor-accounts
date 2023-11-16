@@ -41,10 +41,9 @@ function AlertHeader() {
     <AlertDialogHeader>
       <AlertDialogTitle>Export account</AlertDialogTitle>
       <AlertDialogDescription>
-        Exporting this account will download the private key to your
-        computer unencrypted; you should copy the file to safe encrypted
-        storage such as a password manager and delete the downloaded file
-        from your disc.
+        Exporting this account will download the private key to your computer
+        unencrypted; you should copy the file to safe encrypted storage such as
+        a password manager and delete the downloaded file from your disc.
       </AlertDialogDescription>
     </AlertDialogHeader>
   );
@@ -54,8 +53,8 @@ export function DownloadKeyShare({
   keyShare,
   buttonText,
 }: {
-  keyShare: PrivateKey,
-  buttonText?: string
+  keyShare: PrivateKey;
+  buttonText?: string;
 }) {
   const { toast } = useToast();
 
@@ -73,7 +72,9 @@ export function DownloadKeyShare({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="outline">
-          <Icons.download className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`} />
+          <Icons.download
+            className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`}
+          />
           {buttonText}
         </Button>
       </AlertDialogTrigger>
@@ -95,9 +96,9 @@ export default function ExportAccount({
   buttonText,
   keyShareId,
 }: {
-  account: KeyringAccount
-  buttonText?: string
-  keyShareId?: string
+  account: KeyringAccount;
+  buttonText?: string;
+  keyShareId?: string;
 }) {
   const { toast } = useToast();
 
@@ -126,7 +127,9 @@ export default function ExportAccount({
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="outline">
-          <Icons.download className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`} />
+          <Icons.download
+            className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`}
+          />
           {buttonText}
         </Button>
       </AlertDialogTrigger>
@@ -142,4 +145,3 @@ export default function ExportAccount({
     </AlertDialog>
   );
 }
-

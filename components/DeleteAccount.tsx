@@ -28,10 +28,10 @@ export default function DeleteAccount({
   buttonText,
   keyShareId,
 }: {
-  account: KeyringAccount
-  onDeleted: (accountDeleted: boolean) => void
-  buttonText?: string
-  keyShareId?: string
+  account: KeyringAccount;
+  onDeleted: (accountDeleted: boolean) => void;
+  buttonText?: string;
+  keyShareId?: string;
 }) {
   const dispatch = useDispatch();
   const { toast } = useToast();
@@ -52,35 +52,33 @@ export default function DeleteAccount({
     }, toast);
   };
 
-  const icon = isKeyShare
-    ? (
-      <Icons.remove
-        className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`} />
-    )
-    : (
-      <Icons.trash
-        className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`} />
-    );
+  const icon = isKeyShare ? (
+    <Icons.remove
+      className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`}
+    />
+  ) : (
+    <Icons.trash
+      className={`h-4 w-4 ${buttonText !== undefined ? "mr-2" : ""}`}
+    />
+  );
 
-  const title = isKeyShare
-    ? (
-        <AlertDialogTitle>Delete key share</AlertDialogTitle>
-    )
-    : (
-        <AlertDialogTitle>Delete account</AlertDialogTitle>
-    );
+  const title = isKeyShare ? (
+    <AlertDialogTitle>Delete key share</AlertDialogTitle>
+  ) : (
+    <AlertDialogTitle>Delete account</AlertDialogTitle>
+  );
 
-  const description = isKeyShare
-    ? (
-        <AlertDialogDescription>
-          Deleting a key share is permananent you should export a backup copy of the key share first if you want to be able to import it later.
-        </AlertDialogDescription>
-    )
-    : (
-        <AlertDialogDescription>
-          Deleting an account is permanent consider exporting the account key shares first.
-        </AlertDialogDescription>
-    );
+  const description = isKeyShare ? (
+    <AlertDialogDescription>
+      Deleting a key share is permananent you should export a backup copy of the
+      key share first if you want to be able to import it later.
+    </AlertDialogDescription>
+  ) : (
+    <AlertDialogDescription>
+      Deleting an account is permanent consider exporting the account key shares
+      first.
+    </AlertDialogDescription>
+  );
 
   return (
     <AlertDialog>
@@ -98,9 +96,7 @@ export default function DeleteAccount({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction asChild onClick={removeAccount}>
-            <Button variant="destructive">
-              Continue
-            </Button>
+            <Button variant="destructive">Continue</Button>
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
