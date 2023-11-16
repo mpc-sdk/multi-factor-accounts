@@ -1,5 +1,4 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useContext } from "react";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
 import { useToast } from "@/components/ui/use-toast";
@@ -18,7 +17,7 @@ import {
 
 import Icons from "@/components/Icons";
 
-import { invalidateAccounts } from "@/app/store/accounts";
+import {BroadcastContext} from '@/app/providers/broadcast';
 import { deleteAccount, deleteKeyShare } from "@/lib/keyring";
 import guard from "@/lib/guard";
 
@@ -33,7 +32,7 @@ export default function DeleteAccount({
   buttonText?: string;
   keyShareId?: string;
 }) {
-  const dispatch = useDispatch();
+  const { invalidate } = useContext(BroadcastContext);
   const { toast } = useToast();
   const shares = account.options.shares as string[];
   const isKeyShare = keyShareId && shares.length > 1;
@@ -42,11 +41,11 @@ export default function DeleteAccount({
     await guard(async () => {
       if (isKeyShare) {
         const accountDeleted = await deleteKeyShare(account.id, keyShareId);
-        await dispatch(invalidateAccounts());
+        await invalidate();
         onDeleted(accountDeleted);
       } else {
         await deleteAccount(account.id);
-        await dispatch(invalidateAccounts());
+        await invalidate();
         onDeleted(true);
       }
     }, toast);

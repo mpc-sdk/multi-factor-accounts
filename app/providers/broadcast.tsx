@@ -15,12 +15,13 @@ const BroadcastProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const invalidate = () => {
+  const invalidate = async () => {
     channel.postMessage("invalidate");
+    await dispatch(invalidateAccounts());
   };
 
   return (
-    <BroadcastContext.Provider value={invalidate}>
+    <BroadcastContext.Provider value={{invalidate}}>
       {children}
     </BroadcastContext.Provider>
   );
