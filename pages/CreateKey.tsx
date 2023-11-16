@@ -130,7 +130,7 @@ export default function CreateKey() {
     return (
       <CreateKeyContent>
         <Badges />
-        <SaveKeyShare keyShare={keyShare} name={createKeyState.name} />
+        <SaveKeyShare keyShare={keyShare} accountName={createKeyState.name} />
       </CreateKeyContent>
     );
   }

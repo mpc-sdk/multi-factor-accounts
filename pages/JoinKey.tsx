@@ -99,7 +99,7 @@ export default function JoinKey() {
     return (
       <JoinKeyContent>
         <Badges />
-        <SaveKeyShare keyShare={keyShare} name={name} />
+        <SaveKeyShare keyShare={keyShare} accountName={name} />
       </JoinKeyContent>
     );
   }
