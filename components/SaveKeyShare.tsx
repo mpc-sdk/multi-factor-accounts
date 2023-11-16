@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import KeyAlert from "@/components/KeyAlert";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,7 @@ export default function SaveKeyShare({
   name: string;
   keyShare: PrivateKey;
 }) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
 
@@ -33,6 +35,7 @@ export default function SaveKeyShare({
         title: "Saved",
         description: "Account key share saved to MetaMask",
       });
+      navigate("/");
     }, toast);
   };
 
