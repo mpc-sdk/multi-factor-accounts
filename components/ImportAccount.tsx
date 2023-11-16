@@ -52,7 +52,7 @@ export default function ImportAccount({
     await guard(async () => {
       /* eslint-disable @typescript-eslint/no-unused-vars */
       for (const [_, privateKey] of Object.entries(importShares.privateKey)) {
-        await createAccount(privateKey, "Imported account");
+        await createAccount(privateKey, importShares.accountName ?? "Imported account");
       }
       onImportComplete();
     }, toast);

@@ -26,8 +26,9 @@ function downloadKeyShares(
   address: string,
   privateKey: KeyShares,
   keyShareId?: string,
+  accountName?: string,
 ) {
-  const exportedAccount = { privateKey };
+  const exportedAccount = { privateKey, accountName };
   let fileName = `${address}.json`;
   if (keyShareId) {
     fileName = `${address}-${keyShareId}.json`;
@@ -52,9 +53,11 @@ function AlertHeader() {
 export function DownloadKeyShare({
   keyShare,
   buttonText,
+  accountName,
 }: {
-  keyShare: PrivateKey;
-  buttonText?: string;
+  keyShare: PrivateKey
+  buttonText?: string
+  accountName?: string
 }) {
   const { toast } = useToast();
 
@@ -64,7 +67,7 @@ export function DownloadKeyShare({
       const { i: keyShareId } = keyShare.privateKey;
       const keyShares: KeyShares = {};
       keyShares[keyShareId.toString()] = keyShare;
-      await downloadKeyShares(address, keyShares, keyShareId.toString());
+      await downloadKeyShares(address, keyShares, keyShareId.toString(), accountName);
     }, toast);
   };
 
@@ -95,10 +98,12 @@ export default function ExportAccount({
   account,
   buttonText,
   keyShareId,
+  accountName,
 }: {
-  account: KeyringAccount;
-  buttonText?: string;
-  keyShareId?: string;
+  account: KeyringAccount
+  buttonText?: string
+  keyShareId?: string
+  accountName?: string
 }) {
   const { toast } = useToast();
 
@@ -119,7 +124,7 @@ export default function ExportAccount({
         privateKey[keyShareId] = keySharePrivateKey;
       }
 
-      downloadKeyShares(address, privateKey, keyShareId);
+      downloadKeyShares(address, privateKey, keyShareId, accountName);
     }, toast);
   };
 

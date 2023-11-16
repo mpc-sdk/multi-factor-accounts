@@ -10,7 +10,7 @@ export default function Header() {
           <span className="flex items-center">
             <Logo />
             <h3 className="ml-4 font-semibold tracking-tight">
-              Threshold Signatures
+              Multi-Factor Accounts
             </h3>
           </span>
         </Link>

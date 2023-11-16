@@ -28,15 +28,18 @@ function AccountContent({
     navigate("/");
   };
 
-  const name = (account?.options?.name as string) ?? "Untitled account";
+  const accountName = (account?.options?.name as string) ?? "Untitled account";
 
   return (
     <>
       <div>
         <div className="flex items-center justify-between">
-          <Heading>{name}</Heading>
+          <Heading>{accountName}</Heading>
           <div className="flex space-x-4">
-            <ExportAccount account={account} buttonText="Export" />
+            <ExportAccount
+              account={account}
+              buttonText="Export"
+              accountName={accountName} />
             <DeleteAccount
               account={account}
               buttonText="Delete"
@@ -80,6 +83,8 @@ export default function Account() {
     }
   };
 
+  const accountName = (account?.options?.name as string) ?? "Untitled account";
+
   return (
     <AccountContent account={account}>
       <div className="mt-12 flex flex-col space-y-6">
@@ -99,7 +104,11 @@ export default function Account() {
                   <div>Share {keyShareId}</div>
                 </div>
                 <div className="flex space-x-4">
-                  <ExportAccount account={account} keyShareId={keyShareId} />
+                  <ExportAccount
+                    account={account}
+                    keyShareId={keyShareId}
+                    accountName={accountName}
+                  />
                   <DeleteAccount
                     account={account}
                     keyShareId={keyShareId}

@@ -13,10 +13,10 @@ import { PrivateKey } from "@/lib/types";
 import guard from "@/lib/guard";
 
 export default function SaveKeyShare({
-  name,
+  accountName,
   keyShare,
 }: {
-  name: string;
+  accountName: string;
   keyShare: PrivateKey;
 }) {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export default function SaveKeyShare({
 
   const saveKeyShare = async () => {
     await guard(async () => {
-      await createAccount(keyShare, name);
+      await createAccount(keyShare, accountName);
       await dispatch(invalidateAccounts());
       toast({
         title: "Saved",
@@ -42,7 +42,11 @@ export default function SaveKeyShare({
         description="Your key share is ready, now you just need to save it in MetaMask or download and save it to safe encrypted storage such as a password maanager or encrypted disc."
       />
       <div className="flex justify-end space-x-4">
-        <DownloadKeyShare keyShare={keyShare} buttonText="Download" />
+        <DownloadKeyShare
+          keyShare={keyShare}
+          buttonText="Download"
+          accountName={accountName}
+        />
         <Button onClick={saveKeyShare}>Save to MetaMask</Button>
       </div>
     </div>
