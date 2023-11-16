@@ -6,7 +6,7 @@ import Loader from "@/components/Loader";
 import { AppDispatch } from "@/app/store";
 import { accountsSelector, setAccounts } from "@/app/store/accounts";
 import { listAccounts } from "@/lib/keyring";
-import guard from '@/lib/guard';
+import guard from "@/lib/guard";
 
 export default function AccountsLoader() {
   const { toast } = useToast();
@@ -21,7 +21,7 @@ export default function AccountsLoader() {
         await dispatch(setAccounts(accounts));
         // Load any saved key information
         setLoading(false);
-      }, toast );
+      }, toast);
     };
     if (!loaded) {
       onLoadKeys();

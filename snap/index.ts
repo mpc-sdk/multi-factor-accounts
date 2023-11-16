@@ -62,9 +62,8 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       return await keyring.getWalletByAddress(address);
     }
     case InternalMethod.DeleteKeyShare: {
-      const id = (request.params as Record<string, unknown>)
-        .id as string;
-      const keyShareId= (request.params as Record<string, unknown>)
+      const id = (request.params as Record<string, unknown>).id as string;
+      const keyShareId = (request.params as Record<string, unknown>)
         .keyShareId as string;
       const keyring = await getKeyring();
       return await keyring.deleteKeyShare(id, keyShareId);
