@@ -1,5 +1,4 @@
 import type { KeyringState } from "./keyring";
-import { logger } from "./logger";
 
 /**
  * Default keyring state.
@@ -19,8 +18,6 @@ export async function getState(): Promise<KeyringState> {
     method: "snap_manageState",
     params: { operation: "get" },
   })) as any;
-
-  logger.debug("Retrieved state:", JSON.stringify(state));
 
   return {
     ...defaultState,

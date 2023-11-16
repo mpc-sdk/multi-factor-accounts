@@ -1,10 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import KeyAlert from "@/components/KeyAlert";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
 import { createAccount } from "@/lib/keyring";
-
+import { invalidateAccounts } from "@/app/store/accounts";
 import { PrivateKey } from "@/lib/types";
 import guard from "@/lib/guard";
 
@@ -15,6 +17,8 @@ export default function SaveKeyShare({
   name: string;
   keyShare: PrivateKey;
 }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { toast } = useToast();
 
   const downloadKeyShare = async () => {
@@ -26,11 +30,12 @@ export default function SaveKeyShare({
   const saveKeyShare = async () => {
     await guard(async () => {
       await createAccount(keyShare, name);
-
+      await dispatch(invalidateAccounts());
       toast({
         title: "Saved",
         description: "Account key share saved to MetaMask",
       });
+      navigate("/");
     }, toast);
   };
 

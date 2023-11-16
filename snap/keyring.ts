@@ -92,11 +92,9 @@ export class ThresholdKeyring implements Keyring {
     // The private key should not be stored in the account options since the
     // account object is exposed to external components, such as MetaMask and
     // the snap UI.
-    if (privateKey) {
-      const { parameters } = privateKey;
-      delete options.privateKey;
-      options.parameters = parameters;
-    }
+    const { parameters } = privateKey;
+    delete options.privateKey;
+    options.parameters = parameters;
 
     try {
       const existingWallet = this.findWalletByAddress(address);
