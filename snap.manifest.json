@@ -1,7 +1,7 @@
 {
   "version": "0.1.0",
-  "description": "Snap using threshold signatures to sign messages and transactions.",
-  "proposedName": "Threshold Signatures",
+  "description": "Multi-factor accounts using threshold signature schemes to sign messages and transactions.",
+  "proposedName": "Multi-Factor Accounts",
   "repository": {
     "type": "git",
     "url": "https://github.com/mpc-sdk/tss-snap"
@@ -19,7 +19,10 @@
   },
   "initialPermissions": {
     "endowment:keyring": {
-      "allowedOrigins": ["https://tss.ac", "http://localhost:7070"]
+      "allowedOrigins": [
+        "https://tss.ac",
+        "http://localhost:7070"
+      ]
     },
     "endowment:rpc": {
       "dapps": true,
