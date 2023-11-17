@@ -10,6 +10,7 @@ import {
   Coffee,
   Pencil,
   Trash,
+  ChevronLeft,
 } from "lucide-react";
 
 const Icons = {
@@ -24,6 +25,7 @@ const Icons = {
   coffee: Coffee,
   pencil: Pencil,
   trash: Trash,
+  back: ChevronLeft,
 };
 
 export default Icons;

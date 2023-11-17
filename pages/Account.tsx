@@ -2,7 +2,9 @@ import React, { Suspense, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
+import { Button } from "@/components/ui/button";
 import Heading from "@/components/Heading";
+import Icons from "@/components/Icons";
 import Link from "@/components/Link";
 import ChainBadge from "@/components/ChainBadge";
 import ExportAccount from "@/components/ExportAccount";
@@ -114,7 +116,12 @@ function AccountView({
           })}
         </div>
 
-        <Link href="/#/">Back to Accounts</Link>
+        <Link href="/#/">
+          <Button variant="link">
+            <Icons.back className="h-4 w-4 mr-2" />
+            Back to accounts
+          </Button>
+        </Link>
       </div>
     </AccountContent>
   );
