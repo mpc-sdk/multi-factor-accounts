@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import KeyAlert from "@/components/KeyAlert";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -8,7 +7,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { DownloadKeyShare } from "@/components/ExportAccount";
 
 import { createAccount } from "@/lib/keyring";
-import { invalidateAccounts } from "@/app/store/accounts";
+import { BroadcastContext } from "@/app/providers/broadcast";
 import { PrivateKey } from "@/lib/types";
 import guard from "@/lib/guard";
 
@@ -19,14 +18,14 @@ export default function SaveKeyShare({
   accountName: string;
   keyShare: PrivateKey;
 }) {
+  const { invalidate } = useContext(BroadcastContext);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { toast } = useToast();
 
   const saveKeyShare = async () => {
     await guard(async () => {
       await createAccount(keyShare, accountName);
-      await dispatch(invalidateAccounts());
+      await invalidate();
       toast({
         title: "Saved",
         description: "Account key share saved to MetaMask",
@@ -39,10 +38,19 @@ export default function SaveKeyShare({
     <div className="flex flex-col space-y-6 mt-12">
       <KeyAlert
         title="Key share ready!"
-        description={<>
-          <span>Your key share is ready, now you just need to save it in MetaMask or download and save it to safe encrypted storage such as a password manager or encrypted disc.</span>
-          <p className="mt-4 font-semibold">Remember that if you have more than one key share in this account you need to save each share in each browser tab!</p>
-          </>}
+        description={
+          <>
+            <span>
+              Your key share is ready, now you just need to save it in MetaMask
+              or download and save it to safe encrypted storage such as a
+              password manager or encrypted disc.
+            </span>
+            <p className="mt-4 font-semibold">
+              Remember that if you have more than one key share in this account
+              you need to save each share in each browser tab!
+            </p>
+          </>
+        }
       />
       <div className="flex justify-end space-x-4">
         <DownloadKeyShare

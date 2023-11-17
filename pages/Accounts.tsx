@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState, useContext } from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,8 @@ import ImportAccount from "@/components/ImportAccount";
 import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 
-import { accountsSelector, invalidateAccounts } from "@/app/store/accounts";
+import { BroadcastContext } from "@/app/providers/broadcast";
+import { accountsSelector } from "@/app/store/accounts";
 
 function AccountsContent({
   children,
@@ -58,7 +59,7 @@ function NoAccounts({ onImportComplete }: { onImportComplete: () => void }) {
 }
 
 export default function Accounts() {
-  const dispatch = useDispatch();
+  const { invalidate } = useContext(BroadcastContext);
   const [refresh, setRefresh] = useState(0);
   const { accounts, loaded } = useSelector(accountsSelector);
 
@@ -67,7 +68,7 @@ export default function Accounts() {
   }
 
   const onChanged = async () => {
-    await dispatch(invalidateAccounts());
+    await invalidate();
     setRefresh(refresh + 1);
   };
 

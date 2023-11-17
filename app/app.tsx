@@ -17,6 +17,7 @@ import MetaMaskProvider, {
 } from "@/app/providers/metamask";
 import WorkerProvider, { webWorker } from "@/app/providers/worker";
 import ChainProvider from "@/app/providers/chain";
+import BroadcastProvider from "@/app/providers/broadcast";
 import KeypairProvider from "@/app/providers/keypair";
 import { getSnap } from "@/lib/snap";
 
@@ -102,7 +103,9 @@ export default function App() {
           <Layout>
             <GuardMetaMask>
               <ChainProvider>
-                <Content />
+                <BroadcastProvider>
+                  <Content />
+                </BroadcastProvider>
               </ChainProvider>
             </GuardMetaMask>
           </Layout>

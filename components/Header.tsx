@@ -6,26 +6,22 @@ import { cn } from "@/lib/utils";
 import {
   NavigationMenu,
   NavigationMenuContent,
-  NavigationMenuIndicator,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from "@/components/ui/navigation-menu"
+} from "@/components/ui/navigation-menu";
 
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Accounts",
     href: "/#/",
-    description:
-      "View your multi-factor accounts and their key shares.",
+    description: "View your multi-factor accounts and their key shares.",
   },
   {
     title: "About",
     href: "/#/about",
-    description:
-      "Learn more about how multi-factor accounts work.",
+    description: "Learn more about how multi-factor accounts work.",
   },
   {
     title: "Create",
@@ -36,14 +32,12 @@ const components: { title: string; href: string; description: string }[] = [
   {
     title: "Source Code",
     href: "https://github.com/mpc-sdk/tss-snap",
-    description:
-      "Get the source code for this snap on Github.",
+    description: "Get the source code for this snap on Github.",
   },
   {
     title: "MetaMask Flask",
     href: "https://metamask.io/flask/",
-    description:
-      "The canary build of MetaMask with next-generation features.",
+    description: "The canary build of MetaMask with next-generation features.",
   },
   {
     title: "Snaps",
@@ -89,6 +83,7 @@ export default function Header() {
   );
 }
 
+/* eslint-disable react/prop-types */
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
@@ -100,7 +95,7 @@ const ListItem = React.forwardRef<
           ref={ref}
           className={cn(
             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
+            className,
           )}
           {...props}
         >
@@ -111,6 +106,6 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = "ListItem";
