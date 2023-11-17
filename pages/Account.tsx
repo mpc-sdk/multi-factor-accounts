@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { Suspense, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 
@@ -14,6 +14,7 @@ import DeleteAccount from "@/components/DeleteAccount";
 import NotFound from "@/pages/NotFound";
 
 import { getAccountByAddress } from "@/lib/keyring";
+import use from "@/lib/react-use";
 
 function AccountContent({
   account,
@@ -55,30 +56,22 @@ function AccountContent({
   );
 }
 
-export default function Account() {
+function AccountView({
+  resource,
+  onChanged,
+}: {
+  resource: Promise<KeyringAccount>;
+  onChanged: () => void;
+}) {
   const navigate = useNavigate();
-  const { address } = useParams();
-  const [account, setAccount] = useState(null);
-  const [loaded, setLoaded] = useState(null);
+  const account = use(resource);
 
-  useEffect(() => {
-    const loadAccountInfo = async () => {
-      const account = await getAccountByAddress(address);
-      setLoaded(true);
-      setAccount(account);
-    };
-    loadAccountInfo();
-  }, [account]);
-
-  if (!loaded) {
-    return <Loader text="Loading account..." />;
-  } else if (loaded && !account) {
+  if (!account) {
     return <NotFound />;
   }
 
   const onDeleted = async (accountDeleted: boolean) => {
-    setAccount(null);
-    setLoaded(false);
+    onChanged();
     if (accountDeleted) {
       navigate("/");
     }
@@ -124,5 +117,17 @@ export default function Account() {
         <Link href="/#/">Back to Accounts</Link>
       </div>
     </AccountContent>
+  );
+}
+
+export default function Account() {
+  const [changed, setChanged] = useState(0);
+  const onChanged = () => setChanged(changed + 1);
+  const { address } = useParams();
+  const resource = getAccountByAddress(address);
+  return (
+    <Suspense fallback={<Loader text="Loading account..." />}>
+      <AccountView resource={resource} onChanged={onChanged} />
+    </Suspense>
   );
 }

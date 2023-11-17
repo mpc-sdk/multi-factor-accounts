@@ -1,20 +1,20 @@
-import React, { useState, useContext } from "react";
-import { useSelector } from "react-redux";
+import React, { Suspense, useContext } from "react";
 import { Link } from "react-router-dom";
-
 import { Button } from "@/components/ui/button";
+import { KeyringAccount } from "@metamask/keyring-api";
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
 import KeyAlert from "@/components/KeyAlert";
 import ChainBadge from "@/components/ChainBadge";
-import AccountsLoader from "@/components/AccountsLoader";
+import Loader from "@/components/Loader";
 import ImportAccount from "@/components/ImportAccount";
 import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 
 import { BroadcastContext } from "@/app/providers/broadcast";
-import { accountsSelector } from "@/app/store/accounts";
+import { listAccounts } from "@/lib/keyring";
+import use from "@/lib/react-use";
 
 function AccountsContent({
   children,
@@ -58,28 +58,19 @@ function NoAccounts({ onImportComplete }: { onImportComplete: () => void }) {
   );
 }
 
-export default function Accounts() {
+function AccountsView({ resource }: { resource: Promise<KeyringAccount[]> }) {
   const { invalidate } = useContext(BroadcastContext);
-  const [refresh, setRefresh] = useState(0);
-  const { accounts, loaded } = useSelector(accountsSelector);
+  const accounts = use(resource);
+  const onChanged = () => invalidate();
 
-  if (!loaded) {
-    return <AccountsLoader />;
-  }
-
-  const onChanged = async () => {
-    await invalidate();
-    setRefresh(refresh + 1);
-  };
-
-  if (accounts.length == 0) {
+  if (accounts.length === 0) {
     return <NoAccounts onImportComplete={onChanged} />;
   }
 
   return (
     <AccountsContent onImportComplete={onChanged}>
       <div className="mt-12 border rounded-md">
-        {accounts.map((account) => {
+        {accounts.map((account: KeyringAccount) => {
           const { name } = account.options as {
             name: string;
           };
@@ -106,5 +97,15 @@ export default function Accounts() {
         })}
       </div>
     </AccountsContent>
+  );
+  return null;
+}
+
+export default function Accounts() {
+  const resource = listAccounts();
+  return (
+    <Suspense fallback={<Loader text="Loading accounts..." />}>
+      <AccountsView resource={resource} />
+    </Suspense>
   );
 }

@@ -1,4 +1,4 @@
-import { Transaction, TransactionReceiptParams } from "ethers";
+//import { Transaction, TransactionReceiptParams } from "ethers";
 import { Parameters } from "@/lib/types";
 
 // Noise protocol key information.
@@ -122,6 +122,7 @@ export type SignPrimitive = {
   scalar: number[];
 };
 
+/*
 // Key share with a human-friendly label.
 export type NamedKeyShare = {
   label: string;
@@ -182,3 +183,4 @@ export type SignTransaction = {
 };
 
 export type SignValue = SignMessage | SignTransaction;
+*/

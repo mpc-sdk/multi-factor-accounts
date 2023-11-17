@@ -49,8 +49,22 @@ function Content() {
       <Route path="/about" element={<About />} />
       <Route path="/keys/create" element={<CreateKey />} />
       <Route path="/keys/join/:meetingId/:userId" element={<JoinKey />} />
-      <Route path="/" element={<Accounts />} />
-      <Route path="/accounts/:address" element={<Account />} />
+      <Route
+        path="/"
+        element={
+          <BroadcastProvider>
+            <Accounts />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/accounts/:address"
+        element={
+          <BroadcastProvider>
+            <Account />
+          </BroadcastProvider>
+        }
+      />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -103,9 +117,7 @@ export default function App() {
           <Layout>
             <GuardMetaMask>
               <ChainProvider>
-                <BroadcastProvider>
-                  <Content />
-                </BroadcastProvider>
+                <Content />
               </ChainProvider>
             </GuardMetaMask>
           </Layout>
