@@ -219,14 +219,19 @@ export class ThresholdKeyring implements Keyring {
   }
 
   async submitRequest(request: KeyringRequest): Promise<SubmitRequestResponse> {
+    console.log("SUBMIT REQUEST WAS CALLED...");
+
     this.#state.pendingRequests[request.id] = request;
     await this.#saveState();
     const dappUrl = this.#getCurrentUrl();
+
+    console.log("Redirect to", dappUrl);
+
     return {
       pending: true,
       redirect: {
         url: dappUrl,
-        message: "Redirecting to Snap Simple Keyring to sign transaction",
+        message: "Redirecting to multi-factor accounts snap to sign transaction",
       },
     };
   }
@@ -235,6 +240,8 @@ export class ThresholdKeyring implements Keyring {
     const { request } =
       this.#state.pendingRequests[id] ??
       throwError(`Request '${id}' not found`);
+
+    console.log("APPROVE REQUEST WAS CALLED...");
 
     //const result = this.#handleSigningRequest(
     //request.method,
