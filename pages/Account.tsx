@@ -1,7 +1,7 @@
 import React, { Suspense, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
-
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
@@ -12,19 +12,24 @@ import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 import Loader from "@/components/Loader";
 import DeleteAccount from "@/components/DeleteAccount";
+import EditAccount from "@/components/EditAccount";
 
 import NotFound from "@/pages/NotFound";
 
-import { getAccountByAddress } from "@/lib/keyring";
+import { getAccountByAddress, updateAccount } from "@/lib/keyring";
 import use from "@/lib/react-use";
+import guard from "@/lib/guard";
 
 function AccountContent({
   account,
   children,
+  onChanged,
 }: {
   account: KeyringAccount;
   children?: React.ReactNode;
+  onChanged: () => void;
 }) {
+  const { toast } = useToast();
   const navigate = useNavigate();
 
   const onDeleted = async () => {
@@ -33,12 +38,28 @@ function AccountContent({
 
   const accountName = (account?.options?.name as string) ?? "Untitled account";
 
+  const onUpdateName = async (value: string) => {
+    account.options.name = value;
+    await guard(async () => {
+      await updateAccount(account);
+      onChanged();
+    }, toast);
+  };
+
   return (
     <>
       <div>
-        <div className="flex items-center justify-between">
-          <Heading>{accountName}</Heading>
+        <div className="flex items-center justify-between space-x-6">
+          <Heading>
+            {accountName}
+          </Heading>
           <div className="flex space-x-4">
+
+            <EditAccount
+              initialValue={accountName}
+              onUpdate={onUpdateName}
+            />
+
             <ExportAccount
               account={account}
               buttonText="Export"
@@ -82,7 +103,7 @@ function AccountView({
   const accountName = (account?.options?.name as string) ?? "Untitled account";
 
   return (
-    <AccountContent account={account}>
+    <AccountContent account={account} onChanged={onChanged}>
       <div className="mt-12 flex flex-col space-y-6">
         <div className="flex items-center justify-between">
           <SharesBadge account={account} />

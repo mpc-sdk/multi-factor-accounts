@@ -25,6 +25,11 @@ export async function deleteAccount(id: string): Promise<void> {
   return await client.deleteAccount(id);
 }
 
+export async function updateAccount(account: KeyringAccount): Promise<void> {
+  const client = getKeyringClient();
+  return await client.updateAccount(account);
+}
+
 export async function deleteKeyShare(
   id: string,
   keyShareId: string,

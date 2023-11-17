@@ -71,11 +71,9 @@ export default function FileUploadReader({
           <div>
             {file ? (
               <div className="flex">
-                <div className="flex">
-                  <div>
-                    <p>{file.name}</p>
-                    <p className="text-sm">{humanFileSize(file.size)}</p>
-                  </div>
+                <div>
+                  <p>{file.name}</p>
+                  <p className="text-sm">{humanFileSize(file.size)}</p>
                 </div>
               </div>
             ) : (
