@@ -1,8 +1,7 @@
-import React, { Suspense, useState, useContext } from "react";
-import { useSelector } from "react-redux";
+import React, { Suspense, useContext } from "react";
 import { Link } from "react-router-dom";
-
 import { Button } from "@/components/ui/button";
+import { KeyringAccount } from '@metamask/keyring-api';
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
@@ -14,8 +13,6 @@ import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 
 import BroadcastProvider, { BroadcastContext } from "@/app/providers/broadcast";
-import { accountsSelector } from "@/app/store/accounts";
-
 import { listAccounts } from "@/lib/keyring";
 import use from '@/lib/react-use';
 
@@ -71,7 +68,7 @@ function AccountsView({resource, onChanged}: {resource: Promise<KeyringAccount[]
   return (
     <AccountsContent onImportComplete={onChanged}>
       <div className="mt-12 border rounded-md">
-        {accounts.map((account) => {
+        {accounts.map((account: KeyringAccount) => {
           const { name } = account.options as {
             name: string;
           };
