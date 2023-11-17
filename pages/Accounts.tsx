@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { Suspense, useState, useContext } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -8,13 +8,16 @@ import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
 import KeyAlert from "@/components/KeyAlert";
 import ChainBadge from "@/components/ChainBadge";
-import AccountsLoader from "@/components/AccountsLoader";
+import Loader from "@/components/Loader";
 import ImportAccount from "@/components/ImportAccount";
 import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 
-import { BroadcastContext } from "@/app/providers/broadcast";
+import BroadcastProvider, { BroadcastContext } from "@/app/providers/broadcast";
 import { accountsSelector } from "@/app/store/accounts";
+
+import { listAccounts } from "@/lib/keyring";
+import use from '@/lib/react-use';
 
 function AccountsContent({
   children,
@@ -58,21 +61,10 @@ function NoAccounts({ onImportComplete }: { onImportComplete: () => void }) {
   );
 }
 
-export default function Accounts() {
-  const { invalidate } = useContext(BroadcastContext);
-  const [refresh, setRefresh] = useState(0);
-  const { accounts, loaded } = useSelector(accountsSelector);
+function AccountsView({resource, onChanged}: {resource: Promise<KeyringAccount[]>, onChanged: () => void}) {
+  const accounts = use(resource);
 
-  if (!loaded) {
-    return <AccountsLoader />;
-  }
-
-  const onChanged = async () => {
-    await invalidate();
-    setRefresh(refresh + 1);
-  };
-
-  if (accounts.length == 0) {
+  if (accounts.length === 0) {
     return <NoAccounts onImportComplete={onChanged} />;
   }
 
@@ -106,5 +98,19 @@ export default function Accounts() {
         })}
       </div>
     </AccountsContent>
+  );
+  return null;
+}
+
+export default function Accounts() {
+  const { invalidate } = useContext(BroadcastContext);
+  const onChanged = () => invalidate();
+  const resource = listAccounts();
+  return (
+    <BroadcastProvider>
+      <Suspense fallback={<Loader text="Loading accounts..." />}>
+        <AccountsView resource={resource} onChanged={onChanged} />
+      </Suspense>
+    </BroadcastProvider>
   );
 }

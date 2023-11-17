@@ -1,23 +1,20 @@
-import React, { createContext } from "react";
-import { useDispatch } from "react-redux";
-
-import { invalidateAccounts } from "@/app/store/accounts";
+import React, { createContext, useState } from "react";
 const BroadcastContext = createContext(null);
 
 const BroadcastProvider = ({ children }: { children: React.ReactNode }) => {
-  const dispatch = useDispatch();
+  const [changed, setChanged] = useState(0);
   const channel = new BroadcastChannel("accounts");
 
   channel.onmessage = async (event) => {
     const { data } = event;
     if (data === "invalidate") {
-      await dispatch(invalidateAccounts());
+      setChanged(changed + 1);
     }
   };
 
   const invalidate = async () => {
     channel.postMessage("invalidate");
-    await dispatch(invalidateAccounts());
+    setChanged(changed + 1);
   };
 
   return (
