@@ -1,9 +1,10 @@
 import React, { createContext, useState } from "react";
 const BroadcastContext = createContext(null);
 
+const channel = new BroadcastChannel("accounts");
+
 const BroadcastProvider = ({ children }: { children: React.ReactNode }) => {
   const [changed, setChanged] = useState(0);
-  const channel = new BroadcastChannel("accounts");
 
   channel.onmessage = async (event) => {
     const { data } = event;
@@ -19,7 +20,7 @@ const BroadcastProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <BroadcastContext.Provider value={{ invalidate }}>
-      {children}
+      <div key={changed}>{children}</div>
     </BroadcastContext.Provider>
   );
 };

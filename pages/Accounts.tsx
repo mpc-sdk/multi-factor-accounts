@@ -1,7 +1,7 @@
 import React, { Suspense, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { KeyringAccount } from '@metamask/keyring-api';
+import { KeyringAccount } from "@metamask/keyring-api";
 
 import Heading from "@/components/Heading";
 import Icons from "@/components/Icons";
@@ -12,9 +12,9 @@ import ImportAccount from "@/components/ImportAccount";
 import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 
-import BroadcastProvider, { BroadcastContext } from "@/app/providers/broadcast";
+import { BroadcastContext } from "@/app/providers/broadcast";
 import { listAccounts } from "@/lib/keyring";
-import use from '@/lib/react-use';
+import use from "@/lib/react-use";
 
 function AccountsContent({
   children,
@@ -58,8 +58,10 @@ function NoAccounts({ onImportComplete }: { onImportComplete: () => void }) {
   );
 }
 
-function AccountsView({resource, onChanged}: {resource: Promise<KeyringAccount[]>, onChanged: () => void}) {
+function AccountsView({ resource }: { resource: Promise<KeyringAccount[]> }) {
+  const { invalidate } = useContext(BroadcastContext);
   const accounts = use(resource);
+  const onChanged = () => invalidate();
 
   if (accounts.length === 0) {
     return <NoAccounts onImportComplete={onChanged} />;
@@ -100,14 +102,10 @@ function AccountsView({resource, onChanged}: {resource: Promise<KeyringAccount[]
 }
 
 export default function Accounts() {
-  const { invalidate } = useContext(BroadcastContext);
-  const onChanged = () => invalidate();
   const resource = listAccounts();
   return (
-    <BroadcastProvider>
-      <Suspense fallback={<Loader text="Loading accounts..." />}>
-        <AccountsView resource={resource} onChanged={onChanged} />
-      </Suspense>
-    </BroadcastProvider>
+    <Suspense fallback={<Loader text="Loading accounts..." />}>
+      <AccountsView resource={resource} />
+    </Suspense>
   );
 }

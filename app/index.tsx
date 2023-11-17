@@ -8,5 +8,5 @@ const root = ReactDOMClient.createRoot(document.querySelector("main"));
 root.render(
   <HashRouter>
     <App />
-  </HashRouter>
+  </HashRouter>,
 );

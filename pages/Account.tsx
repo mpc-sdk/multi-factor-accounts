@@ -56,7 +56,13 @@ function AccountContent({
   );
 }
 
-function AccountView({ resource, onChanged }: { resource: Promise<KeyringAccount>, onChanged: () => void }) {
+function AccountView({
+  resource,
+  onChanged,
+}: {
+  resource: Promise<KeyringAccount>;
+  onChanged: () => void;
+}) {
   const navigate = useNavigate();
   const account = use(resource);
 
@@ -116,9 +122,9 @@ function AccountView({ resource, onChanged }: { resource: Promise<KeyringAccount
 
 export default function Account() {
   const [changed, setChanged] = useState(0);
+  const onChanged = () => setChanged(changed + 1);
   const { address } = useParams();
   const resource = getAccountByAddress(address);
-  const onChanged = () => setChanged(changed + 1);
   return (
     <Suspense fallback={<Loader text="Loading account..." />}>
       <AccountView resource={resource} onChanged={onChanged} />
