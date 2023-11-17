@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
 
 import {
   Form,
@@ -19,12 +18,34 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
+export function NameAlert() {
+  return (
+    <Alert>
+      <Icons.key className="h-4 w-4" />
+      <AlertTitle>Give the key a name</AlertTitle>
+      <AlertDescription>
+        The key name helps you easily recognize the key and it&apos;s purpose.
+      </AlertDescription>
+    </Alert>
+  );
+}
+
 export default function KeyShareNameForm({
   back,
   onNext,
+  nameAlert,
+  submit,
+  initialValue,
+  className,
+  showLabel,
 }: {
-  back?: React.ReactNode;
-  onNext: (name: string) => void;
+  back?: React.ReactNode
+  onNext: (name: string) => void
+  nameAlert?: React.ReactNode
+  submit?: React.ReactNode
+  initialValue?: string
+  className?: string
+  showLabel?: boolean
 }) {
   const FormSchema = z.object({
     keyName: z.string({
@@ -35,7 +56,7 @@ export default function KeyShareNameForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      keyName: "",
+      keyName: initialValue ?? "",
     },
   });
 
@@ -44,14 +65,8 @@ export default function KeyShareNameForm({
   }
 
   return (
-    <div className="mt-12">
-      <Alert>
-        <Icons.key className="h-4 w-4" />
-        <AlertTitle>Give the key a name</AlertTitle>
-        <AlertDescription>
-          The key name helps you easily recognize the key and it&apos;s purpose.
-        </AlertDescription>
-      </Alert>
+    <div className={className}>
+      {nameAlert}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 mt-6">
           <FormField
@@ -59,7 +74,7 @@ export default function KeyShareNameForm({
             name="keyName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Key name</FormLabel>
+                {showLabel && <FormLabel>Key name</FormLabel>}
                 <FormControl>
                   <Input required placeholder="Key name" {...field} />
                 </FormControl>
@@ -73,7 +88,7 @@ export default function KeyShareNameForm({
             }`}
           >
             {back}
-            <Button type="submit">Next</Button>
+            {submit}
           </div>
         </form>
       </Form>

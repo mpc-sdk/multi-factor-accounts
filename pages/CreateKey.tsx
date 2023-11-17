@@ -15,7 +15,7 @@ import SessionRunner from "@/components/SessionRunner";
 import SaveKeyShare from "@/components/SaveKeyShare";
 
 import KeyShareAudienceForm from "@/forms/KeyShareAudience";
-import KeyShareNameForm from "@/forms/KeyShareName";
+import KeyShareNameForm, { NameAlert } from "@/forms/KeyShareName";
 import KeyShareNumberForm from "@/forms/KeyShareNumber";
 
 import {
@@ -165,7 +165,11 @@ export default function CreateKey() {
     return (
       <CreateKeyContent>
         <KeyShareNameForm
+          className="mt-12"
           onNext={onKeyName}
+          showLabel
+          nameAlert={<NameAlert />}
+          submit={<Button type="submit">Next</Button>}
           back={<BackButton onClick={defaultBack} />}
         />
       </CreateKeyContent>

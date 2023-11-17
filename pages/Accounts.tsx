@@ -77,12 +77,14 @@ function AccountsView({ resource }: { resource: Promise<KeyringAccount[]> }) {
           return (
             <div
               key={account.id}
-              className="[&:not(:last-child)]:border-b p-4 flex justify-between items-center"
+              className="[&:not(:last-child)]:border-b p-4 flex justify-between items-center space-x-6"
             >
-              <div className="flex flex-col space-y-2">
+              <div className="flex flex-col space-y-4">
                 <div>{name}</div>
-                <SharesBadge account={account} />
-                <AddressBadge address={account.address} />
+                <div className="flex flex-col space-y-2 items-start">
+                  <SharesBadge account={account} />
+                  <AddressBadge address={account.address} />
+                </div>
               </div>
 
               <div className="flex justify-end">
