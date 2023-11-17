@@ -1,4 +1,5 @@
 import type { Dispatch, ReactNode, Reducer } from "react";
+import { BrowserProvider } from 'ethers';
 import React, { createContext, useEffect, useReducer } from "react";
 
 import { getSnap, Snap } from "@/lib/snap";
@@ -7,6 +8,7 @@ export type MetaMaskState = {
   hasMetaMask: boolean;
   installedSnap?: Snap;
   error?: Error;
+  provider?: BrowserProvider;
 };
 
 const initialState: MetaMaskState = {
@@ -37,6 +39,7 @@ const reducer: Reducer<MetaMaskState, MetaMaskDispatch> = (state, action) => {
       return {
         ...state,
         hasMetaMask: action.payload,
+        provider: new BrowserProvider(ethereum),
       };
     case MetaMaskActions.SetInstalled:
       return {
