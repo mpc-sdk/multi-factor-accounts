@@ -2371,7 +2371,7 @@ __metadata:
     parcel: "npm:2.10.2"
     postcss: "npm:^8.4.31"
     prettier: "npm:3.0.3"
-    react: "npm:^18.2.0"
+    react: "npm:18.2.0"
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.48.2"
     react-redux: "npm:^8.0.5"
@@ -11186,7 +11186,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
+"react@npm:18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
   dependencies:
