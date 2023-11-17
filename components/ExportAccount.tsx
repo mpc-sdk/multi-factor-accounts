@@ -55,9 +55,9 @@ export function DownloadKeyShare({
   buttonText,
   accountName,
 }: {
-  keyShare: PrivateKey
-  buttonText?: string
-  accountName?: string
+  keyShare: PrivateKey;
+  buttonText?: string;
+  accountName?: string;
 }) {
   const { toast } = useToast();
 
@@ -67,7 +67,12 @@ export function DownloadKeyShare({
       const { i: keyShareId } = keyShare.privateKey;
       const keyShares: KeyShares = {};
       keyShares[keyShareId.toString()] = keyShare;
-      await downloadKeyShares(address, keyShares, keyShareId.toString(), accountName);
+      await downloadKeyShares(
+        address,
+        keyShares,
+        keyShareId.toString(),
+        accountName,
+      );
     }, toast);
   };
 
@@ -100,10 +105,10 @@ export default function ExportAccount({
   keyShareId,
   accountName,
 }: {
-  account: KeyringAccount
-  buttonText?: string
-  keyShareId?: string
-  accountName?: string
+  account: KeyringAccount;
+  buttonText?: string;
+  keyShareId?: string;
+  accountName?: string;
 }) {
   const { toast } = useToast();
 

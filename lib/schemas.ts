@@ -99,7 +99,7 @@ export const keyShares = z
     accountName: z.string(),
     privateKey: z.record(privateKey),
   })
-  .required({privateKey: true});
+  .required({ privateKey: true });
 
 export type KeyShares = z.infer<typeof keyShares>;
 export type LocalKey = z.infer<typeof localKey>;

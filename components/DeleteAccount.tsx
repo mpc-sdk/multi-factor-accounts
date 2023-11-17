@@ -17,7 +17,7 @@ import {
 
 import Icons from "@/components/Icons";
 
-import {BroadcastContext} from '@/app/providers/broadcast';
+import { BroadcastContext } from "@/app/providers/broadcast";
 import { deleteAccount, deleteKeyShare } from "@/lib/keyring";
 import guard from "@/lib/guard";
 

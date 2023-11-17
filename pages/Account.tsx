@@ -39,7 +39,8 @@ function AccountContent({
             <ExportAccount
               account={account}
               buttonText="Export"
-              accountName={accountName} />
+              accountName={accountName}
+            />
             <DeleteAccount
               account={account}
               buttonText="Delete"

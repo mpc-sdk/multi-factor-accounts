@@ -38,10 +38,19 @@ export default function SaveKeyShare({
     <div className="flex flex-col space-y-6 mt-12">
       <KeyAlert
         title="Key share ready!"
-        description={<>
-          <span>Your key share is ready, now you just need to save it in MetaMask or download and save it to safe encrypted storage such as a password manager or encrypted disc.</span>
-          <p className="mt-4 font-semibold">Remember that if you have more than one key share in this account you need to save each share in each browser tab!</p>
-          </>}
+        description={
+          <>
+            <span>
+              Your key share is ready, now you just need to save it in MetaMask
+              or download and save it to safe encrypted storage such as a
+              password manager or encrypted disc.
+            </span>
+            <p className="mt-4 font-semibold">
+              Remember that if you have more than one key share in this account
+              you need to save each share in each browser tab!
+            </p>
+          </>
+        }
       />
       <div className="flex justify-end space-x-4">
         <DownloadKeyShare

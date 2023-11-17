@@ -13,7 +13,7 @@ import ImportAccount from "@/components/ImportAccount";
 import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 
-import { BroadcastContext } from '@/app/providers/broadcast';
+import { BroadcastContext } from "@/app/providers/broadcast";
 import { accountsSelector } from "@/app/store/accounts";
 
 function AccountsContent({

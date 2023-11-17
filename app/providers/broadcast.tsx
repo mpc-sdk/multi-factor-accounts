@@ -1,5 +1,5 @@
 import React, { createContext } from "react";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 
 import { invalidateAccounts } from "@/app/store/accounts";
 const BroadcastContext = createContext(null);
@@ -13,7 +13,7 @@ const BroadcastProvider = ({ children }: { children: React.ReactNode }) => {
     if (data === "invalidate") {
       await dispatch(invalidateAccounts());
     }
-  }
+  };
 
   const invalidate = async () => {
     channel.postMessage("invalidate");
@@ -21,7 +21,7 @@ const BroadcastProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <BroadcastContext.Provider value={{invalidate}}>
+    <BroadcastContext.Provider value={{ invalidate }}>
       {children}
     </BroadcastContext.Provider>
   );
