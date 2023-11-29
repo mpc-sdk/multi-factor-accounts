@@ -225,8 +225,6 @@ export class ThresholdKeyring implements Keyring {
     await this.#saveState();
     const dappUrl = this.#getCurrentUrl();
 
-    console.log("Redirect to", dappUrl);
-
     return {
       pending: true,
       redirect: {
