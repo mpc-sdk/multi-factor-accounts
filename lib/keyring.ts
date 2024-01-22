@@ -41,6 +41,11 @@ export async function getRequest(id: String): Promise<KeyringRequest | null> {
   return await client.getRequest(id);
 }
 
+export async function rejectRequest(id: string): Promise<void> {
+  const client = getKeyringClient();
+  return await client.rejectRequest(id);
+}
+
 export async function deleteKeyShare(
   id: string,
   keyShareId: string,

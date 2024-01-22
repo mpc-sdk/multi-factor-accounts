@@ -42,19 +42,19 @@ function TransactionPreview( { tx }: { tx: Transaction } ) {
     </div>
     <div className="flex justify-between">
       <div>Amount</div>
-      <div>{formatEther(tx.value)}</div>
+      <div>{formatEther(tx.value)} ETH</div>
     </div>
     <div className="flex justify-between">
       <div>Max fee</div>
-      <div>{formatEther(tx.maxFeePerGas)}</div>
+      <div>{formatEther(tx.maxFeePerGas)} ETH</div>
     </div>
     <div className="flex justify-between">
       <div>Max priority fee</div>
-      <div>{formatEther(tx.maxPriorityFeePerGas)}</div>
+      <div>{formatEther(tx.maxPriorityFeePerGas)} ETH</div>
     </div>
     <div className="flex justify-between">
       <div>Gas limit</div>
-      <div>{formatEther(tx.gasLimit)}</div>
+      <div>{formatEther(tx.gasLimit)} ETH</div>
     </div>
   </div>;
 }
