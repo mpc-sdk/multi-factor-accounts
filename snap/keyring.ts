@@ -221,7 +221,7 @@ export class ThresholdKeyring implements Keyring {
   async submitRequest(request: KeyringRequest): Promise<SubmitRequestResponse> {
     this.#state.pendingRequests[request.id] = request;
     await this.#saveState();
-    const dappUrl = this.#getCurrentUrl();
+    const dappUrl = this.#getCurrentUrl(request.id);
 
     return {
       pending: true,
@@ -237,12 +237,6 @@ export class ThresholdKeyring implements Keyring {
       this.#state.pendingRequests[id] ??
       throwError(`Request '${id}' not found`);
 
-    console.log("APPROVE REQUEST WAS CALLED...");
-
-    //const result = this.#handleSigningRequest(
-    //request.method,
-    //request.params ?? [],
-    //);
     const result = "TODO: handle request data";
 
     await this.#removePendingRequest(id);
@@ -263,13 +257,11 @@ export class ThresholdKeyring implements Keyring {
     await this.#saveState();
   }
 
-  #getCurrentUrl(): string {
+  #getCurrentUrl(id: string): string {
     const dappUrlPrefix =
       process.env.NODE_ENV === "production"
         ? process.env.DAPP_ORIGIN_PRODUCTION
         : process.env.DAPP_ORIGIN_DEVELOPMENT;
-
-    console.log("GOT DAPP URL PREFIX: ");
 
     /*
     const dappVersion: string = packageInfo.version;
@@ -279,9 +271,7 @@ export class ThresholdKeyring implements Keyring {
     }
     */
 
-    // Default URL if dappUrlPrefix or dappVersion are falsy,
-    // or if URL construction fails
-    return dappUrlPrefix as string;
+    return `${dappUrlPrefix}/sign/${id}`;
   }
 
   async exportAccount(id: string): Promise<KeyringAccountData> {

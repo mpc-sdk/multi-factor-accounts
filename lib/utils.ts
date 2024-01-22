@@ -41,7 +41,7 @@ export function inviteUrl(
   userId: string,
   params?: Dictionary<string>,
 ): string {
-  let url = `${location.protocol}//${location.host}/#/${prefix}/${meetingId}/${userId}`;
+  let url = `${location.protocol}//${location.host}/${prefix}/${meetingId}/${userId}`;
   if (params) {
     const searchParams = new URLSearchParams();
     for (const [key, value] of Object.entries(params)) {

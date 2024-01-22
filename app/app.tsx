@@ -73,6 +73,11 @@ function Content() {
           </BroadcastProvider>
         }
       />
+      <Route path="/sign/:meetingId" element={
+        <BroadcastProvider>
+          <JoinKey />
+        </BroadcastProvider>
+      } />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -147,7 +147,7 @@ function AccountView({
           })}
         </div>
 
-        <Link href="/#/">
+        <Link href="/">
           <Button variant="link">
             <Icons.back className="h-4 w-4 mr-2" />
             Back to accounts
