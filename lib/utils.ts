@@ -85,7 +85,7 @@ const chains: Dictionary<string> = {
 };
 
 // Get human-readable chain name from it's identifier.
-export function getChainName(value: string | number): string {
+export function getChainName(value: string | number | bigint): string {
   return chains[toBeHex(BigInt(value))];
 }
 

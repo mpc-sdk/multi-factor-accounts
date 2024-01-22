@@ -2,7 +2,8 @@ import React, { Suspense, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { KeyringAccount, KeyringRequest } from "@metamask/keyring-api";
-import { formatEther, Transaction } from 'ethers';
+import { formatEther, TransactionLike } from 'ethers';
+import type { Json } from '@metamask/utils';
 
 import { useToast } from "@/components/ui/use-toast";
 import Heading, { SubHeading } from "@/components/Heading";
@@ -39,8 +40,8 @@ function RequestsView({ resource }: { resource: Promise<KeyringRequest[]> }) {
   return <div className="mt-12">
     <SubHeading>Requests</SubHeading>
     <div className="mt-4 border rounded-md">
-      {requests.map((pendingRequest) => {
-        const tx = pendingRequest.request.params[0] as Transaction;
+      {requests.map((pendingRequest: KeyringRequest) => {
+        const tx = (pendingRequest.request.params as Json[])[0] as TransactionLike;
 
         return <div
           key={pendingRequest.id}

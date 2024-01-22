@@ -36,7 +36,7 @@ export async function listRequests(): Promise<KeyringRequest[]> {
   return await client.listRequests();
 }
 
-export async function getRequest(id: String): Promise<KeyringRequest | null> {
+export async function getRequest(id: string): Promise<KeyringRequest | null> {
   const client = getKeyringClient();
   return await client.getRequest(id);
 }

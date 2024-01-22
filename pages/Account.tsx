@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState, useContext } from "react";
+import React, { Suspense, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
 

@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { formatEther, Transaction } from 'ethers';
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { formatEther, TransactionLike } from 'ethers';
 
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -10,15 +10,6 @@ import Loader from "@/components/Loader";
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
 import AddressBadge from "@/components/AddressBadge";
-
-import {
-  PublicKeys,
-  AssociatedData,
-  SessionState,
-  OwnerType,
-  SessionType,
-} from "@/app/model";
-
 import NotFound from "@/pages/NotFound";
 
 import guard from "@/lib/guard";
@@ -34,7 +25,7 @@ function SignRequestContent({ children }: { children: React.ReactNode }) {
   );
 }
 
-function TransactionPreview( { tx }: { tx: Transaction } ) {
+function TransactionPreview( { tx }: { tx: TransactionLike } ) {
   return <div className="flex flex-col space-y-2 mt-6 p-4 rounded-md border">
     <div className="flex justify-between">
       <div>To</div>
@@ -76,7 +67,6 @@ export default function SignRequest() {
     loadRequest();
   }, []);
 
-  const { toasts } = useToast();
   const rejectPendingRequest = async (id: string) => {
     await guard(async () => {
       await rejectRequest(id);
@@ -114,7 +104,7 @@ export default function SignRequest() {
     </SignRequestContent>
   }
 
-  const tx = transactionData as Transaction;
+  const tx = transactionData as TransactionLike;
 
   const chainName = getChainName(tx.chainId);
   const Badges = () => (
