@@ -3,6 +3,7 @@ import {
   KeyringAccount,
   KeyringSnapRpcClient,
   KeyringAccountData,
+  KeyringRequest,
 } from "@metamask/keyring-api";
 
 import { Wallet, PrivateKey } from "@/lib/types";
@@ -28,6 +29,16 @@ export async function deleteAccount(id: string): Promise<void> {
 export async function updateAccount(account: KeyringAccount): Promise<void> {
   const client = getKeyringClient();
   return await client.updateAccount(account);
+}
+
+export async function listRequests(): Promise<KeyringRequest[]> {
+  const client = getKeyringClient();
+  return await client.listRequests();
+}
+
+export async function getRequest(id: String): Promise<KeyringRequest | null> {
+  const client = getKeyringClient();
+  return await client.getRequest(id);
 }
 
 export async function deleteKeyShare(

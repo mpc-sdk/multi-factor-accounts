@@ -212,10 +212,8 @@ export class ThresholdKeyring implements Keyring {
     return Object.values(this.#state.pendingRequests);
   }
 
-  async getRequest(id: string): Promise<KeyringRequest> {
-    return (
-      this.#state.pendingRequests[id] ?? throwError(`Request '${id}' not found`)
-    );
+  async getRequest(id: string): Promise<KeyringRequest | null> {
+    return this.#state.pendingRequests[id] ?? null;
   }
 
   async submitRequest(request: KeyringRequest): Promise<SubmitRequestResponse> {
