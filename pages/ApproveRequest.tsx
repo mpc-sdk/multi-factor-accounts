@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import { formatEther, Transaction } from 'ethers';
 
 import { useToast } from "@/components/ui/use-toast";
@@ -22,13 +22,13 @@ import {
 import NotFound from "@/pages/NotFound";
 
 import guard from "@/lib/guard";
-import { getRequest } from "@/lib/keyring";
+import { getRequest, rejectRequest } from "@/lib/keyring";
 import { getChainName } from "@/lib/utils";
 
 function SignRequestContent({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Heading>Sign Request</Heading>
+      <Heading>Sign Transaction</Heading>
       {children}
     </>
   );
@@ -61,6 +61,7 @@ function TransactionPreview( { tx }: { tx: Transaction } ) {
 
 export default function SignRequest() {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [pendingRequest, setPendingRequest] = useState(null);
   const { requestId } = useParams();
@@ -75,17 +76,13 @@ export default function SignRequest() {
     loadRequest();
   }, []);
 
-  // b230bbd4-a6fa-4a91-9f2d-f0cdf73fd21a
-
-  console.log("requestId", requestId);
-
-  //const [searchParams] = useSearchParams();
-  //const name = searchParams.get("name");
-
-  //if (keypair === null) {
-    //return null;
-  //}
-  //const { publicKey } = keypair;
+  const { toasts } = useToast();
+  const rejectPendingRequest = async (id: string) => {
+    await guard(async () => {
+      await rejectRequest(id);
+      navigate("/");
+    }, toast);
+  };
 
   if (!requestId) {
     return <NotFound />;
@@ -133,11 +130,14 @@ export default function SignRequest() {
       <div className="flex flex-col space-y-6 mt-12">
         <KeyAlert
           title="Sign request"
-          description="Approve the signing request to continue"
+          description="Approve the transaction to continue"
         />
         <TransactionPreview tx={tx} />
-        <div className="flex justify-end">
-          <Button>Sign Transaction</Button>
+        <div className="flex justify-between">
+          <Button
+            variant="outline"
+            onClick={() => rejectPendingRequest(pendingRequest.id)}>Reject</Button>
+          <Button>Approve</Button>
         </div>
       </div>
     </SignRequestContent>

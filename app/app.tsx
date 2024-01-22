@@ -8,7 +8,7 @@ import Accounts from "@/pages/Accounts";
 import Account from "@/pages/Account";
 import CreateKey from "@/pages/CreateKey";
 import JoinKey from "@/pages/JoinKey";
-import SignRequest from "@/pages/SignRequest";
+import ApproveRequest from "@/pages/ApproveRequest";
 import NoMetaMask from "@/pages/NoMetaMask";
 import InstallSnap from "@/pages/InstallSnap";
 
@@ -74,9 +74,9 @@ function Content() {
           </BroadcastProvider>
         }
       />
-      <Route path="/sign/:requestId" element={
+      <Route path="/approve/:requestId" element={
         <BroadcastProvider>
-          <SignRequest />
+          <ApproveRequest />
         </BroadcastProvider>
       } />
       <Route path="*" element={<NotFound />} />

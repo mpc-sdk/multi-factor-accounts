@@ -16,19 +16,20 @@ import SharesBadge from "@/components/SharesBadge";
 
 import { BroadcastContext } from "@/app/providers/broadcast";
 import { listAccounts, listRequests, rejectRequest } from "@/lib/keyring";
+import { abbreviateAddress } from '@/lib/utils';
 import guard from '@/lib/guard';
 import use from "@/lib/react-use";
 
 function RequestsView({ resource }: { resource: Promise<KeyringRequest[]> }) {
   const { invalidate } = useContext(BroadcastContext);
   const requests = use(resource);
-  const { toasts } = useToast();
+  const { toast } = useToast();
 
   const rejectPendingRequest = async (id: string) => {
     await guard(async () => {
       await rejectRequest(id);
       invalidate();
-    }, toasts);
+    }, toast);
   };
 
   if (requests.length === 0) {
@@ -45,15 +46,18 @@ function RequestsView({ resource }: { resource: Promise<KeyringRequest[]> }) {
           key={pendingRequest.id}
           className="flex justify-between p-4 items-center">
             <div className="flex flex-col">
-              <div>Send {formatEther(tx.value)} ETH to</div>
-              <div>{tx.to}</div>
+              <div>
+                Send {formatEther(tx.value)} ETH
+                from {abbreviateAddress(tx.from)}
+              </div>
+              <div>to {tx.to}</div>
             </div>
             <div className="flex justify-end space-x-4">
               <Button
-                variant="destructive"
+                variant="outline"
                 onClick={() => rejectPendingRequest(pendingRequest.id)}>Reject</Button>
-              <Link to={`/sign/${pendingRequest.id}`}>
-                <Button>Sign</Button>
+              <Link to={`/accounts/${tx.from}/approve/${pendingRequest.id}`}>
+                <Button>Approve</Button>
               </Link>
             </div>
         </div>;

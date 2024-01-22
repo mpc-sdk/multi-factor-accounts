@@ -269,7 +269,7 @@ export class ThresholdKeyring implements Keyring {
     }
     */
 
-    return `${dappUrlPrefix}/sign/${id}`;
+    return `${dappUrlPrefix}/approve/${id}`;
   }
 
   async exportAccount(id: string): Promise<KeyringAccountData> {
