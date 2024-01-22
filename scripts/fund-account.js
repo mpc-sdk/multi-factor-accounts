@@ -21,7 +21,7 @@ const privateKey = "0xf64abc91d673bcf100c3cf2bc42507df566d36a18189ae41c377c55ee2
 
 
 // Address we want to fund - the MPC address
-const to = "0x74b0ea2b802fdd3ef8c6c46fa41bad06e0db6514";
+const to = "0x560e9f09aa2177e3372f84b8c3dbb9375ee373cf";
 
 // Send 1 ETH
 fundAccount(privateKey, to, "10.0");

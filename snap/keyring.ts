@@ -219,8 +219,6 @@ export class ThresholdKeyring implements Keyring {
   }
 
   async submitRequest(request: KeyringRequest): Promise<SubmitRequestResponse> {
-    console.log("SUBMIT REQUEST WAS CALLED...");
-
     this.#state.pendingRequests[request.id] = request;
     await this.#saveState();
     const dappUrl = this.#getCurrentUrl();
@@ -270,6 +268,8 @@ export class ThresholdKeyring implements Keyring {
       process.env.NODE_ENV === "production"
         ? process.env.DAPP_ORIGIN_PRODUCTION
         : process.env.DAPP_ORIGIN_DEVELOPMENT;
+
+    console.log("GOT DAPP URL PREFIX: ");
 
     /*
     const dappVersion: string = packageInfo.version;
