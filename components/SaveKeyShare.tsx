@@ -25,7 +25,7 @@ export default function SaveKeyShare({
   const saveKeyShare = async () => {
     await guard(async () => {
       await createAccount(keyShare, accountName);
-      await invalidate();
+      //await invalidate();
       toast({
         title: "Saved",
         description: "Account key share saved to MetaMask",

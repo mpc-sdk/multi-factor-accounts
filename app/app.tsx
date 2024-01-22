@@ -47,8 +47,16 @@ function Content() {
   return (
     <Routes>
       <Route path="/about" element={<About />} />
-      <Route path="/keys/create" element={<CreateKey />} />
-      <Route path="/keys/join/:meetingId/:userId" element={<JoinKey />} />
+      <Route path="/keys/create" element={
+        <BroadcastProvider>
+          <CreateKey />
+        </BroadcastProvider>
+      } />
+      <Route path="/keys/join/:meetingId/:userId" element={
+        <BroadcastProvider>
+          <JoinKey />
+        </BroadcastProvider>
+      } />
       <Route
         path="/"
         element={
