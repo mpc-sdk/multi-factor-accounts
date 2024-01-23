@@ -10,6 +10,8 @@ import CreateKey from "@/pages/CreateKey";
 import JoinKey from "@/pages/JoinKey";
 import ApproveRequest from "@/pages/ApproveRequest";
 import SignRequest from "@/pages/SignRequest";
+import CreateSign from "@/pages/CreateSign";
+import JoinSign from "@/pages/JoinSign";
 import NoMetaMask from "@/pages/NoMetaMask";
 import InstallSnap from "@/pages/InstallSnap";
 
@@ -65,6 +67,16 @@ function Content() {
       <Route path="/sign/:requestId" element={
         <BroadcastProvider>
           <SignRequest />
+        </BroadcastProvider>
+      } />
+      <Route path="/sign/create/:requestId/:shareId" element={
+        <BroadcastProvider>
+          <CreateSign />
+        </BroadcastProvider>
+      } />
+      <Route path="/sign/join/:meetingId/:userId" element={
+        <BroadcastProvider>
+          <JoinSign />
         </BroadcastProvider>
       } />
       <Route path="*" element={<NotFound />} />

@@ -107,8 +107,8 @@ export class ThresholdKeyring implements Keyring {
               options,
               address,
               methods: [
-                EthMethod.PersonalSign,
-                EthMethod.Sign,
+                //EthMethod.PersonalSign,
+                //EthMethod.Sign,
                 EthMethod.SignTransaction,
                 //EthMethod.SignTypedDataV1,
                 //EthMethod.SignTypedDataV3,

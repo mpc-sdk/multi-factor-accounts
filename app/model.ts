@@ -71,7 +71,11 @@ export type JoinKeyState = JoinMeeting & {
 // Associated data for a session passed via the meeting point.
 export type AssociatedData = Map<string, unknown>;
 
-export type SessionState = CreateKeyState | JoinKeyState;
+// Aliases for sign session states.
+export type CreateSignState = CreateKeyState;
+export type JoinSignState = JoinKeyState;
+
+export type SessionState = CreateKeyState | JoinKeyState | CreateSignState | JoinSignState;
 
 // Information about a meeting point.
 export type MeetingInfo = {
