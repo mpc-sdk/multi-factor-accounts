@@ -6,7 +6,9 @@ import {
   KeyringRequest,
 } from "@metamask/keyring-api";
 
-import { Wallet, PrivateKey } from "@/lib/types";
+import { Json } from '@metamask/utils';
+
+import { Wallet, PrivateKey, PendingRequest } from "@/lib/types";
 
 const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum);
 
@@ -44,6 +46,17 @@ export async function getRequest(id: string): Promise<KeyringRequest | null> {
 export async function rejectRequest(id: string): Promise<void> {
   const client = getKeyringClient();
   return await client.rejectRequest(id);
+}
+
+export async function getPendingRequest(id: string): Promise<PendingRequest | null> {
+  const client = getKeyringClient();
+  const request = await client.getRequest(id);
+  if (request) {
+    const address = (request.request.params as Json[])[0].from;
+    const account = await getAccountByAddress(address);
+    return { request, account };
+  }
+  return null;
 }
 
 export async function deleteKeyShare(

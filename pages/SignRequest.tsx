@@ -1,35 +1,56 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { formatEther, TransactionLike } from 'ethers';
 
-import { KeyringRequest } from "@metamask/keyring-api";
+import { KeyringAccount, KeyringRequest } from "@metamask/keyring-api";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 import Loader from "@/components/Loader";
 import Link from "@/components/Link";
-import Heading, { SubHeading } from "@/components/Heading";
+import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
 import TransactionPreview, { TransactionFromPreview } from "@/components/TransactionPreview";
 import NotFound from "@/pages/NotFound";
 
 import guard from "@/lib/guard";
-import { getPendingRequest, rejectRequest } from "@/lib/keyring";
+import { getAccountByAddress, getPendingRequest, rejectRequest } from "@/lib/keyring";
 import { getChainName } from "@/lib/utils";
-import use from "@/lib/react-use";
 import { PendingRequest} from "@/lib/types";
+import use from "@/lib/react-use";
 
-function ApproveRequestContent({ children }: { children: React.ReactNode }) {
+function SignRequestContent({ children }: { children: React.ReactNode }) {
   return (
     <>
-      <Heading>Approve Transaction</Heading>
+      <Heading>Sign Transaction</Heading>
       {children}
     </>
   );
 }
 
-function ApproveRequestBody({ resource }: { resource: Promise<PendingRequest | null> }) {
+function ListAccountShares({account}: { account: KeyringAccount }) {
+    return <div className="rounded-md border">
+      {account.options.shares.map((keyShareId: string, index: number) => {
+        return (
+          <div
+            key={index}
+            className="[&:not(:last-child)]:border-b flex p-4 items-center justify-between"
+          >
+            <div className="flex space-x-4">
+              <div className="border-r pr-4">{index + 1}</div>
+              <div>Share {keyShareId}</div>
+            </div>
+            <div className="flex space-x-4">
+              <Button>Choose</Button>
+            </div>
+          </div>
+        );
+      })}
+    </div>;
+}
+
+function SignRequestBody({ resource }: { resource: Promise<PendingRequest | null> }) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const result = use(resource);
@@ -48,23 +69,24 @@ function ApproveRequestBody({ resource }: { resource: Promise<PendingRequest | n
 
   const method = pendingRequest.request && pendingRequest.request.method;
   if (method !== "eth_signTransaction") {
-    return <ApproveRequestContent>
+    return <SignRequestContent>
       <div className="flex flex-col space-y-6 mt-12">
         <p>Signing method {method} is not supported</p>
       </div>
-    </ApproveRequestContent>
+    </SignRequestContent>
   }
 
   const transactionData = pendingRequest.request.params[0] || null;
   if (!transactionData) {
-    return <ApproveRequestContent>
+    return <SignRequestContent>
       <div className="flex flex-col space-y-6 mt-12">
         <p>Invalid transaction data.</p>
       </div>
-    </ApproveRequestContent>
+    </SignRequestContent>
   }
 
   const tx = transactionData as TransactionLike;
+
   const chainName = getChainName(tx.chainId);
   const Badges = () => (
     <div className="flex justify-between items-center mt-2">
@@ -73,25 +95,18 @@ function ApproveRequestBody({ resource }: { resource: Promise<PendingRequest | n
   );
 
   return (
-    <ApproveRequestContent>
+    <SignRequestContent>
       <Badges />
       <div className="flex flex-col space-y-6 mt-12">
         <KeyAlert
-          title="Approve request"
-          description="Approve the transaction to continue"
+          title="Sign request"
+          description="Choose a key share to continue"
         />
         <TransactionFromPreview tx={tx} account={account} />
         <TransactionPreview tx={tx} />
-        <div className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={() => rejectPendingRequest(pendingRequest.id)}>Reject</Button>
-          <Link href={`/sign/${pendingRequest.id}`}>
-            <Button>Approve</Button>
-          </Link>
-        </div>
+        <ListAccountShares account={account} />
       </div>
-    </ApproveRequestContent>
+    </SignRequestContent>
   );
 }
 
@@ -99,12 +114,12 @@ function LoadRequest({ requestId }: { requestId: string }) {
   const resource = getPendingRequest(requestId);
   return (
     <Suspense fallback={<Loader text="Loading signing request..." />}>
-      <ApproveRequestBody resource={resource} />
+      <SignRequestBody resource={resource} />
     </Suspense>
   );
 }
 
-export default function ApproveRequest() {
+export default function SignRequest() {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { requestId } = useParams();

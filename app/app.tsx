@@ -9,6 +9,7 @@ import Account from "@/pages/Account";
 import CreateKey from "@/pages/CreateKey";
 import JoinKey from "@/pages/JoinKey";
 import ApproveRequest from "@/pages/ApproveRequest";
+import SignRequest from "@/pages/SignRequest";
 import NoMetaMask from "@/pages/NoMetaMask";
 import InstallSnap from "@/pages/InstallSnap";
 
@@ -25,24 +26,6 @@ import { getSnap } from "@/lib/snap";
 type WorkerMessage = {
   data: { ready: boolean };
 };
-
-/*
-  <Route path="/keys/create" element={<Create />} />
-  <Route path="/keys/import" element={<Import />} />
-  <Route path="/keys/join/:groupId/:sessionId" element={<Join />} />
-  <Route path="/keys/:address" element={<ShowKey />} />
-  <Route path="/keys" element={<Keys />} />
-  <Route path="/keys/:address/sign/message" element={<Message />} />
-  <Route
-    path="/keys/:address/sign/join/:signingType/:groupId/:sessionId"
-    element={<JoinSignSession />}
-  />
-  <Route
-    path="/keys/:address/sign/transaction"
-    element={<Transaction />}
-  />
-  <Route path="*" element={<NotFound />} />
-*/
 
 function Content() {
   return (
@@ -77,6 +60,11 @@ function Content() {
       <Route path="/approve/:requestId" element={
         <BroadcastProvider>
           <ApproveRequest />
+        </BroadcastProvider>
+      } />
+      <Route path="/sign/:requestId" element={
+        <BroadcastProvider>
+          <SignRequest />
         </BroadcastProvider>
       } />
       <Route path="*" element={<NotFound />} />

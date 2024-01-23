@@ -57,7 +57,7 @@ function RequestsView({ resource }: { resource: Promise<KeyringRequest[]> }) {
               <Button
                 variant="outline"
                 onClick={() => rejectPendingRequest(pendingRequest.id)}>Reject</Button>
-              <Link to={`/accounts/${tx.from}/approve/${pendingRequest.id}`}>
+              <Link to={`/sign/${pendingRequest.id}`}>
                 <Button>Approve</Button>
               </Link>
             </div>
