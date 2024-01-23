@@ -225,7 +225,8 @@ export class ThresholdKeyring implements Keyring {
       pending: true,
       redirect: {
         url: dappUrl,
-        message: "Redirecting to multi-factor accounts snap to sign transaction",
+        message:
+          "Redirecting to multi-factor accounts snap to sign transaction",
       },
     };
   }

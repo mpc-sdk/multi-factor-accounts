@@ -39,13 +39,13 @@ export default function KeyShareNameForm({
   className,
   showLabel,
 }: {
-  back?: React.ReactNode
-  onNext: (name: string) => void
-  nameAlert?: React.ReactNode
-  submit?: React.ReactNode
-  initialValue?: string
-  className?: string
-  showLabel?: boolean
+  back?: React.ReactNode;
+  onNext: (name: string) => void;
+  nameAlert?: React.ReactNode;
+  submit?: React.ReactNode;
+  initialValue?: string;
+  className?: string;
+  showLabel?: boolean;
 }) {
   const FormSchema = z.object({
     keyName: z.string({

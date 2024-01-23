@@ -33,16 +33,22 @@ function Content() {
   return (
     <Routes>
       <Route path="/about" element={<About />} />
-      <Route path="/keys/create" element={
-        <BroadcastProvider>
-          <CreateKey />
-        </BroadcastProvider>
-      } />
-      <Route path="/keys/join/:meetingId/:userId" element={
-        <BroadcastProvider>
-          <JoinKey />
-        </BroadcastProvider>
-      } />
+      <Route
+        path="/keys/create"
+        element={
+          <BroadcastProvider>
+            <CreateKey />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/keys/join/:meetingId/:userId"
+        element={
+          <BroadcastProvider>
+            <JoinKey />
+          </BroadcastProvider>
+        }
+      />
       <Route
         path="/"
         element={
@@ -59,26 +65,38 @@ function Content() {
           </BroadcastProvider>
         }
       />
-      <Route path="/approve/:requestId" element={
-        <BroadcastProvider>
-          <ApproveRequest />
-        </BroadcastProvider>
-      } />
-      <Route path="/sign/:requestId" element={
-        <BroadcastProvider>
-          <SignRequest />
-        </BroadcastProvider>
-      } />
-      <Route path="/sign/create/:requestId/:shareId" element={
-        <BroadcastProvider>
-          <CreateSign />
-        </BroadcastProvider>
-      } />
-      <Route path="/sign/join/:meetingId/:userId" element={
-        <BroadcastProvider>
-          <JoinSign />
-        </BroadcastProvider>
-      } />
+      <Route
+        path="/approve/:requestId"
+        element={
+          <BroadcastProvider>
+            <ApproveRequest />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/sign/:requestId"
+        element={
+          <BroadcastProvider>
+            <SignRequest />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/sign/create/:requestId/:shareId"
+        element={
+          <BroadcastProvider>
+            <CreateSign />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/sign/join/:meetingId/:userId"
+        element={
+          <BroadcastProvider>
+            <JoinSign />
+          </BroadcastProvider>
+        }
+      />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

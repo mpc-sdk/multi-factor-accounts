@@ -75,7 +75,11 @@ export type AssociatedData = Map<string, unknown>;
 export type CreateSignState = CreateKeyState;
 export type JoinSignState = JoinKeyState;
 
-export type SessionState = CreateKeyState | JoinKeyState | CreateSignState | JoinSignState;
+export type SessionState =
+  | CreateKeyState
+  | JoinKeyState
+  | CreateSignState
+  | JoinSignState;
 
 // Information about a meeting point.
 export type MeetingInfo = {

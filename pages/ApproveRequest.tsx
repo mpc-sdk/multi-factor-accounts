@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { formatEther, TransactionLike } from 'ethers';
+import { formatEther, TransactionLike } from "ethers";
 
 import { KeyringRequest } from "@metamask/keyring-api";
 import { useToast } from "@/components/ui/use-toast";
@@ -11,14 +11,16 @@ import Loader from "@/components/Loader";
 import Link from "@/components/Link";
 import Heading, { SubHeading } from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
-import TransactionPreview, { TransactionFromPreview } from "@/components/TransactionPreview";
+import TransactionPreview, {
+  TransactionFromPreview,
+} from "@/components/TransactionPreview";
 import NotFound from "@/pages/NotFound";
 
 import guard from "@/lib/guard";
 import { getPendingRequest, rejectRequest } from "@/lib/keyring";
 import { getChainName } from "@/lib/utils";
 import use from "@/lib/react-use";
-import { PendingRequest} from "@/lib/types";
+import { PendingRequest } from "@/lib/types";
 
 function ApproveRequestContent({ children }: { children: React.ReactNode }) {
   return (
@@ -29,7 +31,11 @@ function ApproveRequestContent({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ApproveRequestBody({ resource }: { resource: Promise<PendingRequest | null> }) {
+function ApproveRequestBody({
+  resource,
+}: {
+  resource: Promise<PendingRequest | null>;
+}) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const result = use(resource);
@@ -48,20 +54,24 @@ function ApproveRequestBody({ resource }: { resource: Promise<PendingRequest | n
 
   const method = pendingRequest.request && pendingRequest.request.method;
   if (method !== "eth_signTransaction") {
-    return <ApproveRequestContent>
-      <div className="flex flex-col space-y-6 mt-12">
-        <p>Signing method {method} is not supported</p>
-      </div>
-    </ApproveRequestContent>
+    return (
+      <ApproveRequestContent>
+        <div className="flex flex-col space-y-6 mt-12">
+          <p>Signing method {method} is not supported</p>
+        </div>
+      </ApproveRequestContent>
+    );
   }
 
   const transactionData = pendingRequest.request.params[0] || null;
   if (!transactionData) {
-    return <ApproveRequestContent>
-      <div className="flex flex-col space-y-6 mt-12">
-        <p>Invalid transaction data.</p>
-      </div>
-    </ApproveRequestContent>
+    return (
+      <ApproveRequestContent>
+        <div className="flex flex-col space-y-6 mt-12">
+          <p>Invalid transaction data.</p>
+        </div>
+      </ApproveRequestContent>
+    );
   }
 
   const tx = transactionData as TransactionLike;
@@ -85,7 +95,10 @@ function ApproveRequestBody({ resource }: { resource: Promise<PendingRequest | n
         <div className="flex justify-between">
           <Button
             variant="outline"
-            onClick={() => rejectPendingRequest(pendingRequest.id)}>Reject</Button>
+            onClick={() => rejectPendingRequest(pendingRequest.id)}
+          >
+            Reject
+          </Button>
           <Link href={`/sign/${pendingRequest.id}`}>
             <Button>Approve</Button>
           </Link>

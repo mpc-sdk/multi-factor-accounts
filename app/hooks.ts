@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import {MetaMaskContext} from "@/app/providers/metamask";
+import { MetaMaskContext } from "@/app/providers/metamask";
 
 // Get the balance of an address from MetaMask.
 export function useBalance(address: string) {
@@ -11,6 +11,6 @@ export function useBalance(address: string) {
       setBalance(_balance);
     };
     loadBalance();
-  }, [])
+  }, []);
   return balance;
 }

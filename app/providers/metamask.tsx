@@ -1,5 +1,5 @@
 import type { Dispatch, ReactNode, Reducer } from "react";
-import { BrowserProvider } from 'ethers';
+import { BrowserProvider } from "ethers";
 import React, { createContext, useEffect, useReducer } from "react";
 
 import { getSnap, Snap } from "@/lib/snap";

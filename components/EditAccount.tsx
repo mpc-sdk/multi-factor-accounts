@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -16,7 +16,13 @@ import Icons from "@/components/Icons";
 
 import KeyShareNameForm from "@/forms/KeyShareName";
 
-export default function EditAccount({initialValue, onUpdate}: {initialValue: string, onUpdate: (value: string) => Promise<void>}) {
+export default function EditAccount({
+  initialValue,
+  onUpdate,
+}: {
+  initialValue: string;
+  onUpdate: (value: string) => Promise<void>;
+}) {
   const [open, setOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
 
@@ -48,11 +54,12 @@ export default function EditAccount({initialValue, onUpdate}: {initialValue: str
               <AlertDialogFooter>
                 <AlertDialogCancel>Cancel</AlertDialogCancel>
                 <Button type="submit" disabled={updating}>
-                  {updating && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
+                  {updating && (
+                    <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                  )}
                   Update
                 </Button>
               </AlertDialogFooter>
-
             }
             onNext={onSubmit}
           />

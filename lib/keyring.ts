@@ -6,7 +6,7 @@ import {
   KeyringRequest,
 } from "@metamask/keyring-api";
 
-import { Json } from '@metamask/utils';
+import { Json } from "@metamask/utils";
 
 import { Wallet, PrivateKey, PendingRequest } from "@/lib/types";
 
@@ -48,7 +48,9 @@ export async function rejectRequest(id: string): Promise<void> {
   return await client.rejectRequest(id);
 }
 
-export async function getPendingRequest(id: string): Promise<PendingRequest | null> {
+export async function getPendingRequest(
+  id: string,
+): Promise<PendingRequest | null> {
   const client = getKeyringClient();
   const request = await client.getRequest(id);
   if (request) {

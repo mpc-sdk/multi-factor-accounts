@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { formatEther, TransactionLike } from 'ethers';
+import { formatEther, TransactionLike } from "ethers";
 
 import { KeyringAccount, KeyringRequest } from "@metamask/keyring-api";
 import { useToast } from "@/components/ui/use-toast";
@@ -11,13 +11,19 @@ import Loader from "@/components/Loader";
 import Link from "@/components/Link";
 import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
-import TransactionPreview, { TransactionFromPreview } from "@/components/TransactionPreview";
+import TransactionPreview, {
+  TransactionFromPreview,
+} from "@/components/TransactionPreview";
 import NotFound from "@/pages/NotFound";
 
 import guard from "@/lib/guard";
-import { getAccountByAddress, getPendingRequest, rejectRequest } from "@/lib/keyring";
+import {
+  getAccountByAddress,
+  getPendingRequest,
+  rejectRequest,
+} from "@/lib/keyring";
 import { getChainName } from "@/lib/utils";
-import { PendingRequest} from "@/lib/types";
+import { PendingRequest } from "@/lib/types";
 import use from "@/lib/react-use";
 
 function SignRequestContent({ children }: { children: React.ReactNode }) {
@@ -29,8 +35,15 @@ function SignRequestContent({ children }: { children: React.ReactNode }) {
   );
 }
 
-function ListAccountShares({request, account}: { request: KeyringRequest, account: KeyringAccount }) {
-    return <div className="rounded-md border">
+function ListAccountShares({
+  request,
+  account,
+}: {
+  request: KeyringRequest;
+  account: KeyringAccount;
+}) {
+  return (
+    <div className="rounded-md border">
       {account.options.shares.map((keyShareId: string, index: number) => {
         return (
           <div
@@ -49,10 +62,15 @@ function ListAccountShares({request, account}: { request: KeyringRequest, accoun
           </div>
         );
       })}
-    </div>;
+    </div>
+  );
 }
 
-function SignRequestBody({ resource }: { resource: Promise<PendingRequest | null> }) {
+function SignRequestBody({
+  resource,
+}: {
+  resource: Promise<PendingRequest | null>;
+}) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const result = use(resource);
@@ -71,24 +89,27 @@ function SignRequestBody({ resource }: { resource: Promise<PendingRequest | null
 
   const method = pendingRequest.request && pendingRequest.request.method;
   if (method !== "eth_signTransaction") {
-    return <SignRequestContent>
-      <div className="flex flex-col space-y-6 mt-12">
-        <p>Signing method {method} is not supported</p>
-      </div>
-    </SignRequestContent>
+    return (
+      <SignRequestContent>
+        <div className="flex flex-col space-y-6 mt-12">
+          <p>Signing method {method} is not supported</p>
+        </div>
+      </SignRequestContent>
+    );
   }
 
   const transactionData = pendingRequest.request.params[0] || null;
   if (!transactionData) {
-    return <SignRequestContent>
-      <div className="flex flex-col space-y-6 mt-12">
-        <p>Invalid transaction data.</p>
-      </div>
-    </SignRequestContent>
+    return (
+      <SignRequestContent>
+        <div className="flex flex-col space-y-6 mt-12">
+          <p>Invalid transaction data.</p>
+        </div>
+      </SignRequestContent>
+    );
   }
 
   const tx = transactionData as TransactionLike;
-
   const chainName = getChainName(tx.chainId);
   const Badges = () => (
     <div className="flex justify-between items-center mt-2">
