@@ -135,8 +135,8 @@ export type SignatureRecId = {
 export type SignPrimitive = {
   // For ECDSA should be `secp256k1`.
   curve: string;
-  // Array of bytes for the value, length will be 32.
-  scalar: number[];
+  // Hex-encoded bytes.
+  scalar: string;
 };
 
 // Result of signing a message.
