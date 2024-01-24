@@ -48,6 +48,30 @@ function JoinSignContent({ children }: { children: React.ReactNode }) {
   );
 }
 
+function SigningCompleted({
+  account,
+  tx,
+  badges,
+}: {
+  account: KeyringAccount;
+  tx: TransactionLike;
+  badges: React.ReactNode;
+}) {
+  return (
+    <JoinSignContent>
+      {badges}
+      <div className="flex flex-col space-y-6 mt-12">
+        <KeyAlert
+          title="Transaction Signed"
+          description="The transaction has been signed, the initiator must submit the transaction for processing."
+        />
+        <TransactionFromPreview account={account} tx={tx} />
+        <TransactionPreview tx={tx} />
+      </div>
+    </JoinSignContent>
+  );
+}
+
 function ReviewTransaction({
   account,
   tx,
@@ -94,10 +118,19 @@ function JoinSignWithAccount({
 }) {
   const { toast } = useToast();
   const [approved, setApproved] = useState(false);
+  const [signature, setSignature] = useState(null);
   const account = use(resource);
   if (!account) {
     return <NotFound />;
   }
+
+  if (signature !== null) {
+    return <SigningCompleted
+      account={account}
+      tx={tx}
+      badges={badges} />;
+  }
+
   const shares = account.options.shares as string[];
   const remainingShares = shares.filter((shareId: string) => shareId !== initiatorKeyShareId);
 
@@ -131,7 +164,7 @@ function JoinSignWithAccount({
         transaction,
       );
 
-      console.log("signature", signature);
+      setSignature(signature);
     }, toast);
   };
 
@@ -233,7 +266,7 @@ export default function JoinSign() {
       <KeyBadge
         name={name}
         parties={signData && (signData.get("parties") as number)}
-        threshold={signData && (signData.get("threshold") as number)}
+        threshold={signData && (signData.get("threshold") as number + 1)}
       />
       <PublicKeyBadge publicKey={publicKey} />
     </div>

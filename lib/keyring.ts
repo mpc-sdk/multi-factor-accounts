@@ -1,4 +1,5 @@
 import { defaultSnapId as snapId } from "@/lib/snap";
+import { TransactionLike } from 'ethers';
 import {
   KeyringAccount,
   KeyringSnapRpcClient,
@@ -7,8 +8,7 @@ import {
 } from "@metamask/keyring-api";
 
 import { Json } from "@metamask/utils";
-
-import { Wallet, PrivateKey, PendingRequest, PendingRequestWithKeyShare } from "@/lib/types";
+import { Wallet, PrivateKey, PendingRequest } from "@/lib/types";
 
 const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum);
 
@@ -54,7 +54,8 @@ export async function getPendingRequest(
   const client = getKeyringClient();
   const request = await client.getRequest(id);
   if (request) {
-    const address = (request.request.params as Json[])[0].from;
+    const tx = (request.request.params as Json[])[0] as TransactionLike;
+    const address = tx.from;
     const account = await getAccountByAddress(address);
     return { request, account };
   }

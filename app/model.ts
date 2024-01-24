@@ -146,6 +146,14 @@ export type Signature = {
   address: string;
 };
 
+export type ProtocolSignature = {
+  gg20: Signature;
+};
+
+export type ProtocolLocalKey = {
+  gg20: LocalKey;
+};
+
 /*
 // Key share with a human-friendly label.
 export type NamedKeyShare = {

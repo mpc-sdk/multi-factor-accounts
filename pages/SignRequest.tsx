@@ -42,9 +42,10 @@ function ListAccountShares({
   request: KeyringRequest;
   account: KeyringAccount;
 }) {
+  const shares = account.options.shares as string[];
   return (
     <div className="rounded-md border">
-      {account.options.shares.map((keyShareId: string, index: number) => {
+      {shares.map((keyShareId: string, index: number) => {
         return (
           <div
             key={index}

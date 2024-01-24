@@ -26,7 +26,7 @@ import {
   rejectRequest,
   getWalletByAddress,
 } from "@/lib/keyring";
-import { getChainName, encodeTransactionToHash } from "@/lib/utils";
+import { getChainName, encodeTransactionToHash, encodeSignedTransaction } from "@/lib/utils";
 import { PendingRequest } from "@/lib/types";
 import { sign, WebassemblyWorker } from "@/lib/client";
 import use from "@/lib/react-use";
@@ -38,6 +38,7 @@ import {
   OwnerType,
   SessionType,
   SessionState,
+  Signature,
 } from "@/app/model";
 
 function CreateSignContent({ children }: { children: React.ReactNode }) {
@@ -47,6 +48,38 @@ function CreateSignContent({ children }: { children: React.ReactNode }) {
       {children}
     </>
   );
+}
+
+function CompleteTransaction({
+  account,
+  tx,
+  transaction,
+  signature,
+  badges,
+}: {
+  account: KeyringAccount;
+  tx: TransactionLike;
+  transaction: string;
+  signature: Signature;
+  badges: React.ReactNode;
+}) {
+  const signedTransaction = encodeSignedTransaction(tx, signature);
+  console.log("raw transaction", signedTransaction.serialized);
+
+  return <CreateSignContent>
+    {badges}
+    <div className="flex flex-col space-y-6 mt-12">
+      <KeyAlert
+        title="Transaction Signed"
+        description="To complete the transaction submit it to the blockchain."
+      />
+      <TransactionFromPreview tx={tx} account={account} />
+      <TransactionPreview tx={tx} />
+      <div className="flex justify-end">
+        <Button>Submit Transaction</Button>
+      </div>
+    </div>
+  </CreateSignContent>;
 }
 
 function CreateSignBody({
@@ -59,9 +92,14 @@ function CreateSignBody({
   const { toast } = useToast();
   const navigate = useNavigate();
   const keypair = useContext(KeypairContext);
+  const [signature, setSignature] = useState(null);
   const result = use(resource);
 
   const { request: pendingRequest, account } = result;
+  const method = pendingRequest.request && pendingRequest.request.method;
+  const transactionData = pendingRequest.request.params[0] || null;
+  const tx = transactionData as TransactionLike;
+  const transaction = encodeTransactionToHash(tx);
 
   const [createSignState, setCreateSignState] = useState<CreateSignState>({
     ownerType: OwnerType.initiator,
@@ -82,7 +120,23 @@ function CreateSignBody({
     return <NotFound />;
   }
 
-  const method = pendingRequest.request && pendingRequest.request.method;
+  const chainName = getChainName(tx.chainId);
+  const Badges = () => (
+    <div className="flex justify-between items-center mt-2">
+      {chainName && <Badge>{chainName}</Badge>}
+    </div>
+  );
+
+  if (signature !== null) {
+    return <CompleteTransaction
+      account={account}
+      tx={tx}
+      transaction={transaction}
+      signature={signature}
+      badges={<Badges />}
+    />
+  }
+
   if (method !== "eth_signTransaction") {
     return (
       <CreateSignContent>
@@ -93,7 +147,6 @@ function CreateSignBody({
     );
   }
 
-  const transactionData = pendingRequest.request.params[0] || null;
   if (!transactionData) {
     return (
       <CreateSignContent>
@@ -104,24 +157,13 @@ function CreateSignBody({
     );
   }
 
-  const tx = transactionData as TransactionLike;
-  const transaction = encodeTransactionToHash(tx);
-
-  const chainName = getChainName(tx.chainId);
-  const Badges = () => (
-    <div className="flex justify-between items-center mt-2">
-      {chainName && <Badge>{chainName}</Badge>}
-    </div>
-  );
-
   /*
         <TransactionFromPreview tx={tx} account={account} />
         <TransactionPreview tx={tx} />
   */
 
   const startSigning = async (worker: WebassemblyWorker, serverUrl: string) => {
-    console.log("Start sign transaction (initiator)..");
-
+    console.log("Start sign transaction (initiator)", transaction);
     await guard(async () => {
       // Public keys includes all members of the meeting but when
       // we initiate key generation the participants list should not
@@ -148,6 +190,7 @@ function CreateSignBody({
       );
 
       console.log("signature", signature);
+      setSignature(signature);
     }, toast);
   };
 

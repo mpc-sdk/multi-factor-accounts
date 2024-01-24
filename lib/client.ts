@@ -8,6 +8,8 @@ import {
   MeetingOptions,
   KeyShare,
   Signature,
+  ProtocolSignature,
+  ProtocolLocalKey,
 } from "@/app/model";
 
 import { PrivateKey, Parameters, LocalKey } from "@/lib/types";
@@ -43,9 +45,9 @@ export type WebassemblyWorker = {
   sign: (
     options: SignOptions,
     publicKeys: PublicKeys,
-    signingKey: LocalKey,
+    signingKey: ProtocolLocalKey,
     message: string,
-  ) => Promise<Signature>;
+  ) => Promise<ProtocolSignature>;
 };
 
 // Convert from a ws: (or wss:) protocol to http: or https:.
@@ -172,10 +174,12 @@ export async function sign(
     parameters: signingKey.parameters,
   };
 
-  return await worker.sign(
+  const result = await worker.sign(
     options,
     participants,
     { gg20: signingKey.privateKey},
     message,
   );
+
+  return result.gg20;
 }

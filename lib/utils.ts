@@ -1,10 +1,13 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { toBeHex, keccak256, TransactionLike, Transaction } from "ethers";
+import { hexlify, toBeHex, keccak256, TransactionLike, Transaction, Signature, SignatureLike } from "ethers";
 import { ToasterToast } from "@/components/ui/use-toast";
 import { RawKey, rawKey } from "@/lib/schemas";
+import { Signature as WasmSignature } from '@/app/model';
 import { KeyShares, PrivateKey, ProtocolId } from "@/lib/types";
 import { fromZodError } from "zod-validation-error";
+
+//f1b44b9ef629cd581c8ab767e1819d59a317f2b9c430cefbe462a8cad3bc49fe
 
 export function encodeTransactionToHash(tx: TransactionLike): string {
   const o = { ...tx };
@@ -14,6 +17,31 @@ export function encodeTransactionToHash(tx: TransactionLike): string {
   // Note that when we send the transaction digest to webassembly
   // it must not contain the leading 0x hex prefix
   return keccak256(transaction.unsignedSerialized).replace(/^0x/, '');
+}
+
+export function encodeSignedTransaction(tx: TransactionLike, result: WasmSignature): Transaction {
+  const o = { ...tx };
+  delete o.from;
+  delete o.type;
+  const transaction = Transaction.from(o);
+
+  console.log(typeof(result.signature.r.scalar));
+  console.log(typeof(result.signature.s.scalar));
+
+  const r = `0x${result.signature.r.scalar}`;
+  const s = `0x${result.signature.s.scalar}`;
+
+  const signature: SignatureLike = {
+    r,
+    s,
+    v: 27 + result.signature.recid,
+  };
+
+  console.log("converted signature", signature);
+
+  transaction.signature = signature;
+
+  return transaction;
 }
 
 // Utility for merging class names.
