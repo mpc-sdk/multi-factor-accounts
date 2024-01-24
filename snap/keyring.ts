@@ -235,11 +235,8 @@ export class ThresholdKeyring implements Keyring {
     const { request } =
       this.#state.pendingRequests[id] ??
       throwError(`Request '${id}' not found`);
-
-    const result = "TODO: handle request data";
-
     await this.#removePendingRequest(id);
-    await this.#emitEvent(KeyringEvent.RequestApproved, { id, result });
+    await this.#emitEvent(KeyringEvent.RequestApproved, { id, result: {} });
   }
 
   async rejectRequest(id: string): Promise<void> {

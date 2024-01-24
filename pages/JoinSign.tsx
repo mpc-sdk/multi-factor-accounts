@@ -31,10 +31,7 @@ import NotFound from "@/pages/NotFound";
 
 import guard from "@/lib/guard";
 import use from "@/lib/react-use";
-import {
-  getAccountByAddress,
-  getWalletByAddress,
-} from "@/lib/keyring";
+import { getAccountByAddress, getWalletByAddress } from "@/lib/keyring";
 import { sign, WebassemblyWorker } from "@/lib/client";
 import { PrivateKey } from "@/lib/types";
 import { encodeTransactionToHash } from "@/lib/utils";
@@ -125,14 +122,13 @@ function JoinSignWithAccount({
   }
 
   if (signature !== null) {
-    return <SigningCompleted
-      account={account}
-      tx={tx}
-      badges={badges} />;
+    return <SigningCompleted account={account} tx={tx} badges={badges} />;
   }
 
   const shares = account.options.shares as string[];
-  const remainingShares = shares.filter((shareId: string) => shareId !== initiatorKeyShareId);
+  const remainingShares = shares.filter(
+    (shareId: string) => shareId !== initiatorKeyShareId,
+  );
 
   // TODO: when remainingShares.length > 1 let the use pick
   // TODO: which share to use after clicking "Approve Transaction"
@@ -144,7 +140,6 @@ function JoinSignWithAccount({
   const startSigning = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start signing (participant)..");
     await guard(async () => {
-
       // Find the key share to use
       const wallet = await getWalletByAddress(account.address);
       if (!wallet) {
@@ -153,7 +148,8 @@ function JoinSignWithAccount({
       const signingKey = wallet.privateKey[shareId];
       if (!signingKey) {
         throw new Error(
-          `signing key not found for ${account.address} with key share id ${shareId}`);
+          `signing key not found for ${account.address} with key share id ${shareId}`,
+        );
       }
 
       const signature = await sign(
@@ -232,8 +228,7 @@ export default function JoinSign() {
   const tx =
     signData && (Object.fromEntries(signData.get("tx")) as TransactionLike);
   // Digest to sign computed by the initiator
-  const transaction =
-    signData && (signData.get("transaction") as string);
+  const transaction = signData && (signData.get("transaction") as string);
   const initiatorKeyShareId =
     signData && (signData.get("initiatorKeyShareId") as string);
 
@@ -251,7 +246,8 @@ export default function JoinSign() {
   const encodedTransaction = encodeTransactionToHash(tx);
   if (transaction && tx && encodedTransaction !== transaction) {
     throw new Error(
-      "transaction mismatch, hash does not match transaction data");
+      "transaction mismatch, hash does not match transaction data",
+    );
   }
 
   const session: SessionState = {
@@ -266,7 +262,7 @@ export default function JoinSign() {
       <KeyBadge
         name={name}
         parties={signData && (signData.get("parties") as number)}
-        threshold={signData && (signData.get("threshold") as number + 1)}
+        threshold={signData && (signData.get("threshold") as number) + 1}
       />
       <PublicKeyBadge publicKey={publicKey} />
     </div>

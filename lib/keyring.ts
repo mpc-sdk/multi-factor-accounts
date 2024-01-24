@@ -1,5 +1,5 @@
 import { defaultSnapId as snapId } from "@/lib/snap";
-import { TransactionLike } from 'ethers';
+import { TransactionLike } from "ethers";
 import {
   KeyringAccount,
   KeyringSnapRpcClient,
@@ -46,6 +46,11 @@ export async function getRequest(id: string): Promise<KeyringRequest | null> {
 export async function rejectRequest(id: string): Promise<void> {
   const client = getKeyringClient();
   return await client.rejectRequest(id);
+}
+
+export async function approveRequest(id: string): Promise<void> {
+  const client = getKeyringClient();
+  return await client.approveRequest(id);
 }
 
 export async function getPendingRequest(

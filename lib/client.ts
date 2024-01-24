@@ -36,9 +36,7 @@ export type WebassemblyWorker = {
   ) => Promise<[string[], unknown]>;
 
   // Perform DKG.
-  keygen: (
-    options: KeygenOptions,
-    publicKeys: PublicKeys) => Promise<KeyShare>;
+  keygen: (options: KeygenOptions, publicKeys: PublicKeys) => Promise<KeyShare>;
   // Sign a message.
   //
   // The message must be a hex-encoded 32 byte array.
@@ -177,7 +175,7 @@ export async function sign(
   const result = await worker.sign(
     options,
     participants,
-    { gg20: signingKey.privateKey},
+    { gg20: signingKey.privateKey },
     message,
   );
 

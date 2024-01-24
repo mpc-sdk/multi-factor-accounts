@@ -25,8 +25,13 @@ import {
   getPendingRequest,
   rejectRequest,
   getWalletByAddress,
+  approveRequest,
 } from "@/lib/keyring";
-import { getChainName, encodeTransactionToHash, encodeSignedTransaction } from "@/lib/utils";
+import {
+  getChainName,
+  encodeTransactionToHash,
+  encodeSignedTransaction,
+} from "@/lib/utils";
 import { PendingRequest } from "@/lib/types";
 import { sign, WebassemblyWorker } from "@/lib/client";
 import use from "@/lib/react-use";
@@ -51,42 +56,73 @@ function CreateSignContent({ children }: { children: React.ReactNode }) {
 }
 
 function CompleteTransaction({
+  requestId,
   account,
   tx,
   transaction,
   signature,
   badges,
 }: {
+  requestId: string;
   account: KeyringAccount;
   tx: TransactionLike;
   transaction: string;
   signature: Signature;
   badges: React.ReactNode;
 }) {
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const signedTransaction = encodeSignedTransaction(tx, signature);
-  console.log("raw transaction", signedTransaction.serialized);
+  //console.log("raw transaction", signedTransaction.serialized);
 
-  return <CreateSignContent>
-    {badges}
-    <div className="flex flex-col space-y-6 mt-12">
-      <KeyAlert
-        title="Transaction Signed"
-        description="To complete the transaction submit it to the blockchain."
-      />
-      <TransactionFromPreview tx={tx} account={account} />
-      <TransactionPreview tx={tx} />
-      <div className="flex justify-end">
-        <Button>Submit Transaction</Button>
+  const submitTransaction = async () => {
+    await guard(async () => {
+      const txHash = (await window.ethereum.request({
+        method: "eth_sendRawTransaction",
+        params: [signedTransaction.serialized],
+      })) as string;
+
+      console.log("submitted transaction hash", txHash);
+
+      if (txHash) {
+        // Approve the request to remove from the pending requests
+        await approveRequest(requestId);
+        // Confirm
+        toast({
+          title: "Transaction confirmed",
+          description: `Tx Hash: ${txHash}`,
+        });
+
+        navigate(`/accounts/${account.address}`);
+      }
+    }, toast);
+  };
+
+  return (
+    <CreateSignContent>
+      {badges}
+      <div className="flex flex-col space-y-6 mt-12">
+        <KeyAlert
+          title="Transaction Signed"
+          description="To complete the transaction submit it to the blockchain."
+        />
+        <TransactionFromPreview tx={tx} account={account} />
+        <TransactionPreview tx={tx} />
+        <div className="flex justify-end">
+          <Button onClick={submitTransaction}>Submit Transaction</Button>
+        </div>
       </div>
-    </div>
-  </CreateSignContent>;
+    </CreateSignContent>
+  );
 }
 
 function CreateSignBody({
   resource,
+  requestId,
   shareId,
 }: {
   resource: Promise<PendingRequest | null>;
+  requestId: string;
   shareId: string;
 }) {
   const { toast } = useToast();
@@ -128,13 +164,16 @@ function CreateSignBody({
   );
 
   if (signature !== null) {
-    return <CompleteTransaction
-      account={account}
-      tx={tx}
-      transaction={transaction}
-      signature={signature}
-      badges={<Badges />}
-    />
+    return (
+      <CompleteTransaction
+        requestId={requestId}
+        account={account}
+        tx={tx}
+        transaction={transaction}
+        signature={signature}
+        badges={<Badges />}
+      />
+    );
   }
 
   if (method !== "eth_signTransaction") {
@@ -178,7 +217,8 @@ function CreateSignBody({
       const signingKey = wallet.privateKey[shareId];
       if (!signingKey) {
         throw new Error(
-          `signing key not found for ${account.address} with key share id ${shareId}`);
+          `signing key not found for ${account.address} with key share id ${shareId}`,
+        );
       }
 
       const signature = await sign(
@@ -236,7 +276,11 @@ function LoadRequest({
   const resource = getPendingRequest(requestId);
   return (
     <Suspense fallback={<Loader text="Loading signing request..." />}>
-      <CreateSignBody resource={resource} shareId={shareId} />
+      <CreateSignBody
+        resource={resource}
+        requestId={requestId}
+        shareId={shareId}
+      />
     </Suspense>
   );
 }
