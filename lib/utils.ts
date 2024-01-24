@@ -11,7 +11,9 @@ export function encodeTransactionToHash(tx: TransactionLike): string {
   delete o.from;
   delete o.type;
   const transaction = Transaction.from(o);
-  return keccak256(transaction.unsignedSerialized);
+  // Note that when we send the transaction digest to webassembly
+  // it must not contain the leading 0x hex prefix
+  return keccak256(transaction.unsignedSerialized).replace(/^0x/, '');
 }
 
 // Utility for merging class names.

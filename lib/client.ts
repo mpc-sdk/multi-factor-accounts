@@ -175,7 +175,7 @@ export async function sign(
   return await worker.sign(
     options,
     participants,
-    signingKey.privateKey,
+    { gg20: signingKey.privateKey},
     message,
   );
 }
