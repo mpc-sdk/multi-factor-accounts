@@ -4,7 +4,7 @@ import { Dictionary } from "@/lib/utils";
 import type { KeyringAccount, KeyringRequest } from "@metamask/keyring-api";
 
 import { PrivateKey } from "@/lib/schemas";
-export { Parameters, PrivateKey } from "@/lib/schemas";
+export { Parameters, PrivateKey, LocalKey } from "@/lib/schemas";
 
 export type PendingRequest = {
   request: KeyringRequest;

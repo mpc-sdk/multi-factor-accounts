@@ -1,8 +1,9 @@
-import React, { Suspense, useEffect, useState, useState } from "react";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { formatEther, TransactionLike } from "ethers";
-
 import { KeyringAccount, KeyringRequest } from "@metamask/keyring-api";
+
+import { KeypairContext } from "@/app/providers/keypair";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,15 +19,16 @@ import TransactionPreview, {
   TransactionFromPreview,
 } from "@/components/TransactionPreview";
 import NotFound from "@/pages/NotFound";
-
 import guard from "@/lib/guard";
 import {
   getAccountByAddress,
   getPendingRequest,
   rejectRequest,
+  getWalletByAddress,
 } from "@/lib/keyring";
-import { getChainName } from "@/lib/utils";
+import { getChainName, encodeTransactionToHash } from "@/lib/utils";
 import { PendingRequest } from "@/lib/types";
+import { sign, WebassemblyWorker } from "@/lib/client";
 import use from "@/lib/react-use";
 
 import {
@@ -56,7 +58,9 @@ function CreateSignBody({
 }) {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const keypair = useContext(KeypairContext);
   const result = use(resource);
+
   const { request: pendingRequest, account } = result;
 
   const [createSignState, setCreateSignState] = useState<CreateSignState>({
@@ -68,6 +72,11 @@ function CreateSignBody({
     threshold: account.options.parameters.threshold,
   });
   const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
+
+  if (keypair === null) {
+    return null;
+  }
+  const { publicKey } = keypair;
 
   if (!pendingRequest || !account) {
     return <NotFound />;
@@ -96,6 +105,7 @@ function CreateSignBody({
   }
 
   const tx = transactionData as TransactionLike;
+  const transaction = encodeTransactionToHash(tx);
 
   const chainName = getChainName(tx.chainId);
   const Badges = () => (
@@ -112,28 +122,33 @@ function CreateSignBody({
   const startSigning = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start sign transaction (initiator)..");
 
-    /*
     await guard(async () => {
       // Public keys includes all members of the meeting but when
       // we initiate key generation the participants list should not
       // include the public key of the initiator
       const participants = publicKeys.filter((key) => key !== publicKey);
 
-      const keyShare = await keygen(
+      // Find the key share to use
+      const wallet = await getWalletByAddress(account.address);
+      if (!wallet) {
+        throw new Error(`wallet not found for ${account.address}`);
+      }
+      const signingKey = wallet.privateKey[shareId];
+      if (!signingKey) {
+        throw new Error(
+          `signing key not found for ${account.address} with key share id ${shareId}`);
+      }
+
+      const signature = await sign(
         worker,
         serverUrl,
-        {
-          parties: createKeyState.parties,
-          // Threshold is human-friendly but for the protocol
-          // we need to cross the threshold hence the -1
-          threshold: createKeyState.threshold - 1,
-        },
         participants,
+        signingKey,
+        transaction,
       );
 
-      setKeyShare(convertRawKey(keyShare));
+      console.log("signature", signature);
     }, toast);
-    */
   };
 
   if (publicKeys !== null) {
@@ -161,7 +176,7 @@ function CreateSignBody({
           linkPrefix="sign"
           session={createSignState as SessionState}
           onMeetingPointReady={(keys) => setPublicKeys(keys)}
-          extraParams={{ tx, initiatorKeyShareId: shareId }}
+          extraParams={{ tx, initiatorKeyShareId: shareId, transaction }}
         />
       </div>
     </CreateSignContent>

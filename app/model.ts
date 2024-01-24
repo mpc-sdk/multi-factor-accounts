@@ -1,5 +1,5 @@
 //import { Transaction, TransactionReceiptParams } from "ethers";
-import { Parameters } from "@/lib/types";
+import { Parameters, LocalKey } from "@/lib/types";
 
 // Noise protocol key information.
 export type Keypair = {
@@ -18,6 +18,13 @@ export enum Protocol {
 }
 
 export type KeygenOptions = {
+  server: ServerOptions;
+  protocol: Protocol;
+  keypair: string;
+  parameters: Parameters;
+};
+
+export type SignOptions = {
   server: ServerOptions;
   protocol: Protocol;
   keypair: string;
@@ -106,6 +113,7 @@ export type KeyShare = {
   address: string;
 };
 
+/*
 // Opaque type for the private key share.
 export type LocalKey = {
   // Index of the key share.
@@ -115,9 +123,10 @@ export type LocalKey = {
   // Total number of parties.
   n: number;
 };
+*/
 
 // Result of signing a message.
-export type SignResult = {
+export type SignatureRecId = {
   r: SignPrimitive;
   s: SignPrimitive;
   recid: number;
@@ -128,6 +137,13 @@ export type SignPrimitive = {
   curve: string;
   // Array of bytes for the value, length will be 32.
   scalar: number[];
+};
+
+// Result of signing a message.
+export type Signature = {
+  signature: SignatureRecId;
+  publicKey: number[];
+  address: string;
 };
 
 /*

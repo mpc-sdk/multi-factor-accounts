@@ -31,9 +31,13 @@ import NotFound from "@/pages/NotFound";
 
 import guard from "@/lib/guard";
 import use from "@/lib/react-use";
-import { getAccountByAddress } from "@/lib/keyring";
+import {
+  getAccountByAddress,
+  getWalletByAddress,
+} from "@/lib/keyring";
 import { sign, WebassemblyWorker } from "@/lib/client";
 import { PrivateKey } from "@/lib/types";
+import { encodeTransactionToHash } from "@/lib/utils";
 
 function JoinSignContent({ children }: { children: React.ReactNode }) {
   return (
@@ -86,38 +90,54 @@ function JoinSignWithAccount({
   badges: React.ReactNode;
   initiatorKeyShareId: string;
 }) {
+  const { toast } = useToast();
   const [approved, setApproved] = useState(false);
   const account = use(resource);
   if (!account) {
     return <NotFound />;
   }
+  const shares = account.options.shares as string[];
+  const remainingShares = shares.filter((shareId: string) => shareId !== initiatorKeyShareId);
+
+  // TODO: when remainingShares.length > 1 let the use pick
+  // TODO: which share to use after clicking "Approve Transaction"
+
+  //console.log("shares", shares);
+  //console.log("remainingShares", remainingShares);
+  const shareId = remainingShares[0];
 
   const startSigning = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start signing (participant)..");
 
-    /*
     await guard(async () => {
-      const keyShare = await keygen(
+
+      // Find the key share to use
+      const wallet = await getWalletByAddress(account.address);
+      if (!wallet) {
+        throw new Error(`wallet not found for ${account.address}`);
+      }
+      const signingKey = wallet.privateKey[shareId];
+      if (!signingKey) {
+        throw new Error(
+          `signing key not found for ${account.address} with key share id ${shareId}`);
+      }
+
+      const signature = await sign(
         worker,
         serverUrl,
-        {
-          parties: signData.get("parties") as number,
-          // Threshold is human-friendly but for the protocol
-          // we need to cross the threshold hence the -1
-          threshold: (signData.get("threshold") as number) - 1,
-        },
         null, // Participants MUST be null when joining
+        signingKey,
+        transaction,
       );
 
-      setKeyShare(convertRawKey(keyShare));
+      console.log("signature", signature);
     }, toast);
-    */
   };
 
   if (approved) {
     return (
       <JoinSignContent>
-        <Badges />
+        {badges}
         <SessionRunner
           loaderText="Signing transaction..."
           message={<CreateSignAlert />}
@@ -171,8 +191,12 @@ export default function JoinSign() {
   const { meetingId, userId } = useParams();
   const [searchParams] = useSearchParams();
   const name = searchParams.get("name");
+  // Transaction data to show to the user
   const tx =
     signData && (Object.fromEntries(signData.get("tx")) as TransactionLike);
+  // Digest to sign computed by the initiator
+  const transaction =
+    signData && (signData.get("transaction") as string);
   const initiatorKeyShareId =
     signData && (signData.get("initiatorKeyShareId") as string);
 
@@ -183,6 +207,18 @@ export default function JoinSign() {
 
   if (!meetingId || !userId || !name) {
     return <NotFound />;
+  }
+
+  // Check the transaction data matches the transaction hash that
+  // the initiator sent.
+  const encodedTransaction = encodeTransactionToHash(tx);
+
+  console.log("transaction", transaction);
+  console.log("encoded", encodedTransaction);
+
+  if (transaction && tx && encodedTransaction !== transaction) {
+    throw new Error(
+      "transaction mismatch, hash does not match transaction data");
   }
 
   const session: SessionState = {

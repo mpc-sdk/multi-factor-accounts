@@ -1,10 +1,18 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { toBeHex } from "ethers";
+import { toBeHex, keccak256, TransactionLike, Transaction } from "ethers";
 import { ToasterToast } from "@/components/ui/use-toast";
 import { RawKey, rawKey } from "@/lib/schemas";
 import { KeyShares, PrivateKey, ProtocolId } from "@/lib/types";
 import { fromZodError } from "zod-validation-error";
+
+export function encodeTransactionToHash(tx: TransactionLike): string {
+  const o = { ...tx };
+  delete o.from;
+  delete o.type;
+  const transaction = Transaction.from(o);
+  return keccak256(transaction.unsignedSerialized);
+}
 
 // Utility for merging class names.
 export function cn(...inputs: ClassValue[]) {

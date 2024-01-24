@@ -8,7 +8,7 @@ import {
 
 import { Json } from "@metamask/utils";
 
-import { Wallet, PrivateKey, PendingRequest } from "@/lib/types";
+import { Wallet, PrivateKey, PendingRequest, PendingRequestWithKeyShare } from "@/lib/types";
 
 const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum);
 
