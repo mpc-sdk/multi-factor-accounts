@@ -79,12 +79,14 @@ function ReviewTransaction({
 
 function JoinSignWithAccount({
   tx,
+  transaction,
   resource,
   publicKeys,
   badges,
   initiatorKeyShareId,
 }: {
   tx: TransactionLike;
+  transaction: string;
   resource: Promise<KeyringAccount | null>;
   publicKeys: PublicKeys;
   badges: React.ReactNode;
@@ -108,7 +110,6 @@ function JoinSignWithAccount({
 
   const startSigning = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start signing (participant)..");
-
     await guard(async () => {
 
       // Find the key share to use
@@ -159,11 +160,13 @@ function JoinSignWithAccount({
 
 function JoinSignLoadAccount({
   tx,
+  transaction,
   publicKeys,
   badges,
   initiatorKeyShareId,
 }: {
   tx: TransactionLike;
+  transaction: string;
   publicKeys: PublicKeys;
   badges: React.ReactNode;
   initiatorKeyShareId: string;
@@ -173,6 +176,7 @@ function JoinSignLoadAccount({
     <Suspense fallback={<Loader text="Loading account..." />}>
       <JoinSignWithAccount
         tx={tx}
+        transaction={transaction}
         resource={resource}
         publicKeys={publicKeys}
         badges={badges}
@@ -212,10 +216,6 @@ export default function JoinSign() {
   // Check the transaction data matches the transaction hash that
   // the initiator sent.
   const encodedTransaction = encodeTransactionToHash(tx);
-
-  console.log("transaction", transaction);
-  console.log("encoded", encodedTransaction);
-
   if (transaction && tx && encodedTransaction !== transaction) {
     throw new Error(
       "transaction mismatch, hash does not match transaction data");
@@ -243,6 +243,7 @@ export default function JoinSign() {
     return (
       <JoinSignLoadAccount
         tx={tx}
+        transaction={transaction}
         publicKeys={publicKeys}
         badges={<Badges />}
         initiatorKeyShareId={initiatorKeyShareId}
