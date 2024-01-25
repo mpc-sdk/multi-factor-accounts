@@ -1,16 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 import Heading from "@/components/Heading";
-import Paragraph from "@/components/Paragraph";
 import Icons from "@/components/Icons";
 import ServerUrlForm from "@/forms/ServerUrl";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import serverUrl from "@/lib/server-url";
+import { useServerUrl } from "@/app/hooks";
+import { fetchServerPublicKey } from "@/lib/client";
+import guard from "@/lib/guard";
 
 export default function Settings() {
-  const defaultServerUrl = serverUrl;
+  const { toast } = useToast();
+  const [serverUrl, setServerUrl] = useServerUrl();
+  const [serverInfo, setServerInfo] = useState(null);
+
+  const submit =
+    serverInfo === null ? (
+      <Button type="submit">Verify</Button>
+    ) : (
+      <Button type="submit">Save</Button>
+    );
+
+  const onReset = () => {
+    setServerInfo(null);
+  };
+
+  const back = (
+    <Button type="reset" variant="outline" onClick={onReset}>
+      Reset
+    </Button>
+  );
+
   return (
     <>
       <Heading>Settings</Heading>
@@ -24,11 +46,25 @@ export default function Settings() {
           </AlertDescription>
         </Alert>
         <ServerUrlForm
-          initialValue={defaultServerUrl}
-          onNext={(url) => {
-            console.log("url", url);
+          initialValue={serverUrl}
+          serverInfo={serverInfo}
+          onNext={async (url) => {
+            await guard(async () => {
+              if (serverInfo == null) {
+                const remoteServerInfo = await fetchServerPublicKey(url, true);
+                setServerInfo(remoteServerInfo);
+              } else {
+                setServerInfo(null);
+                setServerUrl(url);
+                toast({
+                  title: "Saved",
+                  description: "Relay server URL saved",
+                });
+              }
+            }, toast);
           }}
-          submit={<Button type="submit">Save</Button>}
+          back={back}
+          submit={submit}
         />
       </div>
     </>

@@ -19,18 +19,18 @@ export default function ServerUrlForm({
   submit,
   initialValue,
   className,
-  showLabel,
+  serverInfo,
 }: {
   back?: React.ReactNode;
   onNext: (name: string) => void;
   submit?: React.ReactNode;
   initialValue?: string;
   className?: string;
-  showLabel?: boolean;
+  serverInfo?: { serverPublicKey: string };
 }) {
   const FormSchema = z.object({
     url: z.string({
-      required_error: "You need enter a URL for the server.",
+      required_error: "You need to enter a URL for the server.",
     }),
   });
 
@@ -45,6 +45,7 @@ export default function ServerUrlForm({
     onNext(data.url);
   }
 
+  const disabled = serverInfo !== null;
   return (
     <div className={className}>
       <Form {...form}>
@@ -54,14 +55,29 @@ export default function ServerUrlForm({
             name="url"
             render={({ field }) => (
               <FormItem>
-                {showLabel && <FormLabel>Key name</FormLabel>}
                 <FormControl>
-                  <Input required placeholder="Server URL" {...field} />
+                  <Input
+                    {...field}
+                    required
+                    disabled={disabled}
+                    placeholder="Server URL"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {serverInfo && (
+            <div className="flex flex-col rounded-md border p-4 space-y-2">
+              <div>Public key</div>
+              <div className="text-sm">
+                Only save this server if you trust the public key shown below.
+              </div>
+              <div className="font-mono text-xs">
+                {serverInfo.serverPublicKey}
+              </div>
+            </div>
+          )}
           <div
             className={`flex ${
               back == null ? "justify-end" : "justify-between"
