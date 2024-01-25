@@ -13,6 +13,7 @@ import {
   KeyShareAudience,
   MeetingInfo,
   SessionState,
+  SessionType,
   OwnerType,
   JoinMeeting,
 } from "@/app/model";
@@ -29,11 +30,13 @@ import {
 } from "@/lib/utils";
 
 function Invitations({
+  session,
   meetingInfo,
   audience,
   inviteParams,
   linkPrefix,
 }: {
+  session: SessionState;
   meetingInfo: MeetingInfo;
   audience: KeyShareAudience;
   inviteParams?: Dictionary<string>;
@@ -44,7 +47,9 @@ function Invitations({
     await copyWithToast(value, toast);
   };
 
-  const participants = meetingInfo.identifiers.slice(1);
+  const participants = session.sessionType === SessionType.keygen
+    ? meetingInfo.identifiers.slice(1)
+    : meetingInfo.identifiers.slice(1, session.threshold + 1);
   return (
     <div className="rounded-md border">
       {participants.map((userId, index) => {
@@ -117,11 +122,16 @@ export default function MeetingPoint({
     };
 
     const createMeetingPoint = async () => {
-      const { parties } = session as CreateKeyState;
+      const { sessionType, parties, threshold } = session as CreateKeyState;
       const identifiers: string[] = [];
 
+      // Number of identifiers which are the slots for a meeting point
+      const numIdentifiers = sessionType === SessionType.keygen
+        ? parties
+        : threshold + 1;
+
       /* eslint-disable @typescript-eslint/no-unused-vars */
-      for (let i = 0; i < parties; i++) {
+      for (let i = 0; i < numIdentifiers; i++) {
         const value = uuidv4();
         const hash = await digest(value);
         identifiers.push(hash);
@@ -177,6 +187,7 @@ export default function MeetingPoint({
       <div className="flex flex-col space-y-6">
         <Loader text="Waiting for everybody to join..." />
         <Invitations
+          session={session}
           linkPrefix={linkPrefix}
           meetingInfo={meetingInfo}
           inviteParams={{

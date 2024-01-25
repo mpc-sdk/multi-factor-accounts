@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { KeypairContext } from "@/app/providers/keypair";
 import Heading from "@/components/Heading";
 import Loader from "@/components/Loader";
+import ChooseKeyShare from "@/components/ChooseKeyShare";
 import KeyAlert from "@/components/KeyAlert";
 import CreateSignAlert from "@/components/CreateSignAlert";
 import TransactionPreview, {
@@ -73,13 +74,23 @@ function ReviewTransaction({
   account,
   tx,
   badges,
+  remainingShares,
   onApproved,
 }: {
   account: KeyringAccount;
   tx: TransactionLike;
   badges: React.ReactNode;
-  onApproved: () => void;
+  remainingShares: string[];
+  onApproved: (shareId: string) => void;
 }) {
+  const button = remainingShares.length === 1
+    ? <Button onClick={() => onApproved(remainingShares[0])}>Approve Transaction</Button>
+    : <ChooseKeyShare
+        account={account}
+        shares={remainingShares}
+        onConfirm={onApproved}
+        button={<Button>Approve Transaction</Button>} />
+
   return (
     <JoinSignContent>
       {badges}
@@ -91,7 +102,7 @@ function ReviewTransaction({
         <TransactionFromPreview account={account} tx={tx} />
         <TransactionPreview tx={tx} />
         <div className="flex justify-end">
-          <Button onClick={onApproved}>Approve Transaction</Button>
+          {button}
         </div>
       </div>
     </JoinSignContent>
@@ -114,7 +125,7 @@ function JoinSignWithAccount({
   initiatorKeyShareId: string;
 }) {
   const { toast } = useToast();
-  const [approved, setApproved] = useState(false);
+  const [shareId, setShareId] = useState(null);
   const [signature, setSignature] = useState(null);
   const account = use(resource);
   if (!account) {
@@ -129,13 +140,6 @@ function JoinSignWithAccount({
   const remainingShares = shares.filter(
     (shareId: string) => shareId !== initiatorKeyShareId,
   );
-
-  // TODO: when remainingShares.length > 1 let the use pick
-  // TODO: which share to use after clicking "Approve Transaction"
-
-  //console.log("shares", shares);
-  //console.log("remainingShares", remainingShares);
-  const shareId = remainingShares[0];
 
   const startSigning = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start signing (participant)..");
@@ -164,7 +168,7 @@ function JoinSignWithAccount({
     }, toast);
   };
 
-  if (approved) {
+  if (shareId !== null) {
     return (
       <JoinSignContent>
         {badges}
@@ -182,7 +186,8 @@ function JoinSignWithAccount({
       account={account}
       tx={tx}
       badges={badges}
-      onApproved={() => setApproved(true)}
+      remainingShares={remainingShares}
+      onApproved={(shareId) => setShareId(shareId)}
     />
   );
 }
