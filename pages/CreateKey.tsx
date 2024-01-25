@@ -242,6 +242,7 @@ export default function CreateKey() {
             description="Share links to invite participants to join this key, each link may only be used once. Send the links using your favorite messaging or email app, when everyone joins we can continue."
           />
           <MeetingPoint
+            linkPrefix="keys"
             session={createKeyState as SessionState}
             onMeetingPointReady={(keys) => setPublicKeys(keys)}
           />

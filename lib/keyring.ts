@@ -1,11 +1,15 @@
 import { defaultSnapId as snapId } from "@/lib/snap";
+import { TransactionLike } from "ethers";
+import { Json } from '@metamask/utils';
 import {
   KeyringAccount,
   KeyringSnapRpcClient,
   KeyringAccountData,
+  KeyringRequest,
 } from "@metamask/keyring-api";
 
-import { Wallet, PrivateKey } from "@/lib/types";
+import { JsonTx } from "@ethereumjs/tx";
+import { Wallet, PrivateKey, PendingRequest } from "@/lib/types";
 
 const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum);
 
@@ -30,6 +34,35 @@ export async function updateAccount(account: KeyringAccount): Promise<void> {
   return await client.updateAccount(account);
 }
 
+export async function listRequests(): Promise<KeyringRequest[]> {
+  const client = getKeyringClient();
+  return await client.listRequests();
+}
+
+export async function getRequest(id: string): Promise<KeyringRequest | null> {
+  const client = getKeyringClient();
+  return await client.getRequest(id);
+}
+
+export async function rejectRequest(id: string): Promise<void> {
+  const client = getKeyringClient();
+  return await client.rejectRequest(id);
+}
+
+export async function getPendingRequest(
+  id: string,
+): Promise<PendingRequest | null> {
+  const client = getKeyringClient();
+  const request = await client.getRequest(id);
+  if (request) {
+    const tx = (request.request.params as Json[])[0] as TransactionLike;
+    const address = tx.from;
+    const account = await getAccountByAddress(address);
+    return { request, account };
+  }
+  return null;
+}
+
 export async function deleteKeyShare(
   id: string,
   keyShareId: string,
@@ -49,6 +82,19 @@ export async function deleteKeyShare(
 export async function exportAccount(id: string): Promise<KeyringAccountData> {
   const client = getKeyringClient();
   return await client.exportAccount(id);
+}
+
+export async function approveTransaction(id: string, result: JsonTx): Promise<void> {
+  await ethereum.request({
+    method: "wallet_invokeSnap",
+    params: {
+      snapId,
+      request: {
+        method: "snap.internal.approveTransaction",
+        params: { id, result },
+      },
+    },
+  });
 }
 
 export async function getAccountByAddress(

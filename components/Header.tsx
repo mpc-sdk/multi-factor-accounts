@@ -15,17 +15,17 @@ import {
 const components: { title: string; href: string; description: string }[] = [
   {
     title: "Accounts",
-    href: "/#/",
+    href: "/",
     description: "View your multi-factor accounts and their key shares.",
   },
   {
     title: "About",
-    href: "/#/about",
+    href: "/about",
     description: "Learn more about how multi-factor accounts work.",
   },
   {
     title: "Create",
-    href: "/#/keys/create",
+    href: "/keys/create",
     description:
       "Create a new multi-factor account using distributed key generation.",
   },
@@ -50,7 +50,7 @@ export default function Header() {
   return (
     <header className="fixed z-20 w-full border-b bg-background py-4">
       <div className="flex justify-between px-4 md:px-6 xl:px-8">
-        <Link href="#/" className="">
+        <Link href="/" className="">
           <span className="flex items-center">
             <Logo />
             <h3 className="ml-4 font-semibold tracking-tight">

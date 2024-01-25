@@ -5,7 +5,6 @@ import type {
   KeyringRequest,
   SubmitRequestResponse,
 } from "@metamask/keyring-api";
-
 import {
   EthAccountType,
   EthMethod,
@@ -107,8 +106,8 @@ export class ThresholdKeyring implements Keyring {
               options,
               address,
               methods: [
-                EthMethod.PersonalSign,
-                EthMethod.Sign,
+                //EthMethod.PersonalSign,
+                //EthMethod.Sign,
                 EthMethod.SignTransaction,
                 //EthMethod.SignTypedDataV1,
                 //EthMethod.SignTypedDataV3,
@@ -212,38 +211,35 @@ export class ThresholdKeyring implements Keyring {
     return Object.values(this.#state.pendingRequests);
   }
 
-  async getRequest(id: string): Promise<KeyringRequest> {
-    return (
-      this.#state.pendingRequests[id] ?? throwError(`Request '${id}' not found`)
-    );
+  async getRequest(id: string): Promise<KeyringRequest | null> {
+    return this.#state.pendingRequests[id] ?? null;
   }
 
   async submitRequest(request: KeyringRequest): Promise<SubmitRequestResponse> {
     this.#state.pendingRequests[request.id] = request;
     await this.#saveState();
-    const dappUrl = this.#getCurrentUrl();
+    const dappUrl = this.#getCurrentUrl(request.id);
+
     return {
       pending: true,
       redirect: {
         url: dappUrl,
-        message: "Redirecting to Snap Simple Keyring to sign transaction",
+        message:
+          "Redirecting to multi-factor accounts snap to sign transaction",
       },
     };
   }
 
-  async approveRequest(id: string): Promise<void> {
+  async approveTransaction(id: string, result: Json): Promise<void> {
     const { request } =
       this.#state.pendingRequests[id] ??
       throwError(`Request '${id}' not found`);
-
-    //const result = this.#handleSigningRequest(
-    //request.method,
-    //request.params ?? [],
-    //);
-    const result = "TODO: handle request data";
-
     await this.#removePendingRequest(id);
     await this.#emitEvent(KeyringEvent.RequestApproved, { id, result });
+  }
+
+  async approveRequest(id: string): Promise<void> {
+    throw new Error("not implemented, use approveTransaction() instead");
   }
 
   async rejectRequest(id: string): Promise<void> {
@@ -260,7 +256,7 @@ export class ThresholdKeyring implements Keyring {
     await this.#saveState();
   }
 
-  #getCurrentUrl(): string {
+  #getCurrentUrl(id: string): string {
     const dappUrlPrefix =
       process.env.NODE_ENV === "production"
         ? process.env.DAPP_ORIGIN_PRODUCTION
@@ -274,9 +270,7 @@ export class ThresholdKeyring implements Keyring {
     }
     */
 
-    // Default URL if dappUrlPrefix or dappVersion are falsy,
-    // or if URL construction fails
-    return dappUrlPrefix as string;
+    return `${dappUrlPrefix}/approve/${id}`;
   }
 
   async exportAccount(id: string): Promise<KeyringAccountData> {

@@ -9,7 +9,7 @@ export default function NotFound() {
       <Heading>Page not found</Heading>
       <Paragraph>
         We could not find the page you are looking for please{" "}
-        <Link href="/#">start from the home page</Link>.
+        <Link href="/">start from the home page</Link>.
       </Paragraph>
     </>
   );

@@ -8,6 +8,10 @@ import Accounts from "@/pages/Accounts";
 import Account from "@/pages/Account";
 import CreateKey from "@/pages/CreateKey";
 import JoinKey from "@/pages/JoinKey";
+import ApproveRequest from "@/pages/ApproveRequest";
+import SignRequest from "@/pages/SignRequest";
+import CreateSign from "@/pages/CreateSign";
+import JoinSign from "@/pages/JoinSign";
 import NoMetaMask from "@/pages/NoMetaMask";
 import InstallSnap from "@/pages/InstallSnap";
 
@@ -25,30 +29,26 @@ type WorkerMessage = {
   data: { ready: boolean };
 };
 
-/*
-  <Route path="/keys/create" element={<Create />} />
-  <Route path="/keys/import" element={<Import />} />
-  <Route path="/keys/join/:groupId/:sessionId" element={<Join />} />
-  <Route path="/keys/:address" element={<ShowKey />} />
-  <Route path="/keys" element={<Keys />} />
-  <Route path="/keys/:address/sign/message" element={<Message />} />
-  <Route
-    path="/keys/:address/sign/join/:signingType/:groupId/:sessionId"
-    element={<JoinSignSession />}
-  />
-  <Route
-    path="/keys/:address/sign/transaction"
-    element={<Transaction />}
-  />
-  <Route path="*" element={<NotFound />} />
-*/
-
 function Content() {
   return (
     <Routes>
       <Route path="/about" element={<About />} />
-      <Route path="/keys/create" element={<CreateKey />} />
-      <Route path="/keys/join/:meetingId/:userId" element={<JoinKey />} />
+      <Route
+        path="/keys/create"
+        element={
+          <BroadcastProvider>
+            <CreateKey />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/keys/join/:meetingId/:userId"
+        element={
+          <BroadcastProvider>
+            <JoinKey />
+          </BroadcastProvider>
+        }
+      />
       <Route
         path="/"
         element={
@@ -62,6 +62,38 @@ function Content() {
         element={
           <BroadcastProvider>
             <Account />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/approve/:requestId"
+        element={
+          <BroadcastProvider>
+            <ApproveRequest />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/sign/:requestId"
+        element={
+          <BroadcastProvider>
+            <SignRequest />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/sign/create/:requestId/:shareId"
+        element={
+          <BroadcastProvider>
+            <CreateSign />
+          </BroadcastProvider>
+        }
+      />
+      <Route
+        path="/sign/join/:meetingId/:userId"
+        element={
+          <BroadcastProvider>
+            <JoinSign />
           </BroadcastProvider>
         }
       />

@@ -1,9 +1,12 @@
 import React, { Suspense, useContext } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { KeyringAccount } from "@metamask/keyring-api";
+import { KeyringAccount, KeyringRequest } from "@metamask/keyring-api";
+import { formatEther, TransactionLike } from "ethers";
+import type { Json } from "@metamask/utils";
 
-import Heading from "@/components/Heading";
+import { useToast } from "@/components/ui/use-toast";
+import Heading, { SubHeading } from "@/components/Heading";
 import Icons from "@/components/Icons";
 import KeyAlert from "@/components/KeyAlert";
 import ChainBadge from "@/components/ChainBadge";
@@ -13,8 +16,75 @@ import AddressBadge from "@/components/AddressBadge";
 import SharesBadge from "@/components/SharesBadge";
 
 import { BroadcastContext } from "@/app/providers/broadcast";
-import { listAccounts } from "@/lib/keyring";
+import { listAccounts, listRequests, rejectRequest } from "@/lib/keyring";
+import { abbreviateAddress } from "@/lib/utils";
+import guard from "@/lib/guard";
 import use from "@/lib/react-use";
+
+function RequestsView({ resource }: { resource: Promise<KeyringRequest[]> }) {
+  const { invalidate } = useContext(BroadcastContext);
+  const requests = use(resource);
+  const { toast } = useToast();
+
+  const rejectPendingRequest = async (id: string) => {
+    await guard(async () => {
+      await rejectRequest(id);
+      invalidate();
+    }, toast);
+  };
+
+  if (requests.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mt-12">
+      <SubHeading>Requests</SubHeading>
+      <div className="mt-4 border rounded-md">
+        {requests.map((pendingRequest: KeyringRequest) => {
+          const tx = (
+            pendingRequest.request.params as Json[]
+          )[0] as TransactionLike;
+
+          return (
+            <div
+              key={pendingRequest.id}
+              className="flex justify-between p-4 items-center"
+            >
+              <div className="flex flex-col">
+                <div>
+                  Send {formatEther(tx.value)} ETH from{" "}
+                  {abbreviateAddress(tx.from)}
+                </div>
+                <div>to {tx.to}</div>
+              </div>
+              <div className="flex justify-end space-x-4">
+                <Button
+                  variant="outline"
+                  onClick={() => rejectPendingRequest(pendingRequest.id)}
+                >
+                  Reject
+                </Button>
+                <Link to={`/sign/${pendingRequest.id}`}>
+                  <Button>Approve</Button>
+                </Link>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function PendingRequests() {
+  const resource = listRequests();
+  return (
+    <Suspense fallback={<Loader text="Loading pending requests..." />}>
+      <RequestsView resource={resource} />
+    </Suspense>
+  );
+}
 
 function AccountsContent({
   children,
@@ -98,6 +168,7 @@ function AccountsView({ resource }: { resource: Promise<KeyringAccount[]> }) {
           );
         })}
       </div>
+      <PendingRequests />
     </AccountsContent>
   );
   return null;

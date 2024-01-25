@@ -2,6 +2,7 @@ import {
   MethodNotSupportedError,
   handleKeyringRequest,
 } from "@metamask/keyring-api";
+import { Json } from '@metamask/utils';
 import type {
   OnKeyringRequestHandler,
   OnRpcRequestHandler,
@@ -49,24 +50,31 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   // Handle custom methods.
   switch (request.method) {
     case InternalMethod.GetAccountByAddress: {
-      const address = (request.params as Record<string, unknown>)
-        .address as string;
+      const params = request.params as Record<string, unknown>;
+      const address = params.address as string;
       const keyring = await getKeyring();
       const wallet = await keyring.findWalletByAddress(address);
       return wallet?.account;
     }
     case InternalMethod.GetWalletByAddress: {
-      const address = (request.params as Record<string, unknown>)
-        .address as string;
+      const params = request.params as Record<string, unknown>;
+      const address = params.address as string;
       const keyring = await getKeyring();
       return await keyring.getWalletByAddress(address);
     }
     case InternalMethod.DeleteKeyShare: {
-      const id = (request.params as Record<string, unknown>).id as string;
-      const keyShareId = (request.params as Record<string, unknown>)
-        .keyShareId as string;
+      const params = request.params as Record<string, unknown>;
+      const id = params.id as string;
+      const keyShareId = params.keyShareId as string;
       const keyring = await getKeyring();
       return await keyring.deleteKeyShare(id, keyShareId);
+    }
+    case InternalMethod.ApproveTransaction: {
+      const params = request.params as Record<string, unknown>;
+      const id = params.id as string;
+      const result = params.result as Json;
+      const keyring = await getKeyring();
+      return await keyring.approveTransaction(id, result);
     }
     default: {
       throw new MethodNotSupportedError(request.method);

@@ -1,6 +1,9 @@
 import React, { Suspense, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import type { KeyringAccount } from "@metamask/keyring-api";
+
+import { formatEther } from "ethers";
+
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import Heading from "@/components/Heading";
@@ -16,6 +19,7 @@ import EditAccount from "@/components/EditAccount";
 
 import NotFound from "@/pages/NotFound";
 
+import { useBalance } from "@/app/hooks";
 import { getAccountByAddress, updateAccount } from "@/lib/keyring";
 import use from "@/lib/react-use";
 import guard from "@/lib/guard";
@@ -50,15 +54,9 @@ function AccountContent({
     <>
       <div>
         <div className="flex items-center justify-between space-x-6">
-          <Heading>
-            {accountName}
-          </Heading>
+          <Heading>{accountName}</Heading>
           <div className="flex space-x-4">
-
-            <EditAccount
-              initialValue={accountName}
-              onUpdate={onUpdateName}
-            />
+            <EditAccount initialValue={accountName} onUpdate={onUpdateName} />
 
             <ExportAccount
               account={account}
@@ -88,6 +86,9 @@ function AccountView({
 }) {
   const navigate = useNavigate();
   const account = use(resource);
+  const balance = useBalance(account.address);
+
+  if (balance === null) return;
 
   if (!account) {
     return <NotFound />;
@@ -109,6 +110,7 @@ function AccountView({
           <SharesBadge account={account} />
           <AddressBadge address={account.address} />
         </div>
+        <div className="border rounded-md p-4">{formatEther(balance)} ETH</div>
         <div className="rounded-md border">
           {account.options.shares.map((keyShareId: string, index: number) => {
             return (
@@ -137,7 +139,7 @@ function AccountView({
           })}
         </div>
 
-        <Link href="/#/">
+        <Link href="/">
           <Button variant="link">
             <Icons.back className="h-4 w-4 mr-2" />
             Back to accounts

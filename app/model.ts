@@ -1,5 +1,5 @@
 //import { Transaction, TransactionReceiptParams } from "ethers";
-import { Parameters } from "@/lib/types";
+import { Parameters, LocalKey } from "@/lib/types";
 
 // Noise protocol key information.
 export type Keypair = {
@@ -18,6 +18,13 @@ export enum Protocol {
 }
 
 export type KeygenOptions = {
+  server: ServerOptions;
+  protocol: Protocol;
+  keypair: string;
+  parameters: Parameters;
+};
+
+export type SignOptions = {
   server: ServerOptions;
   protocol: Protocol;
   keypair: string;
@@ -71,7 +78,15 @@ export type JoinKeyState = JoinMeeting & {
 // Associated data for a session passed via the meeting point.
 export type AssociatedData = Map<string, unknown>;
 
-export type SessionState = CreateKeyState | JoinKeyState;
+// Aliases for sign session states.
+export type CreateSignState = CreateKeyState;
+export type JoinSignState = JoinKeyState;
+
+export type SessionState =
+  | CreateKeyState
+  | JoinKeyState
+  | CreateSignState
+  | JoinSignState;
 
 // Information about a meeting point.
 export type MeetingInfo = {
@@ -98,6 +113,7 @@ export type KeyShare = {
   address: string;
 };
 
+/*
 // Opaque type for the private key share.
 export type LocalKey = {
   // Index of the key share.
@@ -107,9 +123,10 @@ export type LocalKey = {
   // Total number of parties.
   n: number;
 };
+*/
 
 // Result of signing a message.
-export type SignResult = {
+export type SignatureRecId = {
   r: SignPrimitive;
   s: SignPrimitive;
   recid: number;
@@ -118,8 +135,23 @@ export type SignResult = {
 export type SignPrimitive = {
   // For ECDSA should be `secp256k1`.
   curve: string;
-  // Array of bytes for the value, length will be 32.
-  scalar: number[];
+  // Hex-encoded bytes.
+  scalar: string;
+};
+
+// Result of signing a message.
+export type Signature = {
+  signature: SignatureRecId;
+  publicKey: number[];
+  address: string;
+};
+
+export type ProtocolSignature = {
+  gg20: Signature;
+};
+
+export type ProtocolLocalKey = {
+  gg20: LocalKey;
 };
 
 /*

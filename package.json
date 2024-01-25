@@ -19,11 +19,12 @@
     "clean": "rm -rf dist bundle .parcel-cache",
     "build": "yarn clean && yarn build:snap && yarn tailwind && webpack --config webpack.config.js --node-env production",
     "build:snap": "mm-snap build",
+    "build:snap-dev": "NODE_ENV=development mm-snap build",
     "types": "tsc --noEmit --project tsconfig.json",
     "fmt": "prettier --write . --no-color",
     "lint": "eslint app components forms lib pages",
     "check": "yarn types && yarn lint && yarn fmt",
-    "start": "yarn clean && yarn build:snap && yarn dev:assets && parcel app/index.html --port 7070",
+    "start": "yarn clean && yarn build:snap-dev && yarn dev:assets && parcel app/index.html --port 7070",
     "dev:assets": "mkdir -p dist && cp -r images snap.manifest.json bundle dist/",
     "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"
   },
@@ -55,6 +56,7 @@
     "webpack-dev-server": "4.15.1"
   },
   "dependencies": {
+    "@ethereumjs/tx": "^5.1.0",
     "@ethersproject/address": "^5.7.0",
     "@ethersproject/hash": "^5.7.0",
     "@hookform/resolvers": "^3.3.2",

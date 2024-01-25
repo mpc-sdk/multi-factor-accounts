@@ -2,13 +2,17 @@ import {
   Protocol,
   Keypair,
   KeygenOptions,
+  SignOptions,
   PublicKeys,
   ServerOptions,
   MeetingOptions,
   KeyShare,
+  Signature,
+  ProtocolSignature,
+  ProtocolLocalKey,
 } from "@/app/model";
 
-import { Parameters } from "@/lib/types";
+import { PrivateKey, Parameters, LocalKey } from "@/lib/types";
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;
@@ -30,7 +34,18 @@ export type WebassemblyWorker = {
     meetingId: string,
     userId: string,
   ) => Promise<[string[], unknown]>;
+
+  // Perform DKG.
   keygen: (options: KeygenOptions, publicKeys: PublicKeys) => Promise<KeyShare>;
+  // Sign a message.
+  //
+  // The message must be a hex-encoded 32 byte array.
+  sign: (
+    options: SignOptions,
+    publicKeys: PublicKeys,
+    signingKey: ProtocolLocalKey,
+    message: string,
+  ) => Promise<ProtocolSignature>;
 };
 
 // Convert from a ws: (or wss:) protocol to http: or https:.
@@ -134,4 +149,35 @@ export async function keygen(
     parameters,
   };
   return await worker.keygen(options, participants);
+}
+
+// Sign a hash.
+//
+// Only the initiator needs to submit the participant public keys,
+// participants joining do not need to specify the participants
+// and MUST pass null.
+export async function sign(
+  worker: WebassemblyWorker,
+  serverUrl: string,
+  participants: PublicKeys | null,
+  signingKey: PrivateKey,
+  message: string,
+): Promise<Signature> {
+  const server = await fetchServerPublicKey(serverUrl);
+  const keypair = await generateKeypair(worker);
+  const options: SignOptions = {
+    server,
+    keypair: keypair.pem,
+    protocol: Protocol.gg20,
+    parameters: signingKey.parameters,
+  };
+
+  const result = await worker.sign(
+    options,
+    participants,
+    { gg20: signingKey.privateKey },
+    message,
+  );
+
+  return result.gg20;
 }

@@ -32,10 +32,12 @@ function Invitations({
   meetingInfo,
   audience,
   inviteParams,
+  linkPrefix,
 }: {
   meetingInfo: MeetingInfo;
   audience: KeyShareAudience;
   inviteParams?: Dictionary<string>;
+  linkPrefix?: string;
 }) {
   const { toast } = useToast();
   const copyLink = async (value: string) => {
@@ -47,7 +49,7 @@ function Invitations({
     <div className="rounded-md border">
       {participants.map((userId, index) => {
         const url = inviteUrl(
-          "keys/join",
+          `${linkPrefix}/join`,
           meetingInfo.meetingId,
           userId,
           inviteParams,
@@ -87,9 +89,13 @@ function Invitations({
 export default function MeetingPoint({
   session,
   onMeetingPointReady,
+  linkPrefix,
+  extraParams,
 }: {
   session: SessionState;
   onMeetingPointReady: (publicKeys: string[], data: unknown) => void;
+  linkPrefix?: string;
+  extraParams?: Dictionary<unknown>;
 }) {
   const { toast } = useToast();
   const [meetingInfo, setMeetingInfo] = useState<MeetingInfo>(null);
@@ -111,7 +117,6 @@ export default function MeetingPoint({
 
     const createMeetingPoint = async () => {
       const { parties } = session as CreateKeyState;
-
       const identifiers: string[] = [];
 
       /* eslint-disable @typescript-eslint/no-unused-vars */
@@ -128,6 +133,7 @@ export default function MeetingPoint({
         name: (session as CreateKeyState).name,
         parties: (session as CreateKeyState).parties,
         threshold: (session as CreateKeyState).threshold,
+        ...extraParams,
       };
 
       const meetingId = await guard(async () => {
@@ -170,6 +176,7 @@ export default function MeetingPoint({
       <div className="flex flex-col space-y-6">
         <Loader text="Waiting for everybody to join..." />
         <Invitations
+          linkPrefix={linkPrefix}
           meetingInfo={meetingInfo}
           inviteParams={{
             name: (session as CreateKeyState).name,

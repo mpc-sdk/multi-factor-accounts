@@ -4,6 +4,7 @@ export enum InternalMethod {
   GetAccountByAddress = "snap.internal.getAccountByAddress",
   GetWalletByAddress = "snap.internal.getWalletByAddress",
   DeleteKeyShare = "snap.internal.deleteKeyShare",
+  ApproveTransaction = "snap.internal.approveTransaction",
 }
 
 export const originPermissions = new Map<string, string[]>([
@@ -41,6 +42,7 @@ export const originPermissions = new Map<string, string[]>([
       InternalMethod.GetAccountByAddress,
       InternalMethod.GetWalletByAddress,
       InternalMethod.DeleteKeyShare,
+      InternalMethod.ApproveTransaction,
     ],
   ],
   [
@@ -62,6 +64,7 @@ export const originPermissions = new Map<string, string[]>([
       InternalMethod.GetAccountByAddress,
       InternalMethod.GetWalletByAddress,
       InternalMethod.DeleteKeyShare,
+      InternalMethod.ApproveTransaction,
     ],
   ],
 ]);
