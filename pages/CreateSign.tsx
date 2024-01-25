@@ -25,11 +25,12 @@ import {
   getPendingRequest,
   rejectRequest,
   getWalletByAddress,
-  approveRequest,
+  approveTransaction,
 } from "@/lib/keyring";
 import {
   getChainName,
   encodeTransactionToHash,
+  serializeTransaction,
   encodeSignedTransaction,
 } from "@/lib/utils";
 import { PendingRequest } from "@/lib/types";
@@ -74,9 +75,15 @@ function CompleteTransaction({
   const { toast } = useToast();
   const signedTransaction = encodeSignedTransaction(tx, signature);
   //console.log("raw transaction", signedTransaction.serialized);
+  const jsonTransaction = serializeTransaction(signedTransaction);
+  //jsonTransaction.type = "0x02";
+  console.log("json", jsonTransaction);
 
   const submitTransaction = async () => {
     await guard(async () => {
+      await approveTransaction(requestId, jsonTransaction);
+
+      /*
       const txHash = (await window.ethereum.request({
         method: "eth_sendRawTransaction",
         params: [signedTransaction.serialized],
@@ -95,6 +102,7 @@ function CompleteTransaction({
 
         navigate(`/accounts/${account.address}`);
       }
+      */
     }, toast);
   };
 

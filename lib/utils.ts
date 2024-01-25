@@ -14,6 +14,7 @@ import { RawKey, rawKey } from "@/lib/schemas";
 import { Signature as WasmSignature } from "@/app/model";
 import { KeyShares, PrivateKey, ProtocolId } from "@/lib/types";
 import { fromZodError } from "zod-validation-error";
+import { FeeMarketEIP1559Transaction, JsonTx } from '@ethereumjs/tx';
 
 //f1b44b9ef629cd581c8ab767e1819d59a317f2b9c430cefbe462a8cad3bc49fe
 
@@ -35,24 +36,40 @@ export function encodeSignedTransaction(
   delete o.from;
   delete o.type;
   const transaction = Transaction.from(o);
-
-  console.log(typeof result.signature.r.scalar);
-  console.log(typeof result.signature.s.scalar);
-
   const r = `0x${result.signature.r.scalar}`;
   const s = `0x${result.signature.s.scalar}`;
-
   const signature: SignatureLike = {
     r,
     s,
     v: 27 + result.signature.recid,
   };
 
-  console.log("converted signature", signature);
-
   transaction.signature = signature;
-
   return transaction;
+}
+
+// Serialize a transaction by converting to `@ethereumjs/tx`
+// and then to Json.
+export function serializeTransaction(tx: Transaction): JsonTx {
+  const txData = tx.toJSON();
+  const signature = txData.sig;
+  delete txData.sig;
+
+  txData.r = signature.r;
+  txData.s = signature.s;
+  txData.v = toBeHex(signature.v - 27);
+
+  txData.gasLimit = toBeHex(txData.gasLimit);
+  txData.maxPriorityFeePerGas = toBeHex(txData.maxPriorityFeePerGas);
+  txData.maxFeePerGas = toBeHex(txData.maxFeePerGas);
+  txData.value = toBeHex(txData.value);
+  txData.chainId = toBeHex(txData.chainId);
+  txData.type = toBeHex(2);
+
+  //console.log("txData", txData);
+
+  const transaction = FeeMarketEIP1559Transaction.fromTxData(txData, {})
+  return transaction.toJSON();
 }
 
 // Utility for merging class names.

@@ -5,7 +5,6 @@ import type {
   KeyringRequest,
   SubmitRequestResponse,
 } from "@metamask/keyring-api";
-
 import {
   EthAccountType,
   EthMethod,
@@ -231,12 +230,16 @@ export class ThresholdKeyring implements Keyring {
     };
   }
 
-  async approveRequest(id: string): Promise<void> {
+  async approveTransaction(id: string, result: Json): Promise<void> {
     const { request } =
       this.#state.pendingRequests[id] ??
       throwError(`Request '${id}' not found`);
     await this.#removePendingRequest(id);
-    await this.#emitEvent(KeyringEvent.RequestApproved, { id, result: {} });
+    await this.#emitEvent(KeyringEvent.RequestApproved, { id, result });
+  }
+
+  async approveRequest(id: string): Promise<void> {
+    throw new Error("not implemented, use approveTransaction() instead");
   }
 
   async rejectRequest(id: string): Promise<void> {
