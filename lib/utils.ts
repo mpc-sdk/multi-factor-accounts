@@ -16,8 +16,8 @@ import { KeyShares, PrivateKey, ProtocolId } from "@/lib/types";
 import { fromZodError } from "zod-validation-error";
 import { FeeMarketEIP1559Transaction, JsonTx } from '@ethereumjs/tx';
 
-//f1b44b9ef629cd581c8ab767e1819d59a317f2b9c430cefbe462a8cad3bc49fe
-
+// Encode an unsigned transaction into a digest that we can
+// pass to webassembly to be signed.
 export function encodeTransactionToHash(tx: TransactionLike): string {
   const o = { ...tx };
   delete o.from;
@@ -28,6 +28,8 @@ export function encodeTransactionToHash(tx: TransactionLike): string {
   return keccak256(transaction.unsignedSerialized).replace(/^0x/, "");
 }
 
+// Convert the signature from webassembly and the transaction data
+// into a signed transaction.
 export function encodeSignedTransaction(
   tx: TransactionLike,
   result: WasmSignature,
@@ -43,13 +45,15 @@ export function encodeSignedTransaction(
     s,
     v: 27 + result.signature.recid,
   };
-
   transaction.signature = signature;
   return transaction;
 }
 
 // Serialize a transaction by converting to `@ethereumjs/tx`
 // and then to Json.
+//
+// This is the transaction format we send to MetaMask via the snap
+// to approve a transaction.
 export function serializeTransaction(tx: Transaction): JsonTx {
   const txData = tx.toJSON();
   const signature = txData.sig;
