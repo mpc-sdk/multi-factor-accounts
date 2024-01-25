@@ -122,11 +122,16 @@ export default function MeetingPoint({
     };
 
     const createMeetingPoint = async () => {
-      const { parties } = session as CreateKeyState;
+      const { sessionType, parties, threshold } = session as CreateKeyState;
       const identifiers: string[] = [];
 
+      // Number of identifiers which are the slots for a meeting point
+      const numIdentifiers = sessionType === SessionType.keygen
+        ? parties
+        : threshold + 1;
+
       /* eslint-disable @typescript-eslint/no-unused-vars */
-      for (let i = 0; i < parties; i++) {
+      for (let i = 0; i < numIdentifiers; i++) {
         const value = uuidv4();
         const hash = await digest(value);
         identifiers.push(hash);
