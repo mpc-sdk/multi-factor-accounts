@@ -43,14 +43,8 @@ function Content() {
       />
       <Route path="/about" element={<About />} />
       <Route path="/settings" element={<Settings />} />
-      <Route
-        path="/keys/create"
-        element={<CreateKey />}
-      />
-      <Route
-        path="/keys/join/:meetingId/:userId"
-        element={<JoinKey />}
-      />
+      <Route path="/keys/create" element={<CreateKey />} />
+      <Route path="/keys/join/:meetingId/:userId" element={<JoinKey />} />
       <Route
         path="/accounts/:address"
         element={
@@ -75,14 +69,8 @@ function Content() {
           </BroadcastProvider>
         }
       />
-      <Route
-        path="/sign/create/:requestId/:shareId"
-        element={<CreateSign />}
-      />
-      <Route
-        path="/sign/join/:meetingId/:userId"
-        element={<JoinSign />}
-      />
+      <Route path="/sign/create/:requestId/:shareId" element={<CreateSign />} />
+      <Route path="/sign/join/:meetingId/:userId" element={<JoinSign />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

@@ -1,15 +1,16 @@
 import React from "react";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 
 import Heading from "@/components/Heading";
 import Paragraph from "@/components/Paragraph";
 import Icons from "@/components/Icons";
-import ServerUrlForm from '@/forms/ServerUrl';
+import ServerUrlForm from "@/forms/ServerUrl";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import serverUrl from '@/lib/server-url';
+import serverUrl from "@/lib/server-url";
 
 export default function Settings() {
+  const defaultServerUrl = serverUrl;
   return (
     <>
       <Heading>Settings</Heading>
@@ -23,7 +24,7 @@ export default function Settings() {
           </AlertDescription>
         </Alert>
         <ServerUrlForm
-          initialValue={serverUrl}
+          initialValue={defaultServerUrl}
           onNext={(url) => {
             console.log("url", url);
           }}

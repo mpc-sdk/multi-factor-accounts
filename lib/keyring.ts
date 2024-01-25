@@ -1,6 +1,6 @@
 import { defaultSnapId as snapId } from "@/lib/snap";
 import { TransactionLike } from "ethers";
-import { Json } from '@metamask/utils';
+import { Json } from "@metamask/utils";
 import {
   KeyringAccount,
   KeyringSnapRpcClient,
@@ -84,7 +84,10 @@ export async function exportAccount(id: string): Promise<KeyringAccountData> {
   return await client.exportAccount(id);
 }
 
-export async function approveTransaction(id: string, result: JsonTx): Promise<void> {
+export async function approveTransaction(
+  id: string,
+  result: JsonTx,
+): Promise<void> {
   await ethereum.request({
     method: "wallet_invokeSnap",
     params: {
