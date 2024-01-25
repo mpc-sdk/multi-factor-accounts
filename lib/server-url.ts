@@ -1,1 +1,1 @@
-export default process.env.WS_URL || `ws://localhost:7007`;
+export default process.env.RELAY_URL || `http://localhost:7007`;

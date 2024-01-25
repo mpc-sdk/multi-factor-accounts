@@ -14,7 +14,7 @@ import { RawKey, rawKey } from "@/lib/schemas";
 import { Signature as WasmSignature } from "@/app/model";
 import { KeyShares, PrivateKey, ProtocolId } from "@/lib/types";
 import { fromZodError } from "zod-validation-error";
-import { FeeMarketEIP1559Transaction, JsonTx } from '@ethereumjs/tx';
+import { FeeMarketEIP1559Transaction, JsonTx } from "@ethereumjs/tx";
 
 // Encode an unsigned transaction into a digest that we can
 // pass to webassembly to be signed.
@@ -72,7 +72,7 @@ export function serializeTransaction(tx: Transaction): JsonTx {
 
   //console.log("txData", txData);
 
-  const transaction = FeeMarketEIP1559Transaction.fromTxData(txData, {})
+  const transaction = FeeMarketEIP1559Transaction.fromTxData(txData, {});
   return transaction.toJSON();
 }
 

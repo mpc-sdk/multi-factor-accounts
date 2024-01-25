@@ -11,6 +11,7 @@ import {
   Pencil,
   Trash,
   ChevronLeft,
+  Server,
 } from "lucide-react";
 
 const Icons = {
@@ -26,6 +27,7 @@ const Icons = {
   pencil: Pencil,
   trash: Trash,
   back: ChevronLeft,
+  server: Server,
 };
 
 export default Icons;

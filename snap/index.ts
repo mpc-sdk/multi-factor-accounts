@@ -2,7 +2,7 @@ import {
   MethodNotSupportedError,
   handleKeyringRequest,
 } from "@metamask/keyring-api";
-import { Json } from '@metamask/utils';
+import { Json } from "@metamask/utils";
 import type {
   OnKeyringRequestHandler,
   OnRpcRequestHandler,

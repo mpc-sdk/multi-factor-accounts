@@ -48,13 +48,13 @@ export type WebassemblyWorker = {
   ) => Promise<ProtocolSignature>;
 };
 
-// Convert from a ws: (or wss:) protocol to http: or https:.
-export function convertUrlProtocol(server: string): string {
+// Convert from a http: (or https:) protocol to ws: or wss:.
+function convertToWebSocketProtocol(server: string): string {
   const url = new URL(server);
-  if (url.protocol === "ws:") {
-    url.protocol = "http:";
-  } else if (url.protocol === "wss:") {
-    url.protocol = "https:";
+  if (url.protocol === "http:") {
+    url.protocol = "ws:";
+  } else if (url.protocol === "https:") {
+    url.protocol = "wss:";
   }
   return url.toString().replace(/\/+$/, "");
 }
@@ -62,13 +62,18 @@ export function convertUrlProtocol(server: string): string {
 // Get the public key of the backend server and cache the result.
 export async function fetchServerPublicKey(
   serverUrl: string,
+  bypassCache?: boolean,
 ): Promise<ServerOptions> {
-  if (serverOptions != null && serverOptions.serverUrl === serverUrl) {
+  if (
+    !bypassCache &&
+    serverOptions != null &&
+    serverOptions.serverUrl === serverUrl
+  ) {
     return serverOptions;
   }
 
-  let url = convertUrlProtocol(serverUrl);
-  url = `${url}/public-key`;
+  //let url = convertToHttpProtocol(serverUrl);
+  let url = `${serverUrl}/public-key`;
   const response = await fetch(url);
 
   if (response.status !== 200) {
@@ -78,7 +83,7 @@ export async function fetchServerPublicKey(
   }
   const serverPublicKey = await response.text();
   serverOptions = {
-    serverUrl: serverUrl,
+    serverUrl: convertToWebSocketProtocol(serverUrl),
     serverPublicKey,
   };
   return serverOptions;

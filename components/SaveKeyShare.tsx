@@ -18,7 +18,7 @@ export default function SaveKeyShare({
   accountName: string;
   keyShare: PrivateKey;
 }) {
-  const { invalidate } = useContext(BroadcastContext);
+  //const { invalidate } = useContext(BroadcastContext);
   const navigate = useNavigate();
   const { toast } = useToast();
 

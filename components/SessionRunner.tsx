@@ -3,8 +3,7 @@ import React, { useContext, useEffect } from "react";
 import Loader from "@/components/Loader";
 import { WorkerContext } from "@/app/providers/worker";
 import { WebassemblyWorker } from "@/lib/client";
-
-import serverUrl from "@/lib/server-url";
+import { useServerUrl } from "@/app/hooks";
 
 // View shown whilst a session is executing.
 export default function SessionRunner({
@@ -16,6 +15,7 @@ export default function SessionRunner({
   executor: (worker: WebassemblyWorker, serverUrl: string) => Promise<void>;
   message: React.ReactNode;
 }) {
+  const [serverUrl] = useServerUrl();
   const worker = useContext(WorkerContext);
 
   // Call the session executor with our worker reference

@@ -18,7 +18,7 @@ import {
 } from "@/app/model";
 
 import guard from "@/lib/guard";
-import serverUrl from "@/lib/server-url";
+import { useServerUrl } from "@/app/hooks";
 import { joinMeeting, createMeeting } from "@/lib/client";
 import {
   Dictionary,
@@ -98,6 +98,7 @@ export default function MeetingPoint({
   extraParams?: Dictionary<unknown>;
 }) {
   const { toast } = useToast();
+  const [serverUrl] = useServerUrl();
   const [meetingInfo, setMeetingInfo] = useState<MeetingInfo>(null);
   const worker = useContext(WorkerContext);
   const create = session.ownerType == OwnerType.initiator;

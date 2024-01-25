@@ -49,8 +49,7 @@ module.exports = {
       patterns: ["index.html", "dist/styles.css", "favicon.png"],
     }),
     new webpack.DefinePlugin({
-      "process.env.WS_URL": JSON.stringify(""),
-      "process.env.INFURA_API_KEY": JSON.stringify(process.env.INFURA_API_KEY),
+      "process.env.RELAY_URL": JSON.stringify("https://relay.tss.ac"),
       "process.env.SNAP_ID": JSON.stringify(process.env.SNAP_ID),
     }),
   ],

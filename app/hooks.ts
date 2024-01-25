@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
 import { MetaMaskContext } from "@/app/providers/metamask";
+import defaultServerUrl from "@/lib/server-url";
 
 // Get the balance of an address from MetaMask.
 export function useBalance(address: string) {
@@ -13,4 +14,18 @@ export function useBalance(address: string) {
     loadBalance();
   }, []);
   return balance;
+}
+
+// Get the current server URL.
+export function useServerUrl() {
+  const [serverUrl, setServerUrl] = useState<string>(
+    localStorage.getItem("serverUrl") as string,
+  );
+
+  const updateServerUrl = (url: string) => {
+    localStorage.setItem("serverUrl", url);
+    setServerUrl(url);
+  };
+
+  return [serverUrl || defaultServerUrl, updateServerUrl];
 }
