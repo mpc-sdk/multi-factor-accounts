@@ -74,35 +74,11 @@ function CompleteTransaction({
   const navigate = useNavigate();
   const { toast } = useToast();
   const signedTransaction = encodeSignedTransaction(tx, signature);
-  //console.log("raw transaction", signedTransaction.serialized);
   const jsonTransaction = serializeTransaction(signedTransaction);
-  //jsonTransaction.type = "0x02";
-  console.log("json", jsonTransaction);
-
   const submitTransaction = async () => {
     await guard(async () => {
       await approveTransaction(requestId, jsonTransaction);
-
-      /*
-      const txHash = (await window.ethereum.request({
-        method: "eth_sendRawTransaction",
-        params: [signedTransaction.serialized],
-      })) as string;
-
-      console.log("submitted transaction hash", txHash);
-
-      if (txHash) {
-        // Approve the request to remove from the pending requests
-        await approveRequest(requestId);
-        // Confirm
-        toast({
-          title: "Transaction confirmed",
-          description: `Tx Hash: ${txHash}`,
-        });
-
-        navigate(`/accounts/${account.address}`);
-      }
-      */
+      navigate(`/accounts/${account.address}`);
     }, toast);
   };
 
