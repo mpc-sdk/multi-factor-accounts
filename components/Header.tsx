@@ -19,15 +19,20 @@ const components: { title: string; href: string; description: string }[] = [
     description: "View your multi-factor accounts and their key shares.",
   },
   {
-    title: "About",
-    href: "/about",
-    description: "Learn more about how multi-factor accounts work.",
-  },
-  {
     title: "Create",
     href: "/keys/create",
     description:
       "Create a new multi-factor account using distributed key generation.",
+  },
+  {
+    title: "Settings",
+    href: "/settings",
+    description: "Choose the relay server and protocol.",
+  },
+  {
+    title: "About",
+    href: "/about",
+    description: "Learn more about how multi-factor accounts work.",
   },
   {
     title: "Source Code",
@@ -35,14 +40,9 @@ const components: { title: string; href: string; description: string }[] = [
     description: "Get the source code for this snap on Github.",
   },
   {
-    title: "MetaMask Flask",
-    href: "https://metamask.io/flask/",
-    description: "The canary build of MetaMask with next-generation features.",
-  },
-  {
     title: "Snaps",
-    href: "https://metamask.io/snaps/",
-    description: "Snaps extend the functionality of the MetaMask wallet.",
+    href: "https://snaps.metamask.io/",
+    description: "Find more Snaps to extend the functionality of MetaMask.",
   },
 ];
 

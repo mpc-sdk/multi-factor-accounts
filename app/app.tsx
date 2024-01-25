@@ -4,6 +4,7 @@ import { Routes, Route } from "react-router-dom";
 import Layout from "@/pages/Layout";
 import NotFound from "@/pages/NotFound";
 import About from "@/pages/About";
+import Settings from "@/pages/Settings";
 import Accounts from "@/pages/Accounts";
 import Account from "@/pages/Account";
 import CreateKey from "@/pages/CreateKey";
@@ -32,23 +33,6 @@ type WorkerMessage = {
 function Content() {
   return (
     <Routes>
-      <Route path="/about" element={<About />} />
-      <Route
-        path="/keys/create"
-        element={
-          <BroadcastProvider>
-            <CreateKey />
-          </BroadcastProvider>
-        }
-      />
-      <Route
-        path="/keys/join/:meetingId/:userId"
-        element={
-          <BroadcastProvider>
-            <JoinKey />
-          </BroadcastProvider>
-        }
-      />
       <Route
         path="/"
         element={
@@ -56,6 +40,16 @@ function Content() {
             <Accounts />
           </BroadcastProvider>
         }
+      />
+      <Route path="/about" element={<About />} />
+      <Route path="/settings" element={<Settings />} />
+      <Route
+        path="/keys/create"
+        element={<CreateKey />}
+      />
+      <Route
+        path="/keys/join/:meetingId/:userId"
+        element={<JoinKey />}
       />
       <Route
         path="/accounts/:address"
@@ -83,19 +77,11 @@ function Content() {
       />
       <Route
         path="/sign/create/:requestId/:shareId"
-        element={
-          <BroadcastProvider>
-            <CreateSign />
-          </BroadcastProvider>
-        }
+        element={<CreateSign />}
       />
       <Route
         path="/sign/join/:meetingId/:userId"
-        element={
-          <BroadcastProvider>
-            <JoinSign />
-          </BroadcastProvider>
-        }
+        element={<JoinSign />}
       />
       <Route path="*" element={<NotFound />} />
     </Routes>
