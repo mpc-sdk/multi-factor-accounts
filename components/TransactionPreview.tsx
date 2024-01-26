@@ -4,13 +4,10 @@ import { KeyringAccount } from "@metamask/keyring-api";
 
 import AddressBadge from "@/components/AddressBadge";
 import { useBalance } from "@/app/hooks";
-import { abbreviateAddress } from "@/lib/utils";
 
 export function TransactionFromPreview({
-  tx,
   account,
 }: {
-  tx: TransactionLike;
   account: KeyringAccount;
 }) {
   const balance = useBalance(account.address);

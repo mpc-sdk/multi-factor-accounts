@@ -33,17 +33,21 @@ export default function ImportAccount({
   const { toast } = useToast();
   const [importShares, setImportShares] = useState<KeyShares>(null);
 
-  const readFile = async (file: File) => {
+  const readFile = async (file?: File) => {
     await guard(async () => {
-      const buffer = await file.arrayBuffer();
-      const contents = fromUint8Array(new Uint8Array(buffer));
-      const keystore = JSON.parse(contents);
-      try {
-        const importShares: KeyShares = keyShares.parse(keystore);
-        setImportShares(importShares);
-      } catch (error) {
-        const validationError = fromZodError(error);
-        throw validationError;
+      if (file) {
+        const buffer = await file.arrayBuffer();
+        const contents = fromUint8Array(new Uint8Array(buffer));
+        const keystore = JSON.parse(contents);
+        try {
+          const importShares: KeyShares = keyShares.parse(keystore);
+          setImportShares(importShares);
+        } catch (error) {
+          const validationError = fromZodError(error);
+          throw validationError;
+        }
+      } else {
+        setImportShares(null);
       }
     }, toast);
   };

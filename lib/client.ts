@@ -12,7 +12,7 @@ import {
   ProtocolLocalKey,
 } from "@/app/model";
 
-import { PrivateKey, Parameters, LocalKey } from "@/lib/types";
+import { PrivateKey, Parameters } from "@/lib/types";
 
 // Cache of server options.
 let serverOptions: ServerOptions = null;
@@ -72,8 +72,7 @@ export async function fetchServerPublicKey(
     return serverOptions;
   }
 
-  //let url = convertToHttpProtocol(serverUrl);
-  let url = `${serverUrl}/public-key`;
+  const url = `${serverUrl}/public-key`;
   const response = await fetch(url);
 
   if (response.status !== 200) {

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 
+import Icons from "@/components/Icons";
 import { getDroppedFiles, humanFileSize } from "@/lib/utils";
 
 export default function FileUploadReader({
   onSelect,
 }: {
-  onSelect: (file: File) => void;
+  onSelect: (file?: File) => void;
 }) {
   const [file, setFile] = useState(null);
   const [fileInput, setFileInput] = useState(null);
@@ -17,7 +18,7 @@ export default function FileUploadReader({
     setFileInput(e.target);
   };
 
-  const removeFile = (e: React.MouseEvent<HTMLInputElement>) => {
+  const removeFile = (e: React.MouseEvent<SVGSVGElement>) => {
     e.preventDefault();
     setFile(null);
     onSelect(null);
@@ -45,15 +46,6 @@ export default function FileUploadReader({
     }
   };
 
-  /*
-                  <IconButton
-                    onClick={removeFile}
-                    sx={{ width: 40, height: 40 }}
-                  >
-                    <RemoveCircleIcon />
-                  </IconButton>
-  */
-
   return (
     <>
       <input
@@ -70,11 +62,12 @@ export default function FileUploadReader({
         >
           <div>
             {file ? (
-              <div className="flex">
+              <div className="flex justify-between items-center space-x-6">
                 <div>
-                  <p>{file.name}</p>
+                  <p className="text-sm whitespace-pre-wrap">{file.name}</p>
                   <p className="text-sm">{humanFileSize(file.size)}</p>
                 </div>
+                <Icons.remove className="h-4 w-4" onClick={removeFile} />
               </div>
             ) : (
               <>

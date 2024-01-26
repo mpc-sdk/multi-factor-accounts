@@ -1,12 +1,10 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import {
-  hexlify,
   toBeHex,
   keccak256,
   TransactionLike,
   Transaction,
-  Signature,
   SignatureLike,
 } from "ethers";
 import { ToasterToast } from "@/components/ui/use-toast";

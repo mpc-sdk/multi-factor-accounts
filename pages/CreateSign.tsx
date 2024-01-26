@@ -1,7 +1,7 @@
-import React, { Suspense, useContext, useEffect, useState } from "react";
+import React, { Suspense, useContext, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { formatEther, TransactionLike } from "ethers";
-import { KeyringAccount, KeyringRequest } from "@metamask/keyring-api";
+import { TransactionLike } from "ethers";
+import { KeyringAccount } from "@metamask/keyring-api";
 
 import { KeypairContext } from "@/app/providers/keypair";
 import { useToast } from "@/components/ui/use-toast";
@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 import Loader from "@/components/Loader";
-import Link from "@/components/Link";
 import CreateSignAlert from "@/components/CreateSignAlert";
 import MeetingPoint from "@/components/MeetingPoint";
 import Heading from "@/components/Heading";
@@ -21,11 +20,9 @@ import TransactionPreview, {
 import NotFound from "@/pages/NotFound";
 import guard from "@/lib/guard";
 import {
-  getAccountByAddress,
   getPendingRequest,
-  rejectRequest,
   getWalletByAddress,
-  approveTransaction,
+  approveRequest,
 } from "@/lib/keyring";
 import {
   getChainName,
@@ -39,7 +36,6 @@ import use from "@/lib/react-use";
 
 import {
   PublicKeys,
-  CreateSignState,
   KeyShareAudience,
   OwnerType,
   SessionType,
@@ -60,14 +56,12 @@ function CompleteTransaction({
   requestId,
   account,
   tx,
-  transaction,
   signature,
   badges,
 }: {
   requestId: string;
   account: KeyringAccount;
   tx: TransactionLike;
-  transaction: string;
   signature: Signature;
   badges: React.ReactNode;
 }) {
@@ -77,7 +71,7 @@ function CompleteTransaction({
   const jsonTransaction = serializeTransaction(signedTransaction);
   const submitTransaction = async () => {
     await guard(async () => {
-      await approveTransaction(requestId, jsonTransaction);
+      await approveRequest(requestId, jsonTransaction);
       navigate(`/accounts/${account.address}`);
     }, toast);
   };
@@ -90,7 +84,7 @@ function CompleteTransaction({
           title="Transaction Signed"
           description="To complete the transaction submit it to the blockchain."
         />
-        <TransactionFromPreview tx={tx} account={account} />
+        <TransactionFromPreview account={account} />
         <TransactionPreview tx={tx} />
         <div className="flex justify-end">
           <Button onClick={submitTransaction}>Submit Transaction</Button>
@@ -110,10 +104,10 @@ function CreateSignBody({
   shareId: string;
 }) {
   const { toast } = useToast();
-  const navigate = useNavigate();
   const keypair = useContext(KeypairContext);
   const [signature, setSignature] = useState(null);
   const result = use(resource);
+  const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
 
   const { request: pendingRequest, account } = result;
   const method = pendingRequest.request && pendingRequest.request.method;
@@ -121,15 +115,14 @@ function CreateSignBody({
   const tx = transactionData as TransactionLike;
   const transaction = encodeTransactionToHash(tx);
 
-  const [createSignState, setCreateSignState] = useState<CreateSignState>({
+  const createSignState = {
     ownerType: OwnerType.initiator,
     sessionType: SessionType.sign,
     name: account?.options?.name ?? "Untitled account",
     audience: KeyShareAudience.self,
     parties: account.options.parameters.parties,
     threshold: account.options.parameters.threshold,
-  });
-  const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
+  };
 
   if (keypair === null) {
     return null;
@@ -153,7 +146,6 @@ function CreateSignBody({
         requestId={requestId}
         account={account}
         tx={tx}
-        transaction={transaction}
         signature={signature}
         badges={<Badges />}
       />
@@ -179,11 +171,6 @@ function CreateSignBody({
       </CreateSignContent>
     );
   }
-
-  /*
-        <TransactionFromPreview tx={tx} account={account} />
-        <TransactionPreview tx={tx} />
-  */
 
   const startSigning = async (worker: WebassemblyWorker, serverUrl: string) => {
     console.log("Start sign transaction (initiator)", transaction);
@@ -270,8 +257,6 @@ function LoadRequest({
 }
 
 export default function CreateSign() {
-  const { toast } = useToast();
-  const navigate = useNavigate();
   const { requestId, shareId } = useParams();
   if (!requestId || !shareId) {
     return <NotFound />;

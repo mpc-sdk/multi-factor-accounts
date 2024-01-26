@@ -1,9 +1,8 @@
-import React, { Suspense, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { formatEther, TransactionLike } from "ethers";
+import React, { Suspense } from "react";
+import { useParams } from "react-router-dom";
+import { TransactionLike } from "ethers";
 
 import { KeyringAccount, KeyringRequest } from "@metamask/keyring-api";
-import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -16,12 +15,7 @@ import TransactionPreview, {
 } from "@/components/TransactionPreview";
 import NotFound from "@/pages/NotFound";
 
-import guard from "@/lib/guard";
-import {
-  getAccountByAddress,
-  getPendingRequest,
-  rejectRequest,
-} from "@/lib/keyring";
+import { getPendingRequest } from "@/lib/keyring";
 import { getChainName } from "@/lib/utils";
 import { PendingRequest } from "@/lib/types";
 import use from "@/lib/react-use";
@@ -72,21 +66,12 @@ function SignRequestBody({
 }: {
   resource: Promise<PendingRequest | null>;
 }) {
-  const { toast } = useToast();
-  const navigate = useNavigate();
   const result = use(resource);
   const { request: pendingRequest, account } = result;
 
   if (!pendingRequest || !account) {
     return <NotFound />;
   }
-
-  const rejectPendingRequest = async (id: string) => {
-    await guard(async () => {
-      await rejectRequest(id);
-      navigate("/");
-    }, toast);
-  };
 
   const method = pendingRequest.request && pendingRequest.request.method;
   if (method !== "eth_signTransaction") {
@@ -126,7 +111,7 @@ function SignRequestBody({
           title="Sign request"
           description="Choose a key share to continue"
         />
-        <TransactionFromPreview tx={tx} account={account} />
+        <TransactionFromPreview account={account} />
         <TransactionPreview tx={tx} />
         <ListAccountShares request={pendingRequest} account={account} />
       </div>
@@ -144,8 +129,6 @@ function LoadRequest({ requestId }: { requestId: string }) {
 }
 
 export default function SignRequest() {
-  const { toast } = useToast();
-  const navigate = useNavigate();
   const { requestId } = useParams();
   if (!requestId) {
     return <NotFound />;
