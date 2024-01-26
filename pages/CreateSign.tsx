@@ -25,7 +25,7 @@ import {
   getPendingRequest,
   rejectRequest,
   getWalletByAddress,
-  approveTransaction,
+  approveRequest,
 } from "@/lib/keyring";
 import {
   getChainName,
@@ -77,7 +77,7 @@ function CompleteTransaction({
   const jsonTransaction = serializeTransaction(signedTransaction);
   const submitTransaction = async () => {
     await guard(async () => {
-      await approveTransaction(requestId, jsonTransaction);
+      await approveRequest(requestId, jsonTransaction);
       navigate(`/accounts/${account.address}`);
     }, toast);
   };

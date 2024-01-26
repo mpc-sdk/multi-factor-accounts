@@ -17,8 +17,8 @@ export function useBalance(address: string) {
 }
 
 // Get the current server URL.
-export function useServerUrl() {
-  const [serverUrl, setServerUrl] = useState<string>(
+export function useServerUrl(): [string, (url: string) => void] {
+  const [serverUrl, setServerUrl] = useState(
     localStorage.getItem("serverUrl") as string,
   );
 

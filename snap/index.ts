@@ -69,13 +69,6 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
       const keyring = await getKeyring();
       return await keyring.deleteKeyShare(id, keyShareId);
     }
-    case InternalMethod.ApproveTransaction: {
-      const params = request.params as Record<string, unknown>;
-      const id = params.id as string;
-      const result = params.result as Json;
-      const keyring = await getKeyring();
-      return await keyring.approveTransaction(id, result);
-    }
     default: {
       throw new MethodNotSupportedError(request.method);
     }

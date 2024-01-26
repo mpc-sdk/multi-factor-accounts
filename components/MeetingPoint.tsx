@@ -49,7 +49,7 @@ function Invitations({
 
   const participants = session.sessionType === SessionType.keygen
     ? meetingInfo.identifiers.slice(1)
-    : meetingInfo.identifiers.slice(1, session.threshold + 1);
+    : meetingInfo.identifiers.slice(1, (session as CreateKeyState).threshold + 1);
   return (
     <div className="rounded-md border">
       {participants.map((userId, index) => {

@@ -49,6 +49,14 @@ export async function rejectRequest(id: string): Promise<void> {
   return await client.rejectRequest(id);
 }
 
+export async function approveRequest(
+  id: string,
+  result: JsonTx,
+): Promise<void> {
+  const client = getKeyringClient();
+  return await client.approveRequest(id, { result: result as Json });
+}
+
 export async function getPendingRequest(
   id: string,
 ): Promise<PendingRequest | null> {
@@ -82,22 +90,6 @@ export async function deleteKeyShare(
 export async function exportAccount(id: string): Promise<KeyringAccountData> {
   const client = getKeyringClient();
   return await client.exportAccount(id);
-}
-
-export async function approveTransaction(
-  id: string,
-  result: JsonTx,
-): Promise<void> {
-  await ethereum.request({
-    method: "wallet_invokeSnap",
-    params: {
-      snapId,
-      request: {
-        method: "snap.internal.approveTransaction",
-        params: { id, result },
-      },
-    },
-  });
 }
 
 export async function getAccountByAddress(

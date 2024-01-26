@@ -230,16 +230,16 @@ export class ThresholdKeyring implements Keyring {
     };
   }
 
-  async approveTransaction(id: string, result: Json): Promise<void> {
+  async approveRequest(id: string, data?: Record<string, Json>): Promise<void> {
     const { request } =
       this.#state.pendingRequests[id] ??
       throwError(`Request '${id}' not found`);
+    if (!data || !data.result) {
+      throw new Error("Request approval requires a result");
+    }
+    const { result } = data;
     await this.#removePendingRequest(id);
     await this.#emitEvent(KeyringEvent.RequestApproved, { id, result });
-  }
-
-  async approveRequest(id: string): Promise<void> {
-    throw new Error("not implemented, use approveTransaction() instead");
   }
 
   async rejectRequest(id: string): Promise<void> {
