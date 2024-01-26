@@ -6,7 +6,6 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { DownloadKeyShare } from "@/components/ExportAccount";
 import { createAccount } from "@/lib/keyring";
-import { BroadcastContext } from "@/app/providers/broadcast";
 import { PrivateKey } from "@/lib/types";
 import guard from "@/lib/guard";
 

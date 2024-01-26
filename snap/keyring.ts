@@ -238,8 +238,7 @@ export class ThresholdKeyring implements Keyring {
       pending: true,
       redirect: {
         url,
-        message:
-          "Redirecting to multi-factor accounts snap",
+        message: "Redirecting to multi-factor accounts snap",
       },
     };
   }
@@ -330,5 +329,4 @@ export class ThresholdKeyring implements Keyring {
         : process.env.DAPP_ORIGIN_DEVELOPMENT;
     return `${dappUrlPrefix}/approve/${id}`;
   }
-
 }

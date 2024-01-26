@@ -1,15 +1,14 @@
-import React, { Suspense, useState } from "react";
+import React, { Suspense } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { formatEther, TransactionLike } from "ethers";
+import { TransactionLike } from "ethers";
 
-import { KeyringRequest } from "@metamask/keyring-api";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 import Loader from "@/components/Loader";
 import Link from "@/components/Link";
-import Heading, { SubHeading } from "@/components/Heading";
+import Heading from "@/components/Heading";
 import KeyAlert from "@/components/KeyAlert";
 import TransactionPreview, {
   TransactionFromPreview,
@@ -90,7 +89,7 @@ function ApproveRequestBody({
           title="Approve request"
           description="Approve the transaction to continue"
         />
-        <TransactionFromPreview tx={tx} account={account} />
+        <TransactionFromPreview account={account} />
         <TransactionPreview tx={tx} />
         <div className="flex justify-between">
           <Button
@@ -118,8 +117,6 @@ function LoadRequest({ requestId }: { requestId: string }) {
 }
 
 export default function ApproveRequest() {
-  const { toast } = useToast();
-  const navigate = useNavigate();
   const { requestId } = useParams();
   if (!requestId) {
     return <NotFound />;

@@ -21,7 +21,6 @@ import MeetingPoint from "@/components/MeetingPoint";
 import SessionRunner from "@/components/SessionRunner";
 
 import {
-  PublicKeys,
   AssociatedData,
   SessionState,
   OwnerType,
@@ -34,7 +33,6 @@ import guard from "@/lib/guard";
 import use from "@/lib/react-use";
 import { getAccountByAddress, getWalletByAddress } from "@/lib/keyring";
 import { sign, WebassemblyWorker } from "@/lib/client";
-import { PrivateKey } from "@/lib/types";
 import { encodeTransactionToHash } from "@/lib/utils";
 
 function JoinSignContent({ children }: { children: React.ReactNode }) {
@@ -63,7 +61,7 @@ function SigningCompleted({
           title="Transaction Signed"
           description="The transaction has been signed, the initiator must submit the transaction for processing."
         />
-        <TransactionFromPreview account={account} tx={tx} />
+        <TransactionFromPreview account={account} />
         <TransactionPreview tx={tx} />
       </div>
     </JoinSignContent>
@@ -83,12 +81,18 @@ function ReviewTransaction({
   remainingShares: string[];
   onApproved: (shareId: string) => void;
 }) {
-  const button = remainingShares.length === 1
-    ? <Button onClick={() => onApproved(remainingShares[0])}>Approve Transaction</Button>
-    : <ChooseKeyShare
+  const button =
+    remainingShares.length === 1 ? (
+      <Button onClick={() => onApproved(remainingShares[0])}>
+        Approve Transaction
+      </Button>
+    ) : (
+      <ChooseKeyShare
         shares={remainingShares}
         onConfirm={onApproved}
-        button={<Button>Approve Transaction</Button>} />
+        button={<Button>Approve Transaction</Button>}
+      />
+    );
 
   return (
     <JoinSignContent>
@@ -98,11 +102,9 @@ function ReviewTransaction({
           title="Join transaction"
           description="Review the transaction and approve to begin signing"
         />
-        <TransactionFromPreview account={account} tx={tx} />
+        <TransactionFromPreview account={account} />
         <TransactionPreview tx={tx} />
-        <div className="flex justify-end">
-          {button}
-        </div>
+        <div className="flex justify-end">{button}</div>
       </div>
     </JoinSignContent>
   );
@@ -112,14 +114,12 @@ function JoinSignWithAccount({
   tx,
   transaction,
   resource,
-  publicKeys,
   badges,
   initiatorKeyShareId,
 }: {
   tx: TransactionLike;
   transaction: string;
   resource: Promise<KeyringAccount | null>;
-  publicKeys: PublicKeys;
   badges: React.ReactNode;
   initiatorKeyShareId: string;
 }) {
@@ -194,13 +194,11 @@ function JoinSignWithAccount({
 function JoinSignLoadAccount({
   tx,
   transaction,
-  publicKeys,
   badges,
   initiatorKeyShareId,
 }: {
   tx: TransactionLike;
   transaction: string;
-  publicKeys: PublicKeys;
   badges: React.ReactNode;
   initiatorKeyShareId: string;
 }) {
@@ -211,7 +209,6 @@ function JoinSignLoadAccount({
         tx={tx}
         transaction={transaction}
         resource={resource}
-        publicKeys={publicKeys}
         badges={badges}
         initiatorKeyShareId={initiatorKeyShareId}
       />
@@ -221,9 +218,6 @@ function JoinSignLoadAccount({
 
 export default function JoinSign() {
   const keypair = useContext(KeypairContext);
-
-  const { toast } = useToast();
-  const [publicKeys, setPublicKeys] = useState<PublicKeys>(null);
   const [signData, setSignData] = useState<AssociatedData>(null);
   const { meetingId, userId } = useParams();
   const [searchParams] = useSearchParams();
@@ -277,7 +271,6 @@ export default function JoinSign() {
       <JoinSignLoadAccount
         tx={tx}
         transaction={transaction}
-        publicKeys={publicKeys}
         badges={<Badges />}
         initiatorKeyShareId={initiatorKeyShareId}
       />
@@ -295,7 +288,6 @@ export default function JoinSign() {
         <MeetingPoint
           session={session}
           onMeetingPointReady={(keys, data) => {
-            setPublicKeys(keys);
             setSignData(data as AssociatedData);
           }}
         />

@@ -47,9 +47,13 @@ function Invitations({
     await copyWithToast(value, toast);
   };
 
-  const participants = session.sessionType === SessionType.keygen
-    ? meetingInfo.identifiers.slice(1)
-    : meetingInfo.identifiers.slice(1, (session as CreateKeyState).threshold + 1);
+  const participants =
+    session.sessionType === SessionType.keygen
+      ? meetingInfo.identifiers.slice(1)
+      : meetingInfo.identifiers.slice(
+          1,
+          (session as CreateKeyState).threshold + 1,
+        );
   return (
     <div className="rounded-md border">
       {participants.map((userId, index) => {
@@ -126,9 +130,8 @@ export default function MeetingPoint({
       const identifiers: string[] = [];
 
       // Number of identifiers which are the slots for a meeting point
-      const numIdentifiers = sessionType === SessionType.keygen
-        ? parties
-        : threshold + 1;
+      const numIdentifiers =
+        sessionType === SessionType.keygen ? parties : threshold + 1;
 
       /* eslint-disable @typescript-eslint/no-unused-vars */
       for (let i = 0; i < numIdentifiers; i++) {
