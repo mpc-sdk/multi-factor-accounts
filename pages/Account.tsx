@@ -86,6 +86,11 @@ function AccountView({
 }) {
   const navigate = useNavigate();
   const account = use(resource);
+
+  if (account === null) {
+    return <NotFound />;
+  }
+
   const balance = useBalance(account.address);
 
   if (balance === null) return;
