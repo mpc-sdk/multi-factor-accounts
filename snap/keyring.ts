@@ -14,11 +14,8 @@ import {
 import { KeyringEvent } from "@metamask/keyring-api/dist/events";
 import { type Json, type JsonRpcRequest } from "@metamask/utils";
 import { v4 as uuid } from "uuid";
-
 import { saveState } from "./stateManagement";
-
-import packageInfo from "../package.json";
-
+//import packageInfo from "../package.json";
 import { Wallet, PrivateKey } from "@/lib/types";
 
 /**
@@ -40,6 +37,9 @@ export function isEvmChain(chain: string): boolean {
   return chain.startsWith("eip155:");
 }
 
+/**
+ *  State of the snap.
+ */
 export type KeyringState = {
   wallets: Record<string, Wallet>;
   pendingRequests: Record<string, KeyringRequest>;
@@ -52,10 +52,16 @@ export class ThresholdKeyring implements Keyring {
     this.#state = state;
   }
 
+  /**
+   *  List all accounts.
+   */
   async listAccounts(): Promise<KeyringAccount[]> {
     return Object.values(this.#state.wallets).map((wallet) => wallet.account);
   }
 
+  /**
+   *  Get an account.
+   */
   async getAccount(id: string): Promise<KeyringAccount> {
     return (
       this.#state.wallets[id]?.account ??
@@ -63,10 +69,13 @@ export class ThresholdKeyring implements Keyring {
     );
   }
 
-  // Add a private key share to an account using an upsert.
-  //
-  // Creates the account if it does not exist otherwise creates
-  // or overwrites the key share.
+  /**
+   *  Add a private key share to an account using an upsert.
+   *
+   *  Creates the account if it does not exist otherwise creates
+   *  or overwrites the key share.
+   *
+   */
   async createAccount(
     options: Record<string, Json> = {},
   ): Promise<KeyringAccount> {
@@ -79,7 +88,7 @@ export class ThresholdKeyring implements Keyring {
     const { address, keyshareId } = privateKey;
 
     if (!address) {
-      throw new Error(`Address  must be given to create an account.`);
+      throw new Error(`Address must be given to create an account.`);
     }
 
     if (!keyshareId) {
@@ -184,7 +193,7 @@ export class ThresholdKeyring implements Keyring {
    *  If the key share is the last remaining key share the entire account
    *  is removed.
    *
-   *  Returns true if the account was deleted.
+   *  @returns Whether the entire account was deleted.
    */
   async deleteKeyShare(id: string, keyShareId: string): Promise<boolean> {
     try {
@@ -207,10 +216,16 @@ export class ThresholdKeyring implements Keyring {
     }
   }
 
+  /**
+   *  List pending requests.
+   *.
   async listRequests(): Promise<KeyringRequest[]> {
     return Object.values(this.#state.pendingRequests);
   }
 
+  /**
+   *  Get a pending request.
+   */
   async getRequest(id: string): Promise<KeyringRequest | null> {
     return this.#state.pendingRequests[id] ?? null;
   }
@@ -218,14 +233,13 @@ export class ThresholdKeyring implements Keyring {
   async submitRequest(request: KeyringRequest): Promise<SubmitRequestResponse> {
     this.#state.pendingRequests[request.id] = request;
     await this.#saveState();
-    const dappUrl = this.#getCurrentUrl(request.id);
-
+    const url = this.#getRedirectUrl(request.id);
     return {
       pending: true,
       redirect: {
-        url: dappUrl,
+        url,
         message:
-          "Redirecting to multi-factor accounts snap to sign transaction",
+          "Redirecting to multi-factor accounts snap",
       },
     };
   }
@@ -246,33 +260,18 @@ export class ThresholdKeyring implements Keyring {
     if (this.#state.pendingRequests[id] === undefined) {
       throw new Error(`Request '${id}' not found`);
     }
-
     await this.#removePendingRequest(id);
     await this.#emitEvent(KeyringEvent.RequestRejected, { id });
   }
 
-  async #removePendingRequest(id: string): Promise<void> {
-    delete this.#state.pendingRequests[id];
-    await this.#saveState();
-  }
-
-  #getCurrentUrl(id: string): string {
-    const dappUrlPrefix =
-      process.env.NODE_ENV === "production"
-        ? process.env.DAPP_ORIGIN_PRODUCTION
-        : process.env.DAPP_ORIGIN_DEVELOPMENT;
-
-    /*
-    const dappVersion: string = packageInfo.version;
-    // Ensuring that both dappUrlPrefix and dappVersion are truthy
-    if (dappUrlPrefix && dappVersion && process.env.NODE_ENV === "production") {
-      return `${dappUrlPrefix}/${dappVersion}/`;
-    }
-    */
-
-    return `${dappUrlPrefix}/approve/${id}`;
-  }
-
+  /**
+   *  Export an account.
+   *
+   *  This exposes the private key so should be handled with care,
+   *  end users should save this in safe, encrypted storage.
+   *
+   *  @param id - The account identifier.
+   */
   async exportAccount(id: string): Promise<KeyringAccountData> {
     const wallet =
       this.#state.wallets[id] || throwError(`Account ${id} does not exist`);
@@ -282,8 +281,8 @@ export class ThresholdKeyring implements Keyring {
   /**
    * Find the first wallet with the given address.
    *
-   * @param address - The address to validate for duplication.
-   * @param wallets - The array of wallets to search for duplicate addresses.
+   * @param address - The address of the wallet to find.
+   *
    * @returns Returns the wallet or undefined.
    */
   findWalletByAddress(address: string): Wallet | undefined {
@@ -292,6 +291,12 @@ export class ThresholdKeyring implements Keyring {
     );
   }
 
+  /**
+   *  Get a wallet by address.
+   *
+   *  A wallet contains private key information so must
+   *  be handled with care.
+   */
   getWalletByAddress(address: string): Wallet {
     const match = this.findWalletByAddress(address);
     return match ?? throwError(`Account '${address}' not found`);
@@ -301,10 +306,29 @@ export class ThresholdKeyring implements Keyring {
     await saveState(this.#state);
   }
 
+  async #removePendingRequest(id: string): Promise<void> {
+    delete this.#state.pendingRequests[id];
+    await this.#saveState();
+  }
+
   async #emitEvent(
     event: KeyringEvent,
     data: Record<string, Json>,
   ): Promise<void> {
     await emitSnapKeyringEvent(snap, event, data);
   }
+
+  /**
+   *  Get the URL to redirect to for the asynchronous flow.
+   *
+   *  @param id - The request identifier.
+   */
+  #getRedirectUrl(id: string): string {
+    const dappUrlPrefix =
+      process.env.NODE_ENV === "production"
+        ? process.env.DAPP_ORIGIN_PRODUCTION
+        : process.env.DAPP_ORIGIN_DEVELOPMENT;
+    return `${dappUrlPrefix}/approve/${id}`;
+  }
+
 }

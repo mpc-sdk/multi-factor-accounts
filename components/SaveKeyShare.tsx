@@ -1,11 +1,10 @@
-import React, { useContext } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import KeyAlert from "@/components/KeyAlert";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 
 import { DownloadKeyShare } from "@/components/ExportAccount";
-
 import { createAccount } from "@/lib/keyring";
 import { BroadcastContext } from "@/app/providers/broadcast";
 import { PrivateKey } from "@/lib/types";
@@ -18,14 +17,12 @@ export default function SaveKeyShare({
   accountName: string;
   keyShare: PrivateKey;
 }) {
-  //const { invalidate } = useContext(BroadcastContext);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   const saveKeyShare = async () => {
     await guard(async () => {
       await createAccount(keyShare, accountName);
-      //await invalidate();
       toast({
         title: "Saved",
         description: "Account key share saved to MetaMask",

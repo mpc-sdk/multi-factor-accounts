@@ -1,7 +1,5 @@
 import React, {useState} from "react";
-import type { KeyringAccount } from "@metamask/keyring-api";
 
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
@@ -15,8 +13,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-
-import Icons from "@/components/Icons";
 
 function AlertContent({shares, onChange}: { shares: string[], onChange: (shareId: string) => void }) {
   return (
@@ -41,12 +37,10 @@ function AlertContent({shares, onChange}: { shares: string[], onChange: (shareId
 }
 
 export default function ChooseKeyShare({
-  account,
   button,
   shares,
   onConfirm,
 }: {
-  account: KeyringAccount;
   button: React.ReactNode;
   shares: string[];
   onConfirm: (shareId: string) => void;

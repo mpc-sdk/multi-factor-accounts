@@ -86,7 +86,6 @@ function ReviewTransaction({
   const button = remainingShares.length === 1
     ? <Button onClick={() => onApproved(remainingShares[0])}>Approve Transaction</Button>
     : <ChooseKeyShare
-        account={account}
         shares={remainingShares}
         onConfirm={onApproved}
         button={<Button>Approve Transaction</Button>} />
