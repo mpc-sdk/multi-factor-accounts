@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@metamask/approval-controller": "^4.0.0",
-    "@metamask/snaps-cli": "^3.0.1",
+    "@metamask/snaps-cli": "^5.0.0",
     "@metamask/utils": "^8.2.0",
     "@types/node": "^20.8.10",
     "@types/react": "^18.0.26",
@@ -61,7 +61,7 @@
     "@ethersproject/hash": "^5.7.0",
     "@hookform/resolvers": "^3.3.2",
     "@metamask/detect-provider": "^2.0.0",
-    "@metamask/keyring-api": "1.1.0",
+    "@metamask/keyring-api": "^3.0.0",
     "@metamask/snaps-types": "^3.1.0",
     "@mpc-sdk/mpc-bindings": "workspace:^",
     "@radix-ui/react-alert-dialog": "^1.0.5",
