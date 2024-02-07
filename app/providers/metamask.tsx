@@ -39,7 +39,7 @@ const reducer: Reducer<MetaMaskState, MetaMaskDispatch> = (state, action) => {
       return {
         ...state,
         hasMetaMask: action.payload,
-        provider: new BrowserProvider(ethereum),
+        provider: new BrowserProvider(window.ethereum),
       };
     case MetaMaskActions.SetInstalled:
       return {
@@ -107,7 +107,7 @@ export default function MetaMaskProvider({
     };
 
     detectInstallation().catch(console.error);
-  }, [state.hasMetaMask, ethereum]);
+  }, [state.hasMetaMask, window.ethereum]);
 
   useEffect(() => {
     let timeoutId: number;

@@ -41,7 +41,7 @@ A backend relay server must be running for meeting points and relaying messages,
 
 ```
 cd sdk
-cargo run -- server config.toml
+cargo run -- start config.toml
 ```
 
 Note that CORS configuration is in the `sdk/config.toml` file so if you change the port for the development server you would need to update the CORS configuration.
