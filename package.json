@@ -62,7 +62,7 @@
     "@hookform/resolvers": "^3.3.2",
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/keyring-api": "^3.0.0",
-    "@metamask/snaps-types": "^3.1.0",
+    "@metamask/snaps-sdk": "^2.0.0",
     "@mpc-sdk/mpc-bindings": "workspace:^",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-label": "^2.0.2",

@@ -137,6 +137,9 @@ function AccountsView({ resource }: { resource: Promise<KeyringAccount[]> }) {
     return <NoAccounts onImportComplete={onChanged} />;
   }
 
+
+      //<PendingRequests />
+
   return (
     <AccountsContent onImportComplete={onChanged}>
       <div className="mt-12 border rounded-md">
@@ -168,7 +171,6 @@ function AccountsView({ resource }: { resource: Promise<KeyringAccount[]> }) {
           );
         })}
       </div>
-      <PendingRequests />
     </AccountsContent>
   );
   return null;
