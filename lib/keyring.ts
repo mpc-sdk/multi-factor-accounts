@@ -8,8 +8,7 @@ import {
   KeyringRequest,
 } from "@metamask/keyring-api";
 
-import { JsonTx } from "@ethereumjs/tx";
-import { Wallet, PrivateKey, PendingRequest } from "@/lib/types";
+import { ResponseSignature, Wallet, PrivateKey, PendingRequest } from "@/lib/types";
 
 const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum);
 
@@ -51,7 +50,7 @@ export async function rejectRequest(id: string): Promise<void> {
 
 export async function approveRequest(
   id: string,
-  result: JsonTx,
+  result: ResponseSignature,
 ): Promise<void> {
   const client = getKeyringClient();
   return await client.approveRequest(id, { result: result as Json });

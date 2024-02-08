@@ -18,6 +18,13 @@ export type Wallet = {
   privateKey: KeyShares;
 };
 
+// Signature type we need to sent to the snap.
+export type ResponseSignature = {
+  r: string;
+  s: string;
+  v: string;
+};
+
 // FIXME: use type from schemas?
 export enum ProtocolId {
   gg20 = "gg20",

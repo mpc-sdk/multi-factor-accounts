@@ -27,10 +27,8 @@ import {
 import {
   getChainName,
   encodeTransactionToHash,
-  serializeTransaction,
-  encodeSignedTransaction,
 } from "@/lib/utils";
-import { PendingRequest } from "@/lib/types";
+import { PendingRequest, ResponseSignature } from "@/lib/types";
 import { sign, WebassemblyWorker } from "@/lib/client";
 import use from "@/lib/react-use";
 
@@ -42,6 +40,15 @@ import {
   SessionState,
   Signature,
 } from "@/app/model";
+
+// Encode a signature into the format we need to reply with.
+function encodeSignature(sig: Signature): ResponseSignature {
+  return {
+    r: `0x${sig.signature.r.scalar}`,
+    s: `0x${sig.signature.s.scalar}`,
+    v: `0x${sig.signature.recid}`,
+  };
+}
 
 function CreateSignContent({ children }: { children: React.ReactNode }) {
   return (
@@ -67,11 +74,10 @@ function CompleteTransaction({
 }) {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const signedTransaction = encodeSignedTransaction(tx, signature);
-  const jsonTransaction = serializeTransaction(signedTransaction);
+  const result = encodeSignature(signature);
   const submitTransaction = async () => {
     await guard(async () => {
-      await approveRequest(requestId, jsonTransaction);
+      await approveRequest(requestId, result);
       navigate(`/accounts/${account.address}`);
     }, toast);
   };
