@@ -1,0 +1,75 @@
+name: Release Artifacts
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+env:
+  REGION: ${{ vars.RELEASE_REGION }}
+  BUCKET: ${{ vars.RELEASE_BUCKET }}
+  CLOUDFRONT_ID: ${{ vars.RELEASE_CLOUDFRONT_ID }}
+
+jobs:
+  release-artifacts:
+    #if: ${{ false }}
+    runs-on: ubuntu-latest
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+      - name: Cache yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Cache cargo dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
+      - name: Set env
+        run: |
+          VERSION=$(node -e 'console.log(require("./package.json").version)');
+          echo "RELEASE_VERSION=$VERSION" >> "$GITHUB_ENV"
+      - name: Enable corepack
+        run: corepack enable
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
+      - name: Compile webassembly bindings
+        run: cd sdk/bindings && wasm-pack build --target web --scope mpc-sdk
+      - name: Install dependencies
+        run: yarn install
+      - name: Check types
+        run: yarn types
+      - name: Build snap package archive
+        run: npm pack
+      - name: Rename snap package archive
+        run: |
+          mv mpc-sdk-multi-factor-accounts-${{ env.RELEASE_VERSION }}.tgz \
+            snap-mpc-sdk-multi-factor-accounts-${{ env.RELEASE_VERSION }}.tgz
+      - name: Build website
+        run: yarn build
+      - name: Compress website
+        run: zip -r dapp-website-${RELEASE_VERSION}.zip dist
+      - name: Upload website to bucket
+        env:
+          AWS_REGION: ${{ env.REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          aws s3 sync ./dist s3://$BUCKET
+          aws cloudfront create-invalidation \
+            --distribution-id $CLOUDFRONT_ID --paths '/*'
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            snap-mpc-sdk-multi-factor-accounts-${{ env.RELEASE_VERSION }}.tgz
+            dapp-website-${{ env.RELEASE_VERSION }}.zip
