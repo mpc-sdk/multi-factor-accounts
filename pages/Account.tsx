@@ -84,6 +84,9 @@ function AccountView({
   resource: Promise<KeyringAccount>;
   onChanged: () => void;
 }) {
+
+  console.log("Account view using resource...");
+
   const navigate = useNavigate();
   const account = use(resource);
 
@@ -91,7 +94,11 @@ function AccountView({
     return <NotFound />;
   }
 
+  console.log(account);
+
   const balance = useBalance(account.address);
+
+  console.log(balance);
 
   if (balance === null) return;
 
@@ -156,6 +163,9 @@ function AccountView({
 }
 
 export default function Account() {
+
+  console.log("Rendering account...");
+
   const [changed, setChanged] = useState(0);
   const onChanged = () => setChanged(changed + 1);
   const { address } = useParams();

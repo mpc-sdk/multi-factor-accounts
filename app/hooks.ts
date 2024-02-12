@@ -6,6 +6,7 @@ import defaultServerUrl from "@/lib/server-url";
 export function useBalance(address: string) {
   const [balance, setBalance] = useState(null);
   const [state] = useContext(MetaMaskContext);
+
   useEffect(() => {
     const loadBalance = async () => {
       const _balance = await state.provider.getBalance(address);
