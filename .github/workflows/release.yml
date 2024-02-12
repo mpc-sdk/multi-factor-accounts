@@ -32,6 +32,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
+        - name: Set env
+        run: |
+          VERSION=$(node -e 'console.log(require("./package.json").version)');
+          echo ::set-env name=RELEASE_VERSION::${VERSION}
+
       - name: Enable corepack
         run: corepack enable
       - name: Install wasm-pack
@@ -46,11 +51,12 @@ jobs:
         run: npm pack
       - name: Build website
         run: yarn build
-      #- name: Release
-        #uses: softprops/action-gh-release@v1
-        #with:
-          #generate_release_notes: true
-          #files: |
-            #target/artifacts/*
-            #LICENSE
-            #COPYRIGHT
+      - name: Compress website
+        run: zip -r website-${RELEASE_VERSION}.zip dist
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          generate_release_notes: true
+          files: |
+            mpc-sdk-multi-factor-accounts-${RELEASE_VERSION}.tgz
+            website-${RELEASE_VERSION}.zip
