@@ -2315,9 +2315,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@mpc-sdk/tss-snap@workspace:.":
+"@mpc-sdk/multi-factor-accounts@workspace:.":
   version: 0.0.0-use.local
-  resolution: "@mpc-sdk/tss-snap@workspace:."
+  resolution: "@mpc-sdk/multi-factor-accounts@workspace:."
   dependencies:
     "@ethersproject/address": "npm:^5.7.0"
     "@ethersproject/hash": "npm:^5.7.0"

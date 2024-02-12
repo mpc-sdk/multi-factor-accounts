@@ -36,7 +36,7 @@ const components: { title: string; href: string; description: string }[] = [
   },
   {
     title: "Source Code",
-    href: "https://github.com/mpc-sdk/tss-snap",
+    href: "https://github.com/mpc-sdk/multi-factor-accounts",
     description: "Get the source code for this snap on Github.",
   },
   {

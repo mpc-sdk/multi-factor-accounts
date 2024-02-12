@@ -1,18 +1,18 @@
 {
   "version": "0.1.0",
-  "description": "Multi-factor accounts using threshold signature schemes to sign messages and transactions.",
+  "description": "Adds multi-factor accounts to MetaMask by sharding keys using threshold signatures",
   "proposedName": "Multi-Factor Accounts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mpc-sdk/tss-snap"
+    "url": "https://github.com/mpc-sdk/multi-factor-accounts"
   },
   "source": {
-    "shasum": "HibWESLp2FS0n+LiXPShwij4XPC+NqO1uP+FBSj+T1E=",
+    "shasum": "Yzv/O3F/eCuEriILwkUHz3QJ3L3WACADMTSMRQba5h4=",
     "location": {
       "npm": {
         "filePath": "bundle/bundle.js",
         "iconPath": "images/icon.svg",
-        "packageName": "@mpc-sdk/tss-snap",
+        "packageName": "@mpc-sdk/multi-factor-accounts",
         "registry": "https://registry.npmjs.org/"
       }
     }

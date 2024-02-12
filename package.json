@@ -1,10 +1,10 @@
 {
-  "name": "@mpc-sdk/tss-snap",
+  "name": "@mpc-sdk/multi-factor-accounts",
   "version": "0.1.0",
-  "description": "Threshold signatures snap for MetaMask.",
+  "description": "Adds multi-factor accounts to MetaMask by sharding keys using threshold signatures",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mpc-sdk/tss-snap"
+    "url": "https://github.com/mpc-sdk/multi-factor-accounts"
   },
   "license": "MIT",
   "files": [
