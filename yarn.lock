@@ -1698,12 +1698,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hookform/resolvers@npm:^3.3.2":
-  version: 3.3.2
-  resolution: "@hookform/resolvers@npm:3.3.2"
+"@hookform/resolvers@npm:^3.3.4":
+  version: 3.3.4
+  resolution: "@hookform/resolvers@npm:3.3.4"
   peerDependencies:
     react-hook-form: ^7.0.0
-  checksum: 538c86a744c71735a5c3be7b450c704111fe53a52634463ed3c801681d57504d3717ab5f7bd20e99ee87d81a9da0aca640af0837eb807486d9d5c927269a9b37
+  checksum: f7a5b8ba59cbb0859e7a212bd5cbcbc70bbdddd21d4fbe9f4a96d149b5756470cb29857a50334d8c1c64392e21007ccf5288d26aa407431784d4006a2570cb36
   languageName: node
   linkType: hard
 
@@ -2317,7 +2317,7 @@ __metadata:
   dependencies:
     "@ethersproject/address": "npm:^5.7.0"
     "@ethersproject/hash": "npm:^5.7.0"
-    "@hookform/resolvers": "npm:^3.3.2"
+    "@hookform/resolvers": "npm:^3.3.4"
     "@metamask/detect-provider": "npm:^2.0.0"
     "@metamask/keyring-api": "npm:^3.0.0"
     "@metamask/providers": "npm:^14.0.2"
@@ -2368,7 +2368,7 @@ __metadata:
     webpack-cli: "npm:^5.0.1"
     webpack-dev-server: "npm:4.15.1"
     zod: "npm:^3.22.4"
-    zod-validation-error: "npm:^2.1.0"
+    zod-validation-error: "npm:^3.0.0"
   languageName: unknown
   linkType: soft
 
@@ -13314,12 +13314,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"zod-validation-error@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "zod-validation-error@npm:2.1.0"
+"zod-validation-error@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "zod-validation-error@npm:3.0.0"
   peerDependencies:
     zod: ^3.18.0
-  checksum: e8e8a0af64092dfb3388d759bf10fb7cf5358bc1bdb365771b8ac1944b1fb014ccbc8e60fbd69627961ea5873c5694e5c3fe730341c9842312fbb91661a1f451
+  checksum: b85590173bb9c7ca6a4996930cce560567033eacc2bf91635b79c4467938dd9363bd0e36ad79f120c880632fdbfaccf92284ae12dc5a2e6d592d352050bb246f
   languageName: node
   linkType: hard
 
