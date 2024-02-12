@@ -12,6 +12,7 @@ jobs:
   release-artifacts:
     #if: ${{ false }}
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - uses: actions/checkout@v3
         with:
