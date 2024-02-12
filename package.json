@@ -1,6 +1,6 @@
 {
   "name": "@mpc-sdk/multi-factor-accounts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Adds multi-factor accounts to MetaMask by sharding keys using threshold signatures",
   "repository": {
     "type": "git",
@@ -26,7 +26,8 @@
     "check": "yarn types && yarn lint && yarn fmt",
     "start": "yarn clean && yarn build:snap-dev && yarn dev:assets && parcel app/index.html --port 7070",
     "dev:assets": "mkdir -p dist && cp -r images snap.manifest.json bundle dist/",
-    "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css"
+    "tailwind": "tailwindcss -i ./app/index.css -o ./dist/styles.css",
+    "publish": "yarn build:snap && npm publish"
   },
   "devDependencies": {
     "@metamask/snaps-cli": "^5.0.0",
