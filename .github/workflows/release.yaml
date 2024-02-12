@@ -16,13 +16,17 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: true
+      - name: Install wasm-pack
+        run: cargo install wasm-pack
+      - name: Compile webassembly bindings
+        run: cd sdk/bindings && wasm-pack build --target web --scope mpc-sdk
       - name: Enable corepack
         run: corepack enable
       - name: Install dependencies
         run: yarn install
       - name: Check types
         run: yarn types
-      - name: Build package
+      - name: Build snap package archive
         run: npm pack
       #- name: Release
         #uses: softprops/action-gh-release@v1
