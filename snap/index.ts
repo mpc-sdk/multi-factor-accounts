@@ -2,12 +2,10 @@ import {
   MethodNotSupportedError,
   handleKeyringRequest,
 } from "@metamask/keyring-api";
-import { Json } from "@metamask/utils";
 import type {
-  OnKeyringRequestHandler,
   OnRpcRequestHandler,
 } from "@metamask/snaps-sdk";
-
+import type { Json, JsonRpcParams, JsonRpcRequest } from '@metamask/utils';
 import { ThresholdKeyring } from "./keyring";
 import { InternalMethod, originPermissions } from "./permissions";
 import { getState } from "./stateManagement";
@@ -75,10 +73,13 @@ export const onRpcRequest: OnRpcRequestHandler = async ({
   }
 };
 
-export const onKeyringRequest: OnKeyringRequestHandler = async ({
+export const onKeyringRequest = async function({
   origin,
   request,
-}) => {
+}: {
+  origin: string;
+  request: JsonRpcRequest<JsonRpcParams>;
+}) {
   // Check if origin is allowed to call method.
   if (!hasPermission(origin, request.method)) {
     throw new Error(

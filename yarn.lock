@@ -12,10 +12,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@adraffy/ens-normalize@npm:1.10.0":
-  version: 1.10.0
-  resolution: "@adraffy/ens-normalize@npm:1.10.0"
-  checksum: 78ae700847a2516d5a0ae12c4e23d09392a40c67e73b137eb7189f51afb1601c8d18784aeda2ed288a278997824dc924d1f398852c21d41ee2c4c564f2fb4d26
+"@adraffy/ens-normalize@npm:1.10.1":
+  version: 1.10.1
+  resolution: "@adraffy/ens-normalize@npm:1.10.1"
+  checksum: fdd647604e8fac6204921888aaf5a6bc65eabf0d2921bc5f93b64d01f4bc33ead167c1445f7de05468d05cd92ac31b74c68d2be840c62b79d73693308f885c06
   languageName: node
   linkType: hard
 
@@ -1873,29 +1873,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@metamask/approval-controller@npm:^4.0.0":
-  version: 4.1.0
-  resolution: "@metamask/approval-controller@npm:4.1.0"
-  dependencies:
-    "@metamask/base-controller": "npm:^3.2.3"
-    "@metamask/rpc-errors": "npm:^6.1.0"
-    "@metamask/utils": "npm:^8.1.0"
-    immer: "npm:^9.0.6"
-    nanoid: "npm:^3.1.31"
-  checksum: 20f908a61b9181b421ddf2ebf4382375b0b5299ed96c05f1cd3041829b481c25f0bb91809ffd3270365f4c4035150d41ad772b3873371aa966b47e3f6f982143
-  languageName: node
-  linkType: hard
-
-"@metamask/base-controller@npm:^3.2.3":
-  version: 3.2.3
-  resolution: "@metamask/base-controller@npm:3.2.3"
-  dependencies:
-    "@metamask/utils": "npm:^8.1.0"
-    immer: "npm:^9.0.6"
-  checksum: c1cd38c744680d9e01e6d1eee26627cef49f359c6f991ba316a8d7a855cd5cedf400be0a54832f40b60e600005d74952a64932c985dca77fa23caa6c54daa007
-  languageName: node
-  linkType: hard
-
 "@metamask/base-controller@npm:^4.0.1, @metamask/base-controller@npm:^4.1.0, @metamask/base-controller@npm:^4.1.1":
   version: 4.1.1
   resolution: "@metamask/base-controller@npm:4.1.1"
@@ -2341,7 +2318,6 @@ __metadata:
     "@ethersproject/address": "npm:^5.7.0"
     "@ethersproject/hash": "npm:^5.7.0"
     "@hookform/resolvers": "npm:^3.3.2"
-    "@metamask/approval-controller": "npm:^4.0.0"
     "@metamask/detect-provider": "npm:^2.0.0"
     "@metamask/keyring-api": "npm:^3.0.0"
     "@metamask/providers": "npm:^14.0.2"
@@ -2370,7 +2346,7 @@ __metadata:
     dotenv: "npm:^16.4.2"
     eslint: "npm:^8.56.0"
     eslint-plugin-react: "npm:^7.31.11"
-    ethers: "npm:6.8.1"
+    ethers: "npm:^6.11.0"
     ganache: "npm:^7.9.2"
     lucide-react: "npm:^0.325.0"
     parcel: "npm:^2.11.0"
@@ -2378,7 +2354,7 @@ __metadata:
     prettier: "npm:^3.2.5"
     react: "npm:18.2.0"
     react-dom: "npm:^18.2.0"
-    react-hook-form: "npm:^7.48.2"
+    react-hook-form: "npm:^7.50.1"
     react-router-dom: "npm:^6.22.0"
     string-replace-loader: "npm:^3.1.0"
     tailwind-merge: "npm:^2.2.1"
@@ -7420,18 +7396,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ethers@npm:6.8.1":
-  version: 6.8.1
-  resolution: "ethers@npm:6.8.1"
+"ethers@npm:^6.11.0":
+  version: 6.11.0
+  resolution: "ethers@npm:6.11.0"
   dependencies:
-    "@adraffy/ens-normalize": "npm:1.10.0"
+    "@adraffy/ens-normalize": "npm:1.10.1"
     "@noble/curves": "npm:1.2.0"
     "@noble/hashes": "npm:1.3.2"
     "@types/node": "npm:18.15.13"
     aes-js: "npm:4.0.0-beta.5"
     tslib: "npm:2.4.0"
     ws: "npm:8.5.0"
-  checksum: 2fb05a0377c7d251ef160ddb5ab8553311c81fd1b7931426d6492d2652704a6ac5c4ff277a5aa6b2e64fe8bbfeec0b0e98263049d2ce44bf2286a72cefc3204b
+  checksum: 8deb72a2ff7b87b43b848ed67f48d451301367e6a29f6c18d50e771358e572621558f838055857c005a123d6830443f3ba7a3873756478b822030663c63e5526
   languageName: node
   linkType: hard
 
@@ -10929,12 +10905,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-hook-form@npm:^7.48.2":
-  version: 7.48.2
-  resolution: "react-hook-form@npm:7.48.2"
+"react-hook-form@npm:^7.50.1":
+  version: 7.50.1
+  resolution: "react-hook-form@npm:7.50.1"
   peerDependencies:
     react: ^16.8.0 || ^17 || ^18
-  checksum: 77663276288d3e240da76c469612fec2bfb2dd34ed0512adb8554b8567e89a316c3df62266e51639f66a9a9d50ce175e8dc965f94bc31afecb460ed48333dafa
+  checksum: 4905c33afbea67dc817e8be53c360d5c009dfd5c5a93f6ac632e1fc258a8a59587add364842b2d39f7bf126e4e20b1883e90f9c3a2f916c5b79173ce4cf30491
   languageName: node
   linkType: hard
 
