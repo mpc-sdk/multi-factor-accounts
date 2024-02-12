@@ -1,6 +1,12 @@
-# TSS Snap
+# Multi-Factor Accounts Snap
 
-Threshold signatures snap for MetaMask.
+Snap for MetaMask that uses threshold signatures to add multi-factor account support by sharding the key across multiple distinct MetaMask accounts.
+
+Keys can be sharded for one person across multiple devices or split for different people so organizations can require multiple authorities to sign off on transactions.
+
+Unlike contract-based solutions using threshold signatures avoids additional gas fees.
+
+Currently supports the GG20 protocol with a CGGMP protocol expected to be integrated soon.
 
 ## Prerequisites
 
