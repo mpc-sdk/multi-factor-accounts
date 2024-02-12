@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Adds multi-factor accounts to MetaMask by sharding keys using threshold signatures",
   "proposedName": "Multi-Factor Accounts",
   "repository": {
@@ -7,7 +7,7 @@
     "url": "https://github.com/mpc-sdk/multi-factor-accounts"
   },
   "source": {
-    "shasum": "sZGK82okZHOXD4WsD48Z8pJb9oXdPE/gsF5A+0tU9YU=",
+    "shasum": "tjOLBPtFzesdnHmd3gcr0pXymj//7BaFCNxvjAfXnUI=",
     "location": {
       "npm": {
         "filePath": "bundle/bundle.js",
