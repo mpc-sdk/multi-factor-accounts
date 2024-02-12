@@ -1,6 +1,6 @@
 {
   "name": "@mpc-sdk/multi-factor-accounts",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Adds multi-factor accounts to MetaMask by sharding keys using threshold signatures",
   "repository": {
     "type": "git",
