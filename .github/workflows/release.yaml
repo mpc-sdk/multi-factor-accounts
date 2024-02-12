@@ -44,6 +44,8 @@ jobs:
         run: yarn types
       - name: Build snap package archive
         run: npm pack
+      - name: Build website
+        run: yarn build
       #- name: Release
         #uses: softprops/action-gh-release@v1
         #with:
