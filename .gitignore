@@ -5,6 +5,7 @@ pkg
 node_modules
 bundle
 bundle.js
+package
 .yarn
 .env
 .env.production
