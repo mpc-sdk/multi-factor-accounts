@@ -7,10 +7,11 @@ import {
   KeyringAccountData,
   KeyringRequest,
 } from "@metamask/keyring-api";
+import type { MetaMaskInpageProvider } from '@metamask/providers';
 
 import { ResponseSignature, Wallet, PrivateKey, PendingRequest } from "@/lib/types";
 
-const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum);
+const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum as MetaMaskInpageProvider);
 
 export async function createAccount(privateKey: PrivateKey, name: string) {
   const client = getKeyringClient();

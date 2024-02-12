@@ -224,7 +224,7 @@ export default function JoinSign() {
   const name = searchParams.get("name");
   // Transaction data to show to the user
   const tx =
-    signData && (Object.fromEntries(signData.get("tx")) as TransactionLike);
+    signData && (Object.fromEntries(signData.get("tx") as Iterable<unknown[]>) as TransactionLike);
   // Digest to sign computed by the initiator
   const transaction = signData && (signData.get("transaction") as string);
   const initiatorKeyShareId =
