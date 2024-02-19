@@ -11,6 +11,8 @@ import type { MetaMaskInpageProvider } from '@metamask/providers';
 
 import { ResponseSignature, Wallet, PrivateKey, PendingRequest } from "@/lib/types";
 
+import { JsonTx } from "@ethereumjs/tx";
+
 const getKeyringClient = () => new KeyringSnapRpcClient(snapId, ethereum as MetaMaskInpageProvider);
 
 export async function createAccount(privateKey: PrivateKey, name: string) {
@@ -51,7 +53,7 @@ export async function rejectRequest(id: string): Promise<void> {
 
 export async function approveRequest(
   id: string,
-  result: ResponseSignature,
+  result: JsonTx,
 ): Promise<void> {
   const client = getKeyringClient();
   return await client.approveRequest(id, { result: result as Json });
