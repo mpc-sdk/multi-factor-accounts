@@ -41,19 +41,12 @@ import {
   Signature,
 } from "@/app/model";
 
-// TODO(tmpfs): remove this once we figure out why submitting
-// TODO(tmpfs): just the signature does not submit the transaction
-import {
-  serializeTransaction,
-  encodeSignedTransaction,
-} from '@/lib/tx-utils';
-
 // Encode a signature into the format we need to reply with.
 function encodeSignature(sig: Signature): ResponseSignature {
   return {
     r: `0x${sig.signature.r.scalar}`,
     s: `0x${sig.signature.s.scalar}`,
-    v: `0x${sig.signature.recid}`,
+    v: `0x0${sig.signature.recid}`,
   };
 }
 
@@ -83,11 +76,7 @@ function CompleteTransaction({
   const { toast } = useToast();
 
   // Signs but does not submit and confirm the transaction
-  //const result = encodeSignature(signature);
-
-  // Signs and submits the transaction
-  const signedTransaction = encodeSignedTransaction(tx, signature);
-  const result = serializeTransaction(signedTransaction);
+  const result = encodeSignature(signature);
 
   const submitTransaction = async () => {
     await guard(async () => {
