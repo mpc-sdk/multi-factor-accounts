@@ -7,10 +7,6 @@ const dotenv = require("dotenv");
 const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : ".env";
 dotenv.config({ path: envFile });
 
-const isProduction = process.env.NODE_ENV === "production";
-const url = isProduction
-  ? "${document.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${location.host}"
-  : "ws://${location.hostname}:7007";
 module.exports = {
   entry: "./app/index.tsx",
   module: {
@@ -19,14 +15,6 @@ module.exports = {
         test: /\.tsx?$/,
         use: "ts-loader",
         exclude: /node_modules/,
-      },
-      {
-        test: /server-url\.ts?$/,
-        loader: "string-replace-loader",
-        options: {
-          search: "ws://localhost:7007",
-          replace: url,
-        },
       },
     ],
   },
@@ -49,7 +37,7 @@ module.exports = {
       patterns: ["index.html", "dist/styles.css", "favicon.png"],
     }),
     new webpack.DefinePlugin({
-      "process.env.RELAY_URL": JSON.stringify("https://relay.tss.ac"),
+      "process.env.RELAY_URL": JSON.stringify(process.env.RELAY_URL),
       "process.env.SNAP_ID": JSON.stringify(process.env.SNAP_ID),
     }),
   ],
