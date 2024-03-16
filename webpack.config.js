@@ -49,7 +49,7 @@ module.exports = {
       patterns: ["index.html", "dist/styles.css", "favicon.png"],
     }),
     new webpack.DefinePlugin({
-      "process.env.RELAY_URL": JSON.stringify("https://relay.tss.ac"),
+      "process.env.RELAY_URL": JSON.stringify("http://relay.tss.ac"),
       "process.env.SNAP_ID": JSON.stringify(process.env.SNAP_ID),
     }),
   ],
