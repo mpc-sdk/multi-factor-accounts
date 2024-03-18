@@ -7,7 +7,6 @@ on:
 env:
   REGION: ${{ vars.RELEASE_REGION }}
   BUCKET: ${{ vars.RELEASE_BUCKET }}
-  CLOUDFRONT_ID: ${{ vars.RELEASE_CLOUDFRONT_ID }}
 
 jobs:
   release-artifacts:
@@ -68,8 +67,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           aws s3 sync ./dist s3://$BUCKET
-          aws cloudfront create-invalidation \
-            --distribution-id $CLOUDFRONT_ID --paths '/*'
       - name: Release
         uses: softprops/action-gh-release@v1
         with:

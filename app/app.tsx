@@ -25,6 +25,7 @@ import ChainProvider from "@/app/providers/chain";
 import BroadcastProvider from "@/app/providers/broadcast";
 import KeypairProvider from "@/app/providers/keypair";
 import { getSnap } from "@/lib/snap";
+import serverUrl from "@/lib/server-url";
 
 type WorkerMessage = {
   data: { ready: boolean };
@@ -115,6 +116,8 @@ export default function App() {
   if (ready === false) {
     return null;
   }
+
+  console.log("Server: ", serverUrl);
 
   return (
     <MetaMaskProvider>
