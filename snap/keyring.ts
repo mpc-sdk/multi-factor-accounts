@@ -218,7 +218,7 @@ export class ThresholdKeyring implements Keyring {
 
   /**
    *  List pending requests.
-   *.
+   */
   async listRequests(): Promise<KeyringRequest[]> {
     return Object.values(this.#state.pendingRequests);
   }
